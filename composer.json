@@ -3,7 +3,9 @@
     "type": "magento2-module",
     "description": "Gubee Integration module for Magento 2",
     "require": {
-        "magento/framework": "103.0.5"
+        "magento/framework": "103.0.5",
+        "magento/module-eav": "^102.1",
+        "magento/module-catalog": "^104.0"
     },
     "require-dev": {
         "captainhook/captainhook": "^5.18",
