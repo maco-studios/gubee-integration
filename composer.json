@@ -5,7 +5,8 @@
     "require": {
         "magento/framework": "103.0.5",
         "magento/module-eav": "^102.1",
-        "magento/module-catalog": "^104.0"
+        "magento/module-catalog": "^104.0",
+        "gubee/sdk": "@dev"
     },
     "require-dev": {
         "captainhook/captainhook": "^5.18",
@@ -31,12 +32,17 @@
         "repo.magento.com": {
             "type": "composer",
             "url": "https://repo.magento.com/"
+        },
+        "gubee/sdk": {
+            "type": "path",
+            "url": "../sdk"
         }
     },
     "config": {
         "allow-plugins": {
             "dealerdirect/phpcodesniffer-composer-installer": true,
-            "magento/composer-dependency-version-audit-plugin": true
+            "magento/composer-dependency-version-audit-plugin": true,
+            "php-http/discovery": true
         }
     },
     "scripts": {
