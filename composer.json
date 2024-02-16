@@ -1,0 +1,62 @@
+{
+    "name": "gubee/integration",
+    "type": "magento2-module",
+    "description": "Gubee Integration module for Magento 2",
+    "require": {
+        "magento/framework": "103.0.5"
+    },
+    "require-dev": {
+        "captainhook/captainhook": "^5.18",
+        "laminas/laminas-coding-standard": "^2.5",
+        "phpcompatibility/php-compatibility": "^9.3",
+        "phpunit/phpunit": "^9.6",
+        "squizlabs/php_codesniffer": "^3.9"
+    },
+    "autoload": {
+        "files": [
+            "src/registration.php"
+        ],
+        "psr-4": {
+            "Gubee\\Integration\\": "src/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Gubee\\Integration\\Test\\": "tests/"
+        }
+    },
+    "repositories": {
+        "repo.magento.com": {
+            "type": "composer",
+            "url": "https://repo.magento.com/"
+        }
+    },
+    "config": {
+        "allow-plugins": {
+            "dealerdirect/phpcodesniffer-composer-installer": true,
+            "magento/composer-dependency-version-audit-plugin": true
+        }
+    },
+    "scripts": {
+        "cs": [
+            "@cs:check",
+            "@cs:fix"
+        ],
+        "cs:check": "git diff --name-only --cached --diff-filter=AM | grep -E '\\.php$' | xargs -n 1 phpcs",
+        "cs:fix": "git diff --name-only --cached --diff-filter=AM | grep -E '\\.php$' | xargs -I {} sh -c 'vendor/bin/phpcbf {} && git add {}'",
+        "cs:setup": "vendor/bin/phpcs --config-set installed_paths ../../laminas/laminas-coding-standard/src,../../phpcompatibility/php-compatibility,../../slevomat/coding-standard,../../webimpress,../../webimpress/coding-standard/src",
+        "test": [
+            "@test:unit"
+        ],
+        "test:unit": "phpunit --testsuite=Unit",
+        "post-install-cmd": [
+            "@cs:setup",
+            "@capitanhook:install"
+        ],
+        "post-update-cmd": [
+            "@cs:setup",
+            "@capitanhook:install"
+        ],
+        "capitanhook:install": "vendor/bin/captainhook install -f"
+    }
+}

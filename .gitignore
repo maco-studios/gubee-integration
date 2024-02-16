@@ -1,45 +1,15 @@
-#--------------------------#
-# Magento Default Files    #
-#--------------------------#
+# Vendor directory
+/vendor/
 
-/PATCH_*.sh
+# PHPCS cache
+/.phpcs-cache
 
-/app/etc/local.xml
+# Test cache
+/.phpunit.result.cache
+/phpunit.xml
 
-/media/*
-!/media/.htaccess
+# asdf version manager
+/.tool-versions
 
-!/media/customer
-/media/customer/*
-!/media/customer/.htaccess
-
-!/media/dhl
-/media/dhl/*
-!/media/dhl/logo.jpg
-
-!/media/downloadable
-/media/downloadable/*
-!/media/downloadable/.htaccess
-
-!/media/xmlconnect
-/media/xmlconnect/*
-
-!/media/xmlconnect/custom
-/media/xmlconnect/custom/*
-!/media/xmlconnect/custom/ok.gif
-
-!/media/xmlconnect/original
-/media/xmlconnect/original/*
-!/media/xmlconnect/original/ok.gif
-
-!/media/xmlconnect/system
-/media/xmlconnect/system/*
-!/media/xmlconnect/system/ok.gif
-
-/var/*
-!/var/.htaccess
-
-!/var/package
-/var/package/*
-!/var/package/*.xml
-
+# tests cache
+/var
