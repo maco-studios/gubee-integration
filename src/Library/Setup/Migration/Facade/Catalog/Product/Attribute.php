@@ -198,7 +198,7 @@ class Attribute extends EavAttribute
         if (! is_int($group)) {
             $groupId = $this->getConnection()->fetchOne(
                 <<<SQL
-            SELECT attribute_group_id FROM {$this->getTableName('eav_attribute_group')}
+                SELECT attribute_group_id FROM {$this->getTableName('eav_attribute_group')}
                 WHERE attribute_group_name = ? AND attribute_set_id = ?
                 SQL,
                 [$group, $this->resolveAttributeSetId($attributeSet)]

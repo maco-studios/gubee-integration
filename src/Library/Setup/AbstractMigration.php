@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Gubee\Integration\Library\Setup;
 
 use Gubee\Integration\Library\Setup\Migration\Context;
+use Magento\Framework\DB\Adapter\AdapterInterface;
 use Magento\Framework\Setup\ModuleDataSetupInterface;
 use Magento\Framework\Setup\Patch\DataPatchInterface;
 use Magento\Framework\Setup\Patch\PatchRevertableInterface;
