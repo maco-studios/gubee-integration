@@ -1,26 +1,26 @@
 <?xml version="1.0" ?>
 <schema xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:Setup/Declaration/Schema/etc/schema.xsd">
-	<table name="gubee_integration_queue" resource="default" engine="innodb" comment="Table for storing integration queue data">
-		<column xsi:type="int" name="queue_id" padding="10" unsigned="true" nullable="false" identity="true" comment="Primary key for the queue item"/>
-		<column name="process" nullable="true" xsi:type="varchar" comment="Name of the process to be executed" length="255"/>
-		<column name="payload" nullable="true" xsi:type="text" comment="Data to be processed by the queue item"/>
-		<column name="status" nullable="true" xsi:type="int" comment="Status of the queue item (0 for pending, 1 for processing, 2 for completed)" identity="false"/>
-		<column name="executed_at" nullable="true" xsi:type="timestamp" comment="Timestamp when the queue item was last executed"/>
-		<column name="attempts" nullable="true" xsi:type="int" comment="Number of attempts made to process the queue item" identity="false"/>
-		<column name="created_at" nullable="true" xsi:type="datetime" comment="Timestamp when the queue item was created"/>
-		<column name="updated_at" nullable="true" xsi:type="timestamp" comment="Timestamp when the queue item was last updated"/>
-		<constraint xsi:type="primary" referenceId="PRIMARY">
-			<column name="queue_id"/>
-		</constraint>
-	</table>
-	<table name="gubee_integration_log" resource="default" engine="innodb" comment="Table for storing integration log data">
-		<column xsi:type="int" name="log_id" padding="10" unsigned="true" nullable="false" identity="true" comment="Primary key for the log entry"/>
-		<column name="message" nullable="true" xsi:type="text" comment="Log message detailing the event"/>
-		<column name="level" nullable="true" xsi:type="int" comment="Severity level of the log entry based on PSR-3 levels:\n- 0 for emergency\n- 1 for alert\n- 2 for critical\n- 3 for error\n- 4 for warning\n- 5 for notice\n- 6 for info\n- 7 for debug" identity="false"/>
-		<column name="context" nullable="true" xsi:type="text" comment="Additional context information for the log entry"/>
-		<column name="created_at" nullable="true" xsi:type="timestamp" comment="Timestamp when the log entry was created"/>
-		<constraint xsi:type="primary" referenceId="PRIMARY">
-			<column name="log_id"/>
-		</constraint>
-	</table>
+    <table name="gubee_integration_queue" resource="default" engine="innodb" comment="Table for storing integration queue data">
+        <column xsi:type="int" name="queue_id" padding="10" unsigned="true" nullable="false" identity="true" comment="Primary key for the queue item"/>
+        <column name="process" nullable="true" xsi:type="varchar" comment="Name of the process to be executed" length="255"/>
+        <column name="payload" nullable="true" xsi:type="text" comment="Data to be processed by the queue item"/>
+        <column name="status" nullable="true" xsi:type="int" comment="Status of the queue item (0 for pending, 1 for processing, 2 for completed)" identity="false"/>
+        <column name="executed_at" nullable="true" xsi:type="timestamp" comment="Timestamp when the queue item was last executed"/>
+        <column name="attempts" nullable="true" xsi:type="int" comment="Number of attempts made to process the queue item" identity="false"/>
+        <column name="created_at" nullable="true" xsi:type="timestamp" default="CURRENT_TIMESTAMP" on_update="false" comment="Timestamp when the queue item was created"/>
+        <column name="updated_at" nullable="true" xsi:type="timestamp" default="CURRENT_TIMESTAMP" on_update="true" comment="Timestamp when the queue item was last updated"/>
+        <constraint xsi:type="primary" referenceId="PRIMARY">
+            <column name="queue_id"/>
+        </constraint>
+    </table>
+    <table name="gubee_integration_log" resource="default" engine="innodb" comment="Table for storing integration log data">
+        <column xsi:type="int" name="log_id" padding="10" unsigned="true" nullable="false" identity="true" comment="Primary key for the log entry"/>
+        <column name="message" nullable="true" xsi:type="text" comment="Log message detailing the event"/>
+        <column name="level" nullable="true" xsi:type="int" comment="Severity level of the log entry based on PSR-3 levels:\n- 0 for emergency\n- 1 for alert\n- 2 for critical\n- 3 for error\n- 4 for warning\n- 5 for notice\n- 6 for info\n- 7 for debug" identity="false"/>
+        <column name="context" nullable="true" xsi:type="text" comment="Additional context information for the log entry"/>
+        <column name="created_at" nullable="true" xsi:type="timestamp" default="CURRENT_TIMESTAMP" on_update="false" comment="Timestamp when the log entry was created"/>
+        <constraint xsi:type="primary" referenceId="PRIMARY">
+            <column name="log_id"/>
+        </constraint>
+    </table>
 </schema>

@@ -13,6 +13,8 @@ use Gubee\Integration\Model\Catalog\Product\Attribute\Source\Origin;
 use Gubee\SDK\Interfaces\Catalog\Product\Attribute\Dimension\UnitTimeInterface;
 use Magento\Eav\Model\Entity\Attribute\Source\Boolean;
 
+use function sprintf;
+
 class InstallProductAttribute extends AbstractMigration
 {
     /** @var array */
@@ -120,12 +122,33 @@ class InstallProductAttribute extends AbstractMigration
         foreach ($this->attributes as $code => $data) {
             try {
                 if (! $this->attribute->exists($code)) {
+                    $this->getContext()->getLogger()
+                        ->info(
+                            sprintf(
+                                "Creating attribute '%s'",
+                                $code
+                            )
+                        );
                     $this->attribute->create($code, $data);
+                    $this->getContext()->getLogger()
+                        ->info(
+                            sprintf(
+                                "Attribute '%s' created successfully",
+                                $code
+                            )
+                        );
                 } else {
                     $this->attribute->update($code, $data);
+                    $this->getContext()->getLogger()
+                        ->info(
+                            sprintf(
+                                "Attribute '%s' updated successfully",
+                                $code
+                            )
+                        );
                 }
             } catch (Exception $e) {
-                $this->context->getLogger()->error($e->getMessage());
+                $this->getContext()->getLogger()->error($e->getMessage());
             }
         }
     }

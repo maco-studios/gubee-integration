@@ -10,7 +10,22 @@ use Gubee\Integration\Model\LogFactory;
 use Psr\Log\InvalidArgumentException;
 use Psr\Log\LoggerInterface;
 
+use function array_filter;
+use function array_merge;
+use function floor;
 use function json_encode;
+use function log;
+use function memory_get_peak_usage;
+use function memory_get_usage;
+use function pow;
+use function round;
+use function sprintf;
+
+use const JSON_NUMERIC_CHECK;
+use const JSON_PRETTY_PRINT;
+use const JSON_UNESCAPED_SLASHES;
+use const JSON_UNESCAPED_UNICODE;
+use const PHP_SAPI;
 
 class Logger implements LoggerInterface
 {
@@ -176,15 +191,54 @@ class Logger implements LoggerInterface
     public function log($level, $message, array $context = [])
     {
         try {
+            $context = array_merge(
+                $context,
+                [
+                    'Memory Usage'      => $this->formatMemorySize(
+                        memory_get_usage(true)
+                    ),
+                    'Memory Peak Usage' => $this->formatMemorySize(
+                        memory_get_peak_usage(true)
+                    ),
+                    'IP'                => $_SERVER['REMOTE_ADDR'] ?? null,
+                    'User Agent'        => $_SERVER['HTTP_USER_AGENT'] ?? '',
+                    'CLI'               => PHP_SAPI === 'cli',
+                    'uri'               => $_SERVER['REQUEST_URI'] ?? '',
+                ]
+            );
+
+            $context = array_filter($context, function ($value) {
+                return ! empty($value);
+            });
+
             $log = $this->logFactory->create();
             $log->setLevel($level)
                 ->setMessage($message)
                 ->setContext(
-                    json_encode($context)
+                    json_encode(
+                        $context,
+                        JSON_UNESCAPED_SLASHES
+                        | JSON_UNESCAPED_UNICODE
+                        | JSON_PRETTY_PRINT
+                        | JSON_NUMERIC_CHECK
+                    )
                 )->save();
         } catch (Exception $e) {
             $this->logger->error($e->getMessage());
         }
+    }
+
+    /**
+     * Convert memory size to human readable format
+     */
+    public function formatMemorySize(int $size): string
+    {
+        $unit = ['B', 'KB', 'MB', 'GB', 'TB', 'PB'];
+        return sprintf(
+            "%s %s",
+            @round($size / pow(1024, $i = floor(log($size, 1024))), 2),
+            $unit[$i]
+        );
     }
 
     public function getLogFactory(): LogFactory

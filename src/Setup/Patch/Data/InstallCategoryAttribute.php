@@ -8,6 +8,8 @@ use Gubee\Integration\Library\Setup\AbstractMigration;
 use Gubee\Integration\Library\Setup\Migration\Context;
 use Gubee\Integration\Library\Setup\Migration\Facade\Catalog\Category\Attribute;
 
+use function sprintf;
+
 class InstallCategoryAttribute extends AbstractMigration
 {
     protected Attribute $attribute;
@@ -30,9 +32,24 @@ class InstallCategoryAttribute extends AbstractMigration
         ];
 
         if (! $this->attribute->exists('gubee')) {
+            $this->getContext()->getLogger()->info(
+                sprintf("Creating attribute '%s'", $attribute['label'])
+            );
             $this->attribute->create('gubee', $attribute);
+            $this->getContext()->getLogger()->info(
+                sprintf(
+                    "Attribute '%s' created successfully",
+                    $attribute["label"]
+                )
+            );
         } else {
             $this->attribute->update('gubee', $attribute);
+            $this->getContext()->getLogger()->info(
+                sprintf(
+                    "Attribute '%s' updated successfully",
+                    $attribute["label"]
+                )
+            );
         }
     }
 }
