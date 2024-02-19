@@ -6,14 +6,21 @@ namespace Gubee\Integration\Api\Data;
 
 interface QueueInterface
 {
-    const UPDATED_AT  = 'updated_at';
-    const QUEUE_ID    = 'queue_id';
-    const PROCESS     = 'process';
-    const CREATED_AT  = 'created_at';
-    const PAYLOAD     = 'payload';
-    const STATUS      = 'status';
-    const ATTEMPTS    = 'attempts';
-    const EXECUTED_AT = 'executed_at';
+    public const STATUS_PENDING = 0;
+    public const STATUS_RUNNING = 1;
+    public const STATUS_STOPPED = 2;
+    public const STATUS_FAILED = 3;
+    public const STATUS_ERROR = 4;
+    public const STATUS_SUCCESS = 5;
+
+    public const UPDATED_AT = 'updated_at';
+    public const QUEUE_ID = 'queue_id';
+    public const PROCESS = 'process';
+    public const CREATED_AT = 'created_at';
+    public const PAYLOAD = 'payload';
+    public const STATUS = 'status';
+    public const ATTEMPTS = 'attempts';
+    public const EXECUTED_AT = 'executed_at';
 
     /**
      * Get queue_id
