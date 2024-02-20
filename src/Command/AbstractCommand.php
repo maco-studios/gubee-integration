@@ -4,14 +4,16 @@ declare(strict_types=1);
 
 namespace Gubee\Integration\Command;
 
-use Psr\Log\LoggerInterface;
-use Symfony\Component\Console\Input\InputInterface;
 use Magento\Framework\Event\ManagerInterface;
-use Symfony\Component\Console\Output\OutputInterface;
-use Symfony\Component\Console\Exception\ExceptionInterface;
+use Psr\Log\LoggerInterface;
 use Symfony\Component\Console\Command\Command;
-use Symfony\Component\Console\Exception\LogicException;
+use Symfony\Component\Console\Exception\ExceptionInterface;
 use Symfony\Component\Console\Exception\InvalidArgumentException;
+use Symfony\Component\Console\Exception\LogicException;
+use Symfony\Component\Console\Input\InputInterface;
+use Symfony\Component\Console\Output\OutputInterface;
+
+use function sprintf;
 
 abstract class AbstractCommand extends Command
 {
@@ -22,17 +24,15 @@ abstract class AbstractCommand extends Command
 
     /**
      * @param string|null $name The name of the command; passing null means it must be set in configure()
-     *
-     * @throws LogicException When the command name is empty
+     * @throws LogicException When the command name is empty.
      */
     public function __construct(
         ManagerInterface $eventDispatcher,
         LoggerInterface $logger,
-        string $name = null
-    )
-    {
+        ?string $name = null
+    ) {
         $this->eventDispatcher = $eventDispatcher;
-        $this->logger = $logger;
+        $this->logger          = $logger;
         parent::__construct($name);
     }
 
@@ -43,16 +43,15 @@ abstract class AbstractCommand extends Command
      * setCode() method or by overriding the execute() method
      * in a sub-class.
      *
-     * @return int The command exit code
-     *
-     * @throws ExceptionInterface When input binding fails. Bypass this by calling {@link ignoreValidationErrors()}.
-     *
      * @see setCode()
      * @see execute()
+     *
+     * @return int The command exit code.
+     * @throws ExceptionInterface When input binding fails. Bypass this by calling {@link ignoreValidationErrors()}.
      */
     public function run(InputInterface $input, OutputInterface $output)
     {
-        $this->input = $input;
+        $this->input  = $input;
         $this->output = $output;
         $this->getEventDispatcher()->dispatch(
             sprintf(
@@ -61,8 +60,8 @@ abstract class AbstractCommand extends Command
             ),
             [
                 'command' => $this,
-                'input' => $input,
-                'output' => $output
+                'input'   => $input,
+                'output'  => $output,
             ]
         );
 
@@ -74,9 +73,9 @@ abstract class AbstractCommand extends Command
             ),
             [
                 'command' => $this,
-                'input' => $input,
-                'output' => $output,
-                'result' => $result
+                'input'   => $input,
+                'output'  => $output,
+                'result'  => $result,
             ]
         );
 
@@ -91,16 +90,15 @@ abstract class AbstractCommand extends Command
      * execute() method, you set the code to execute by passing
      * a Closure to the setCode() method.
      *
-     * @return int 0 if everything went fine, or an exit code
-     *
-     * @throws LogicException When this abstract method is not implemented
-     *
      * @see setCode()
+     *
+     * @return int 0 if everything went fine, or an exit code
+     * @throws LogicException When this abstract method is not implemented.
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
         $this->output = $output;
-        $this->input = $input;
+        $this->input  = $input;
         $this->getLogger()->info(
             sprintf(
                 "Running command '%s'",
@@ -115,8 +113,8 @@ abstract class AbstractCommand extends Command
             ),
             [
                 'command' => $this,
-                'input' => $input,
-                'output' => $output
+                'input'   => $input,
+                'output'  => $output,
             ]
         );
 
@@ -129,15 +127,14 @@ abstract class AbstractCommand extends Command
             ),
             [
                 'command' => $this,
-                'input' => $input,
-                'output' => $output,
-                'result' => $result
+                'input'   => $input,
+                'output'  => $output,
+                'result'  => $result,
             ]
         );
 
         return $result;
     }
-
 
     /**
      * Sets the name of the command.
@@ -148,12 +145,9 @@ abstract class AbstractCommand extends Command
      *     $command->setName('foo:bar');
      *
      * @param string $name The command name
-     *
      * @return $this
-     *
-     * @throws InvalidArgumentException When the name is invalid
+     * @throws InvalidArgumentException When the name is invalid.
      */
-
     public function setName($name)
     {
         return parent::setName(
@@ -165,36 +159,21 @@ abstract class AbstractCommand extends Command
         );
     }
 
-
-
-
-    /**
-     * @return InputInterface
-     */
     public function getInput(): InputInterface
     {
         return $this->input;
     }
 
-    /**
-     * @return ManagerInterface
-     */
     public function getEventDispatcher(): ManagerInterface
     {
         return $this->eventDispatcher;
     }
 
-    /**
-     * @return LoggerInterface
-     */
     public function getLogger(): LoggerInterface
     {
         return $this->logger;
     }
 
-    /**
-     * @return OutputInterface
-     */
     public function getOutput(): OutputInterface
     {
         return $this->output;
