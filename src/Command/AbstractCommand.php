@@ -17,6 +17,8 @@ use function sprintf;
 
 abstract class AbstractCommand extends Command
 {
+    public const SUCCESS = 0;
+    public const FAILED  = 1;
     protected InputInterface $input;
     protected ManagerInterface $eventDispatcher;
     protected LoggerInterface $logger;
@@ -118,7 +120,7 @@ abstract class AbstractCommand extends Command
             ]
         );
 
-        $result = $this->doExecute($input, $output);
+        $result = $this->doExecute();
 
         $this->getEventDispatcher()->dispatch(
             sprintf(
@@ -135,6 +137,11 @@ abstract class AbstractCommand extends Command
 
         return $result;
     }
+
+    /**
+     * Executes the command.
+     */
+    abstract protected function doExecute(): int;
 
     /**
      * Sets the name of the command.
