@@ -1,4 +1,4 @@
-<p align="center"><img src=".github/assets/img/logo.png" width="800px" alt="Gubee Integration Logo" />
+<p align="center"><img src=".github/assets/img/logo.png" width="400px" alt="Gubee Integration Logo" />
 </p>
 <p align="center">
 </p>
