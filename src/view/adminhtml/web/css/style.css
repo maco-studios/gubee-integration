@@ -1,0 +1,77 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/** a td that contains a child div grid-log-* class */
+
+
+/**
+ * Types:
+ * - emergency; background must be light red and border must be dark red
+ * - alert: background must be light orange and border must be dark orange
+ * - critical: background must be light red and border must be dark red
+ * - error: background must be light red and border must be dark red
+ * - warning: background must be light yellow and border must be dark yellow
+ * - notice: background must be light blue and border must be dark blue
+ * - info: background must be green and border must be dark green
+ * - debug: background must be light gray and border must be dark gray
+ */
+.grid-log {
+    background: #feeee1 none repeat scroll 0 0;
+    border: 1px solid #ed4f2e;
+    color: rgba(0, 0, 0, 0.6);
+    display: block;
+    font-weight: bold;
+    line-height: 17px;
+    padding: 0 3px;
+    text-align: center;
+    text-transform: uppercase;
+}
+
+.grid-log-emergency {
+    @apply grid-log;
+    background: rgba(255, 0, 0, 0.5);
+    border: 1px solid rgba(139, 0, 0, 0.8);
+}
+
+.grid-log-alert {
+    @apply grid-log;
+    background: rgba(255, 165, 0, 0.5);
+    border: 1px solid rgba(255, 140, 0, 0.8);
+}
+
+.grid-log-critical {
+    @apply grid-log;
+    background: rgba(255, 0, 0, 0.5);
+    border: 1px solid rgba(139, 0, 0, 0.8);
+}
+
+.grid-log-error {
+    @apply grid-log;
+    background: rgba(255, 0, 0, 0.5);
+    border: 1px solid rgba(139, 0, 0, 0.8);
+}
+
+.grid-log-warning {
+    @apply grid-log;
+    background: rgba(255, 255, 0, 0.5);
+    border: 1px solid rgba(184, 134, 11, 0.8);
+}
+
+.grid-log-notice {
+    @apply grid-log;
+    background: rgba(135, 206, 250, 0.5);
+    border: 1px solid rgba(0, 0, 139, 0.8);
+}
+
+.grid-log-info {
+    @apply grid-log;
+    background: rgba(0, 128, 0, 0.5);
+    border: 1px solid rgba(0, 100, 0, 0.8);
+}
+
+.grid-log-debug {
+    @apply grid-log;
+    background: rgba(255, 165, 0, 0.5);
+    border: 1px solid rgba(255, 140, 0, 0.8);
+}

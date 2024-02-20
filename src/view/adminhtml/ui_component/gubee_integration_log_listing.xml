@@ -48,24 +48,34 @@
                 <sorting>asc</sorting>
             </settings>
         </column>
-        <column name="message">
+        <column name="message" class="Gubee\Integration\Ui\Component\Log\Listing\Column\Message">
             <settings>
                 <filter>text</filter>
                 <label translate="true">Message</label>
+                <bodyTmpl>ui/grid/cells/html</bodyTmpl>
             </settings>
         </column>
-        <column name="level" component="Magento_Ui/js/grid/columns/select">
+        <column name="level" class="Gubee\Integration\Ui\Component\Log\Listing\Column\Level">
             <settings>
                 <options class="Gubee\Integration\Model\Log\Source\Level"/>
                 <filter>select</filter>
                 <dataType>select</dataType>
+                <bodyTmpl>ui/grid/cells/html</bodyTmpl>
                 <label translate="true">Level</label>
             </settings>
         </column>
-        <column name="context">
+        <column name="context" class="Gubee\Integration\Ui\Component\Log\Listing\Column\Context">
             <settings>
                 <filter>text</filter>
+                <bodyTmpl>ui/grid/cells/html</bodyTmpl>
                 <label translate="true">Context</label>
+            </settings>
+        </column>
+        <column name="created_at">
+            <settings>
+                <filter>date</filter>
+                <dataType>date</dataType>
+                <label translate="true">Created At</label>
             </settings>
         </column>
     </columns>

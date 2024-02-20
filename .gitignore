@@ -13,3 +13,6 @@
 
 # tests cache
 /var
+
+# node
+/node_modules

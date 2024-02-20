@@ -1,0 +1,8 @@
+{
+    "devDependencies": {
+        "tailwindcss": "^3.4.1"
+    },
+    "scripts": {
+        "dev": "npx tailwindcss -i ./src/view/adminhtml/web/css/style.css -o ./src/view/adminhtml/web/css/dist/gubee-integration.css --watch"
+    }
+}

@@ -84,6 +84,7 @@
         <column name="created_at">
             <settings>
                 <filter>date</filter>
+                <dataType>date</dataType>
                 <label translate="true">Created At</label>
             </settings>
         </column>

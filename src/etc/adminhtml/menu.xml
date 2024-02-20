@@ -1,8 +1,8 @@
 <?xml version="1.0" ?>
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Backend:etc/menu.xsd">
-	<menu>
-		<add id="Gubee::top_level" title="Gubee" module="Gubee_Integration" sortOrder="9999" resource="Magento_Backend::content"/>
-		<add id="Gubee_Integration::gubee_integration_queue" title="Queue" module="Gubee_Integration" sortOrder="9999" resource="Magento_Backend::content" parent="Gubee::top_level" action="gubee_integration/queue/index"/>
-		<add id="Gubee_Integration::gubee_integration_log" title="Log" module="Gubee_Integration" sortOrder="9999" resource="Magento_Backend::content" parent="Gubee::top_level" action="gubee_integration/log/index"/>
-	</menu>
+    <menu>
+        <add id="Gubee_Integration::catalog" title="Gubee" translate="title" module="Magento_Catalog" sortOrder="10" parent="Magento_Backend::system" resource="Magento_Backend::content" dependsOnConfig="gubee/integration/active"/>
+        <add id="Gubee_Integration::gubee_integration_queue" title="Queue" module="Gubee_Integration" sortOrder="9999" resource="Magento_Backend::content" parent="Gubee_Integration::catalog" action="gubee_integration/queue/index"/>
+        <add id="Gubee_Integration::gubee_integration_log" title="Log" module="Gubee_Integration" sortOrder="9999" resource="Magento_Backend::content" parent="Gubee_Integration::catalog" action="gubee_integration/log/index"/>
+    </menu>
 </config>
