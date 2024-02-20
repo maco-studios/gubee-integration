@@ -9,6 +9,7 @@ use Magento\Eav\Model\Entity\Attribute\Source\AbstractSource;
 
 use function __;
 use function str_replace;
+use function strtolower;
 use function ucfirst;
 
 class Origin extends AbstractSource
@@ -50,10 +51,12 @@ class Origin extends AbstractSource
     public function getLabel(string $value): string
     {
         $value = str_replace(
-            "_",
-            " ",
+            ["_", " PERCENT"],
+            [" ", "%"],
             $value
         );
+
+        $value = strtolower($value);
 
         return ucfirst($value);
     }

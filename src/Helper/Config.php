@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Gubee\Integration\Helper;
 
 use DateTimeInterface;
+use Gubee\Integration\Api\Data\LogInterface;
 use Gubee\Integration\Command\Gubee\Token\RenewCommand;
 use Magento\Framework\App\Config\ReinitableConfigInterface;
 use Magento\Framework\App\Config\Storage\WriterInterface;

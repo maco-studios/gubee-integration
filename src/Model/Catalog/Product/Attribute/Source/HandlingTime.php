@@ -9,6 +9,7 @@ use Magento\Eav\Model\Entity\Attribute\Source\AbstractSource;
 
 use function __;
 use function str_replace;
+use function strtolower;
 use function ucfirst;
 
 class HandlingTime extends AbstractSource
@@ -47,6 +48,8 @@ class HandlingTime extends AbstractSource
             " ",
             $value
         );
+
+        $value = strtolower($value);
 
         return ucfirst($value);
     }
