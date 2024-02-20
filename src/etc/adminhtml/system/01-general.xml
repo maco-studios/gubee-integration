@@ -63,7 +63,7 @@
             <source_model>Gubee\Integration\Model\System\Config\Source\Log\Level</source_model>
             <config_path>gubee/integration/log_level</config_path>
             <comment>
-                <![CDATA[Log Level is the level of logs that will be saved, by <b>default it is Error.</b>]]>
+                <![CDATA[By default <b>errors</b> logs will be saved, you can select the log level to save.]]>
             </comment>
             <depends>
                 <field id="active">1</field>

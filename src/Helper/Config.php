@@ -15,6 +15,8 @@ use Magento\Framework\ObjectManagerInterface;
 use Magento\Framework\Stdlib\DateTime;
 use Psr\Log\LoggerInterface;
 
+use function array_merge;
+use function explode;
 use function sprintf;
 
 class Config extends AbstractHelper
@@ -25,11 +27,9 @@ class Config extends AbstractHelper
     protected WriterInterface $configWriter;
     protected ReinitableConfigInterface $reinitableConfig;
     protected ObjectManagerInterface $objectManager;
-    protected DateTime $dateTime;
     protected LoggerInterface $logger;
 
     public function __construct(
-        DateTime $dateTime,
         Context $context,
         WriterInterface $configWriter,
         ReinitableConfigInterface $reinitableConfig,
@@ -39,7 +39,6 @@ class Config extends AbstractHelper
         parent::__construct($context);
         $this->objectManager    = $objectManager;
         $this->logger           = $logger;
-        $this->dateTime         = $dateTime;
         $this->reinitableConfig = $reinitableConfig;
         $this->configWriter     = $configWriter;
         $this->config           = new DataObject(
@@ -123,7 +122,21 @@ class Config extends AbstractHelper
             $this->getConfig()
                 ->getApiTimeout()
         )->getTimestamp();
-        return $this->dateTime->gmtTimestamp() > $expirationDate;
+        $date           = new DateTime();
+        return $date->getTimestamp() > $expirationDate;
+    }
+
+    public function getLogLevel(): array
+    {
+        return array_merge(
+            [
+                LogInterface::ERROR,
+            ],
+            explode(
+                ',',
+                $this->config->getLogLevel() ?: ''
+            ) ?: []
+        );
     }
 
     /**

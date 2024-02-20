@@ -6,6 +6,7 @@ namespace Gubee\Integration\Model;
 
 use Exception;
 use Gubee\Integration\Api\Data\LogInterface;
+use Gubee\Integration\Helper\Config;
 use Gubee\Integration\Model\LogFactory;
 use Psr\Log\InvalidArgumentException;
 use Psr\Log\LoggerInterface;
@@ -13,6 +14,7 @@ use Psr\Log\LoggerInterface;
 use function array_filter;
 use function array_merge;
 use function floor;
+use function in_array;
 use function json_encode;
 use function log;
 use function memory_get_peak_usage;
@@ -34,10 +36,12 @@ class Logger implements LoggerInterface
 
     public function __construct(
         LogFactory $logFactory,
+        Config $config,
         LoggerInterface $logger
     ) {
         $this->logFactory = $logFactory;
         $this->logger     = $logger;
+        $this->config     = $config;
     }
 
     /**
@@ -190,6 +194,9 @@ class Logger implements LoggerInterface
      */
     public function log($level, $message, array $context = [])
     {
+        if (! in_array($level, $this->config->getLogLevel())) {
+            return;
+        }
         try {
             $context = array_merge(
                 $context,
@@ -224,7 +231,9 @@ class Logger implements LoggerInterface
                     )
                 )->save();
         } catch (Exception $e) {
-            $this->logger->error($e->getMessage());
+            $this->logger->error(
+                $e->getMessage()
+            );
         }
     }
 
