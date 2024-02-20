@@ -6,6 +6,7 @@ namespace Gubee\Integration\Observer\Admin\System\Config;
 
 use Gubee\Integration\Command\Gubee\Token\RenewCommand;
 use Gubee\Integration\Helper\Config;
+use Gubee\Integration\Model\Queue\Manager;
 use Gubee\Integration\Observer\AbstractObserver;
 use Magento\Framework\ObjectManagerInterface;
 use Psr\Log\LoggerInterface;
@@ -20,6 +21,7 @@ class Changed extends AbstractObserver
     protected ObjectManagerInterface $objectManager;
 
     public function __construct(
+        Manager $queueManager,
         LoggerInterface $logger,
         Config $config,
         RenewCommand $renewCommand,
@@ -27,7 +29,11 @@ class Changed extends AbstractObserver
     ) {
         $this->objectManager = $objectManager;
         $this->renewCommand  = $renewCommand;
-        parent::__construct($logger, $config);
+        parent::__construct(
+            $queueManager,
+            $logger,
+            $config
+        );
     }
 
     public function process(): void

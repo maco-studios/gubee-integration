@@ -1,5 +1,6 @@
 <?xml version="1.0" ?>
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
+    <preference for="Gubee\SDK\Gubee" type="Gubee\Integration\Service\Client"/>
     <preference for="Gubee\Integration\Api\QueueRepositoryInterface" type="Gubee\Integration\Model\QueueRepository"/>
     <preference for="Gubee\Integration\Api\Data\QueueInterface" type="Gubee\Integration\Model\Queue"/>
     <preference for="Gubee\Integration\Api\Data\QueueSearchResultsInterface" type="Magento\Framework\Api\SearchResults"/>
@@ -40,11 +41,17 @@
             <argument name="logger" xsi:type="object">Gubee\Integration\Model\Logger</argument>
         </arguments>
     </type>
+    <type name="Gubee\Integration\Model\Queue\Manager">
+        <arguments>
+            <argument name="logger" xsi:type="object">Gubee\Integration\Model\Logger</argument>
+        </arguments>
+    </type>
 
     <type name="Magento\Framework\Console\CommandListInterface">
         <arguments>
             <argument name="commands" xsi:type="array">
                 <item name="Gubee\Integration\Command\Gubee\Token\RenewCommand" xsi:type="object">Gubee\Integration\Command\Gubee\Token\RenewCommand</item>
+                <item name="Gubee\Integration\Command\Catalog\Product\Attribute\SendCommand" xsi:type="object">Gubee\Integration\Command\Catalog\Product\Attribute\SendCommand</item>
             </argument>
         </arguments>
     </type>

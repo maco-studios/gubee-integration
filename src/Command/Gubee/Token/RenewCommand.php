@@ -26,10 +26,12 @@ class RenewCommand extends AbstractCommand
     public function __construct(
         ManagerInterface $eventDispatcher,
         LoggerInterface $logger,
-        Config $config,
-        Gubee $client
+        Config $config
     ) {
-        $this->client = $client;
+        $this->client = new Gubee(
+            null,
+            $logger
+        );
         $this->config = $config;
         parent::__construct(
             $eventDispatcher,

@@ -4,7 +4,9 @@ declare(strict_types=1);
 
 namespace Gubee\Integration\Helper;
 
+use DateTime;
 use DateTimeInterface;
+use Exception;
 use Gubee\Integration\Api\Data\LogInterface;
 use Gubee\Integration\Command\Gubee\Token\RenewCommand;
 use Magento\Framework\App\Config\ReinitableConfigInterface;
@@ -13,8 +15,9 @@ use Magento\Framework\App\Helper\AbstractHelper;
 use Magento\Framework\App\Helper\Context;
 use Magento\Framework\DataObject;
 use Magento\Framework\ObjectManagerInterface;
-use Magento\Framework\Stdlib\DateTime;
 use Psr\Log\LoggerInterface;
+use Symfony\Component\Console\Input\ArrayInput;
+use Symfony\Component\Console\Output\BufferedOutput;
 
 use function array_merge;
 use function explode;
@@ -63,10 +66,10 @@ class Config extends AbstractHelper
     {
         if (
             $this->getConfig()
-                ->getOrigData()
+            ->getOrigData()
             ===
             $this->getConfig()
-                ->getData()
+            ->getData()
         ) {
             return $this;
         }
@@ -86,10 +89,16 @@ class Config extends AbstractHelper
         return $this;
     }
 
-    public function getApiToken(): mixed
+    /**
+     * Get the API token
+     *
+     * @throws Exception When the token is expired.
+     * @return string|null
+     */
+    public function getApiToken()
     {
         if (! $this->getConfig()->getActive()) {
-            return $this;
+            return null;
         }
 
         if ($this->isTokenExpired()) {

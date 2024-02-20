@@ -48,10 +48,10 @@
                 <sorting>asc</sorting>
             </settings>
         </column>
-        <column name="process">
+        <column name="handler">
             <settings>
                 <filter>text</filter>
-                <label translate="true">Process</label>
+                <label translate="true">Handler</label>
             </settings>
         </column>
         <column name="payload">

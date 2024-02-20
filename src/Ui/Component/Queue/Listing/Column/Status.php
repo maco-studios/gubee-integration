@@ -22,14 +22,14 @@ class Status extends Column
         if (isset($dataSource['data']['items'])) {
             foreach ($dataSource['data']['items'] as &$item) {
                 $status                       = $item['status'];
-                $item[$this->getData('name')] = $this->getStatusHtml($status);
+                $item[$this->getData('name')] = $this->getStatusHtml((int) $status);
             }
         }
 
         return $dataSource;
     }
 
-    public function getStatusHtml(string $status): string
+    public function getStatusHtml(int $status): string
     {
         switch ($status) {
             case QueueInterface::STATUS_PENDING:

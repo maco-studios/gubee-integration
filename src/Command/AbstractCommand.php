@@ -18,7 +18,7 @@ use function sprintf;
 abstract class AbstractCommand extends Command
 {
     public const SUCCESS = 0;
-    public const FAILED  = 1;
+    public const FAILURE = 1;
     protected InputInterface $input;
     protected ManagerInterface $eventDispatcher;
     protected LoggerInterface $logger;
