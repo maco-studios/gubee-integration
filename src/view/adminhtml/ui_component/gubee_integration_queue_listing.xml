@@ -60,11 +60,12 @@
                 <label translate="true">Payload</label>
             </settings>
         </column>
-        <column name="status" component="Magento_Ui/js/grid/columns/select">
+        <column name="status" class="Gubee\Integration\Ui\Component\Queue\Listing\Column\Status">
             <settings>
                 <options class="Gubee\Integration\Model\Queue\Source\Status"/>
                 <filter>select</filter>
                 <dataType>select</dataType>
+                <bodyTmpl>ui/grid/cells/html</bodyTmpl>
                 <label translate="true">Status</label>
             </settings>
         </column>

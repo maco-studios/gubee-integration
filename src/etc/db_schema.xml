@@ -2,9 +2,11 @@
 <schema xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:Setup/Declaration/Schema/etc/schema.xsd">
     <table name="gubee_integration_queue" resource="default" engine="innodb" comment="Table for storing integration queue data">
         <column xsi:type="int" name="queue_id" padding="10" unsigned="true" nullable="false" identity="true" comment="Primary key for the queue item"/>
-        <column name="process" nullable="true" xsi:type="varchar" comment="Name of the process to be executed" length="255"/>
+        <column name="handler" nullable="true" xsi:type="varchar" comment="Name of the process to be executed" length="255"/>
         <column name="payload" nullable="true" xsi:type="text" comment="Data to be processed by the queue item"/>
         <column name="status" nullable="true" xsi:type="int" comment="Status of the queue item (0 for pending, 1 for processing, 2 for completed)" identity="false"/>
+        <column name="error_message" nullable="true" xsi:type="text" comment="Error message if the queue item failed to process"/>
+        <column name="response" nullable="true" xsi:type="text" comment="Response data from the queue item processing"/>
         <column name="executed_at" nullable="true" xsi:type="timestamp" comment="Timestamp when the queue item was last executed"/>
         <column name="attempts" nullable="true" xsi:type="int" comment="Number of attempts made to process the queue item" identity="false"/>
         <column name="created_at" nullable="true" xsi:type="timestamp" default="CURRENT_TIMESTAMP" on_update="false" comment="Timestamp when the queue item was created"/>

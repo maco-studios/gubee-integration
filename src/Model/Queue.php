@@ -22,6 +22,38 @@ class Queue extends AbstractModel implements QueueInterface
     /**
      * @inheritDoc
      */
+    public function setErrorMessage($message)
+    {
+        return $this->setData(self::ERROR_MESSAGE, $message);
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function getErrorMessage()
+    {
+        return $this->getData(self::ERROR_MESSAGE);
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function setResponse($response)
+    {
+        return $this->setData(self::RESPONSE, $response);
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function getResponse()
+    {
+        return $this->getData(self::RESPONSE);
+    }
+
+    /**
+     * @inheritDoc
+     */
     public function getQueueId()
     {
         return $this->getData(self::QUEUE_ID);
@@ -38,17 +70,17 @@ class Queue extends AbstractModel implements QueueInterface
     /**
      * @inheritDoc
      */
-    public function getProcess()
+    public function getHandler()
     {
-        return $this->getData(self::PROCESS);
+        return $this->getData(self::HANDLER);
     }
 
     /**
      * @inheritDoc
      */
-    public function setProcess($process)
+    public function setHandler($process)
     {
-        return $this->setData(self::PROCESS, $process);
+        return $this->setData(self::HANDLER, $process);
     }
 
     /**

@@ -15,8 +15,10 @@ interface QueueInterface
 
     public const UPDATED_AT = 'updated_at';
     public const QUEUE_ID = 'queue_id';
-    public const PROCESS = 'process';
+    public const HANDLER = 'handler';
     public const CREATED_AT = 'created_at';
+    public const ERROR_MESSAGE = 'error_message';
+    public const RESPONSE = 'response';
     public const PAYLOAD = 'payload';
     public const STATUS = 'status';
     public const ATTEMPTS = 'attempts';
@@ -42,7 +44,7 @@ interface QueueInterface
      *
      * @return string|null
      */
-    public function getProcess();
+    public function getHandler();
 
     /**
      * Set process
@@ -50,7 +52,37 @@ interface QueueInterface
      * @param string $process
      * @return \Gubee\Integration\Queue\Api\Data\QueueInterface
      */
-    public function setProcess($process);
+    public function setHandler($process);
+
+    /**
+     * Get error
+     *
+     * @return string|null
+     */
+    public function getErrorMessage();
+
+    /**
+     * Set error
+     *
+     * @param string $errorMessage
+     * @return \Gubee\Integration\Queue\Api\Data\QueueInterface
+     */
+    public function setErrorMessage($errorMessage);
+
+    /**
+     * Get response
+     *
+     * @return string|null
+     */
+    public function getResponse();
+
+    /**
+     * Set response
+     *
+     * @param string $response
+     * @return \Gubee\Integration\Queue\Api\Data\QueueInterface
+     */
+    public function setResponse($response);
 
     /**
      * Get payload
@@ -77,7 +109,7 @@ interface QueueInterface
     /**
      * Set status
      *
-     * @param string $status
+     * @param mixed $status
      * @return \Gubee\Integration\Queue\Api\Data\QueueInterface
      */
     public function setStatus($status);
@@ -100,14 +132,14 @@ interface QueueInterface
     /**
      * Get attempts
      *
-     * @return string|null
+     * @return int|null
      */
     public function getAttempts();
 
     /**
      * Set attempts
      *
-     * @param string $attempts
+     * @param int $attempts
      * @return \Gubee\Integration\Queue\Api\Data\QueueInterface
      */
     public function setAttempts($attempts);
