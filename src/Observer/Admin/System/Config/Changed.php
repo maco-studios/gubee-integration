@@ -12,6 +12,8 @@ use Psr\Log\LoggerInterface;
 use Symfony\Component\Console\Input\ArrayInput;
 use Symfony\Component\Console\Output\BufferedOutput;
 
+use function in_array;
+
 class Changed extends AbstractObserver
 {
     protected RenewCommand $renewCommand;
@@ -22,21 +24,20 @@ class Changed extends AbstractObserver
         Config $config,
         RenewCommand $renewCommand,
         ObjectManagerInterface $objectManager
-    )
-    {
+    ) {
         $this->objectManager = $objectManager;
-        $this->renewCommand = $renewCommand;
+        $this->renewCommand  = $renewCommand;
         parent::__construct($logger, $config);
     }
 
     public function process(): void
     {
-        $input = $this->objectManager->create(
+        $input  = $this->objectManager->create(
             ArrayInput::class,
             [
                 'parameters' => [
-                    'token' => $this->getConfig()->getApiKey()
-                ]
+                    'token' => $this->getConfig()->getApiKey(),
+                ],
             ]
         );
         $output = $this->objectManager->create(BufferedOutput::class);
@@ -54,14 +55,13 @@ class Changed extends AbstractObserver
                 'changed_paths'
             )
         ) || in_array(
-                'gubee/integration/api_key',
-                $this->getObserver()->getData(
-                    'changed_paths'
-                )
-            );
+            'gubee/integration/api_key',
+            $this->getObserver()->getData(
+                'changed_paths'
+            )
+        );
 
         $isAllowed = parent::isAllowed();
         return $isAllowed && $apiKeyHasChanged;
     }
-
 }

@@ -7,6 +7,7 @@
             <tab>service</tab>
             <resource>Gubee_Integration::config_gubee_integration</resource>
             <include path="Gubee_Integration::system/01-general.xml"/>
+            <include path="Gubee_Integration::system/02-attributes.xml"/>
         </section>
     </system>
 </config>

@@ -63,8 +63,9 @@ abstract class AbstractObserver implements ObserverInterface
     /**
      * Check if the observer is allowed to run
      */
-    protected function isAllowed(): bool {
-        if (!$this->getConfig()->getActive()) {
+    protected function isAllowed(): bool
+    {
+        if (! $this->getConfig()->getActive()) {
             return false;
         }
 
@@ -87,10 +88,8 @@ abstract class AbstractObserver implements ObserverInterface
         return $this;
     }
 
-	/**
-	 * @return Config
-	 */
-	public function getConfig(): Config {
-		return $this->config;
-	}
+    public function getConfig(): Config
+    {
+        return $this->config;
+    }
 }

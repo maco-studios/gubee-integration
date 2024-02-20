@@ -10,12 +10,11 @@ use Magento\Framework\App\Config\ReinitableConfigInterface;
 use Magento\Framework\App\Config\Storage\WriterInterface;
 use Magento\Framework\App\Helper\AbstractHelper;
 use Magento\Framework\App\Helper\Context;
-use Magento\Framework\App\ObjectManager;
 use Magento\Framework\DataObject;
-use Magento\Framework\Stdlib\DateTime;
 use Magento\Framework\ObjectManagerInterface;
-
+use Magento\Framework\Stdlib\DateTime;
 use Psr\Log\LoggerInterface;
+
 use function sprintf;
 
 class Config extends AbstractHelper
@@ -36,17 +35,16 @@ class Config extends AbstractHelper
         ReinitableConfigInterface $reinitableConfig,
         LoggerInterface $logger,
         ObjectManagerInterface $objectManager
-    )
-    {
+    ) {
         parent::__construct($context);
-        $this->objectManager = $objectManager;
-        $this->logger = $logger;
-        $this->dateTime = $dateTime;
+        $this->objectManager    = $objectManager;
+        $this->logger           = $logger;
+        $this->dateTime         = $dateTime;
         $this->reinitableConfig = $reinitableConfig;
-        $this->configWriter = $configWriter;
-        $this->config = new DataObject(
+        $this->configWriter     = $configWriter;
+        $this->config           = new DataObject(
             $this->scopeConfig->getValue(
-                    self::CONFIG_PATH
+                self::CONFIG_PATH
             ) ?: []
         );
     }
@@ -55,7 +53,7 @@ class Config extends AbstractHelper
     {
         $this->config = new DataObject(
             $this->scopeConfig->getValue(
-                    self::CONFIG_PATH
+                self::CONFIG_PATH
             ) ?: []
         );
         return $this;
@@ -90,24 +88,24 @@ class Config extends AbstractHelper
 
     public function getApiToken(): mixed
     {
-        if (!$this->getConfig()->getActive()) {
+        if (! $this->getConfig()->getActive()) {
             return $this;
         }
 
         if ($this->isTokenExpired()) {
-            $input = $this->objectManager->create(
+            $input    = $this->objectManager->create(
                 ArrayInput::class,
                 [
                     'parameters' => [
-                        'token' => $this->getConfig()->getApiKey()
-                    ]
+                        'token' => $this->getConfig()->getApiKey(),
+                    ],
                 ]
             );
-            $output = $this->objectManager->create(BufferedOutput::class);
+            $output   = $this->objectManager->create(BufferedOutput::class);
             $renewCmd = $this->objectManager->create(
                 RenewCommand::class,
                 [
-                    'config' => $this
+                    'config' => $this,
                 ]
             );
             $renewCmd->run($input, $output);
@@ -138,8 +136,7 @@ class Config extends AbstractHelper
     public function __call(
         $name,
         $arguments
-    )
-    {
+    ) {
         return $this->config->$name(...$arguments);
     }
 
