@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Gubee\Integration\Observer;
 
+use Gubee\Integration\Helper\Config;
 use Magento\Framework\Event\Observer;
 use Magento\Framework\Event\ObserverInterface;
 use Psr\Log\LoggerInterface;
@@ -15,11 +16,14 @@ abstract class AbstractObserver implements ObserverInterface
     protected LoggerInterface $logger;
 
     protected Observer $observer;
+    protected Config $config;
 
     public function __construct(
-        LoggerInterface $logger
+        LoggerInterface $logger,
+        Config $config
     ) {
         $this->logger = $logger;
+        $this->config = $config;
     }
 
     /**
@@ -29,6 +33,8 @@ abstract class AbstractObserver implements ObserverInterface
 
     public function execute(Observer $observer): void
     {
+        $this->setObserver($observer);
+
         if (! $this->isAllowed()) {
             $this->getLogger()->debug(
                 sprintf(
@@ -39,7 +45,6 @@ abstract class AbstractObserver implements ObserverInterface
             return;
         }
 
-        $this->setObserver($observer);
         $this->getLogger()->debug(
             sprintf(
                 "Observer '%s' is running",
@@ -58,7 +63,13 @@ abstract class AbstractObserver implements ObserverInterface
     /**
      * Check if the observer is allowed to run
      */
-    abstract protected function isAllowed(): bool;
+    protected function isAllowed(): bool {
+        if (!$this->getConfig()->getActive()) {
+            return false;
+        }
+
+        return true;
+    }
 
     public function getLogger(): LoggerInterface
     {
@@ -75,4 +86,11 @@ abstract class AbstractObserver implements ObserverInterface
         $this->observer = $observer;
         return $this;
     }
+
+	/**
+	 * @return Config
+	 */
+	public function getConfig(): Config {
+		return $this->config;
+	}
 }
