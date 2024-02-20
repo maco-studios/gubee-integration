@@ -11,6 +11,12 @@ use function __;
 
 class Status extends Column
 {
+    /**
+     * Prepare status column
+     *
+     * @param array $dataSource
+     * @return array
+     */
     public function prepareDataSource(array $dataSource)
     {
         if (isset($dataSource['data']['items'])) {
