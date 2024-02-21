@@ -9,6 +9,7 @@ use DateTimeInterface;
 use Exception;
 use Gubee\Integration\Api\Data\LogInterface;
 use Gubee\Integration\Command\Gubee\Token\RenewCommand;
+use Gubee\SDK\Interfaces\Catalog\Product\Attribute\Dimension\WeightInterface;
 use Magento\Framework\App\Config\ReinitableConfigInterface;
 use Magento\Framework\App\Config\Storage\WriterInterface;
 use Magento\Framework\App\Helper\AbstractHelper;
@@ -134,6 +135,17 @@ class Config extends AbstractHelper
         )->getTimestamp();
         $date           = new DateTime();
         return $date->getTimestamp() > $expirationDate;
+    }
+
+    public function getWeightUnit(): string
+    {
+        switch ($this->scopeConfig->getValue('general/locale/weight_unit')) {
+            case 'lbs':
+                return WeightInterface::POUND;
+            case 'kg':
+            default:
+                return WeightInterface::KILOGRAM;
+        }
     }
 
     public function getLogLevel(): array

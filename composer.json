@@ -6,7 +6,8 @@
         "magento/framework": "103.0.5",
         "magento/module-eav": "^102.1",
         "magento/module-catalog": "^104.0",
-        "gubee/sdk": "@dev"
+        "gubee/sdk": "@dev",
+        "magento/module-configurable-product": "^100.4"
     },
     "require-dev": {
         "captainhook/captainhook": "^5.18",

@@ -7,15 +7,35 @@ namespace Gubee\Integration\Service\Model\Catalog;
 use Exception;
 use Gubee\SDK\Api\Catalog\ProductApi;
 use Gubee\SDK\Library\HttpClient\Exception\NotFoundException;
+use Laminas\Hydrator\Strategy\StrategyChain;
+use Magento\Catalog\Api\Data\ProductInterface;
+use Magento\Framework\ObjectManagerInterface;
 
 class Product extends \Gubee\SDK\Model\Catalog\Product
 {
     protected ProductApi $productApi;
+    protected StrategyChain $hydrator;
 
     public function __construct(
-        ProductApi $productApi
+        ProductInterface $product,
+        ObjectManagerInterface $objectManager,
+        ProductApi $productApi,
+        iterable $strategies = []
     ) {
         $this->productApi = $productApi;
+        foreach ($strategies as &$strategy) {
+            $strategy = $objectManager->create(
+                $strategy
+            );
+            $strategy->setProduct($product);
+        }
+        $this->hydrator = $objectManager->create(
+            StrategyChain::class,
+            [
+                'extractionStrategies' => $strategies,
+            ]
+        );
+        $this->hydrator->hydrate($this);
     }
 
     public function load(string $id, string $field = 'id'): Product

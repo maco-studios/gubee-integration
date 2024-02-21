@@ -79,4 +79,46 @@
             </argument>
         </arguments>
     </type>
+
+    <type name="Gubee\Integration\Service\Model\Catalog\Product">
+        <arguments>
+            <argument name="strategies" xsi:type="array">
+                <item name="brand" xsi:type="string">Gubee\Integration\Service\Hydration\Catalog\Product\BrandHydrator</item>
+                <item name="categories" xsi:type="string">Gubee\Integration\Service\Hydration\Catalog\Product\CategoriesHydrator</item>
+                <item name="id" xsi:type="string">Gubee\Integration\Service\Hydration\Catalog\Product\IdHydrator</item>
+                <item name="mainCategory" xsi:type="string">Gubee\Integration\Service\Hydration\Catalog\Product\MainCategoryHydrator</item>
+                <item name="mainSku" xsi:type="string">Gubee\Integration\Service\Hydration\Catalog\Product\MainSkuHydrator</item>
+                <item name="name" xsi:type="string">Gubee\Integration\Service\Hydration\Catalog\Product\NameHydrator</item>
+                <item name="origin" xsi:type="string">Gubee\Integration\Service\Hydration\Catalog\Product\OriginHydrator</item>
+                <item name="specifications" xsi:type="string">Gubee\Integration\Service\Hydration\Catalog\Product\SpecificationsHydrator</item>
+                <item name="status" xsi:type="string">Gubee\Integration\Service\Hydration\Catalog\Product\StatusHydrator</item>
+                <item name="type" xsi:type="string">Gubee\Integration\Service\Hydration\Catalog\Product\TypeHydrator</item>
+                <item name="variantAttributes" xsi:type="string">Gubee\Integration\Service\Hydration\Catalog\Product\VariantAttributesHydrator</item>
+                <item name="variations" xsi:type="string">Gubee\Integration\Service\Hydration\Catalog\Product\VariationsHydrator</item>
+            </argument>
+        </arguments>
+    </type>
+
+    <type name="Gubee\Integration\Service\Model\Catalog\Product\Variation">
+        <arguments>
+            <argument name="strategies" xsi:type="array">
+                <item name="cost" xsi:type="string">Gubee\Integration\Service\Hydration\Catalog\Product\Variation\CostHydrator</item>
+                <item name="description" xsi:type="string">Gubee\Integration\Service\Hydration\Catalog\Product\Variation\DescriptionHydrator</item>
+                <item name="dimension" xsi:type="string">Gubee\Integration\Service\Hydration\Catalog\Product\Variation\DimensionHydrator</item>
+                <item name="ean" xsi:type="string">Gubee\Integration\Service\Hydration\Catalog\Product\Variation\EanHydrator</item>
+                <item name="handlingTime" xsi:type="string">Gubee\Integration\Service\Hydration\Catalog\Product\Variation\HandlingTimeHydrator</item>
+                <item name="images" xsi:type="string">Gubee\Integration\Service\Hydration\Catalog\Product\Variation\ImagesHydrator</item>
+                <item name="name" xsi:type="string">Gubee\Integration\Service\Hydration\Catalog\Product\NameHydrator</item>
+                <item name="prices" xsi:type="string">Gubee\Integration\Service\Hydration\Catalog\Product\Variation\PricesHydrator</item>
+                <item name="sku" xsi:type="string">Gubee\Integration\Service\Hydration\Catalog\Product\Variation\SkuHydrator</item>
+                <item name="skuId" xsi:type="string">Gubee\Integration\Service\Hydration\Catalog\Product\Variation\SkuIdHydrator</item>
+                <item name="status" xsi:type="string">Gubee\Integration\Service\Hydration\Catalog\Product\StatusHydrator</item>
+                <item name="stocks" xsi:type="string">Gubee\Integration\Service\Hydration\Catalog\Product\Variation\StocksHydrator</item>
+                <item name="variantSpecification" xsi:type="string">Gubee\Integration\Service\Hydration\Catalog\Product\Variation\VariantSpecificationHydrator</item>
+                <item name="warrantyTime" xsi:type="string">Gubee\Integration\Service\Hydration\Catalog\Product\Variation\WarrantyTimeHydrator</item>
+            </argument>
+        </arguments>
+    </type>
+
+
 </config>

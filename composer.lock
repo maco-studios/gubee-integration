@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "753078c84f347a64c70ac52ec159ff12",
+    "content-hash": "ce3db000a247fd7173aaf30560b052da",
     "packages": [
         {
             "name": "brick/math",
@@ -3196,6 +3196,53 @@
                 ],
                 "psr-4": {
                     "Magento\\Config\\": ""
+                }
+            },
+            "license": [
+                "OSL-3.0",
+                "AFL-3.0"
+            ],
+            "description": "N/A"
+        },
+        {
+            "name": "magento/module-configurable-product",
+            "version": "100.4.6-p4",
+            "dist": {
+                "type": "zip",
+                "url": "https://repo.magento.com/archives/magento/module-configurable-product/magento-module-configurable-product-100.4.6.0-patch4.zip",
+                "shasum": "8708010d952f5d4fb2d8404312ba88132685f96f"
+            },
+            "require": {
+                "magento/framework": "103.0.*",
+                "magento/module-backend": "102.0.*",
+                "magento/module-catalog": "104.0.*",
+                "magento/module-catalog-inventory": "100.4.*",
+                "magento/module-checkout": "100.4.*",
+                "magento/module-customer": "103.0.*",
+                "magento/module-eav": "102.1.*",
+                "magento/module-media-storage": "100.4.*",
+                "magento/module-quote": "101.2.*",
+                "magento/module-store": "101.1.*",
+                "magento/module-ui": "101.2.*",
+                "php": "~8.1.0||~8.2.0"
+            },
+            "suggest": {
+                "magento/module-configurable-sample-data": "Sample Data version: 100.4.*",
+                "magento/module-msrp": "100.4.*",
+                "magento/module-product-links-sample-data": "Sample Data version: 100.4.*",
+                "magento/module-product-video": "100.4.*",
+                "magento/module-sales": "103.0.*",
+                "magento/module-sales-rule": "101.2.*",
+                "magento/module-tax": "100.4.*",
+                "magento/module-webapi": "100.4.*"
+            },
+            "type": "magento2-module",
+            "autoload": {
+                "files": [
+                    "registration.php"
+                ],
+                "psr-4": {
+                    "Magento\\ConfigurableProduct\\": ""
                 }
             },
             "license": [
