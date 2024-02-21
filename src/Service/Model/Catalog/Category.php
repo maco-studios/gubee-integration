@@ -7,15 +7,35 @@ namespace Gubee\Integration\Service\Model\Catalog;
 use Exception;
 use Gubee\SDK\Api\Catalog\CategoryApi;
 use Gubee\SDK\Library\HttpClient\Exception\NotFoundException;
+use Laminas\Hydrator\Strategy\StrategyChain;
+use Magento\Catalog\Api\Data\CategoryInterface;
+use Magento\Framework\ObjectManagerInterface;
 
 class Category extends \Gubee\SDK\Model\Catalog\Category
 {
     protected CategoryApi $categoryApi;
+    protected StrategyChain $hydrator;
 
     public function __construct(
-        CategoryApi $categoryApi
+        CategoryInterface $category,
+        CategoryApi $categoryApi,
+        ObjectManagerInterface $objectManager,
+        iterable $strategies = []
     ) {
         $this->categoryApi = $categoryApi;
+        foreach ($strategies as &$strategy) {
+            $strategy = $objectManager->create(
+                $strategy
+            );
+            $strategy->setCategory($category);
+        }
+        $this->hydrator = $objectManager->create(
+            StrategyChain::class,
+            [
+                'extractionStrategies' => $strategies,
+            ]
+        );
+        $this->hydrator->hydrate($this);
     }
 
     public function load(string $id): Category

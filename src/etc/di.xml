@@ -67,4 +67,16 @@
             </argument>
         </arguments>
     </type>
+
+    <type name="Gubee\Integration\Service\Model\Catalog\Category">
+        <arguments>
+            <argument name="strategies" xsi:type="array">
+                <item name="active" xsi:type="string">Gubee\Integration\Service\Hydration\Catalog\Product\Category\ActiveHydrator</item>
+                <item name="description" xsi:type="string">Gubee\Integration\Service\Hydration\Catalog\Product\Category\DescriptionHydrator</item>
+                <item name="id" xsi:type="string">Gubee\Integration\Service\Hydration\Catalog\Product\Category\IdHydrator</item>
+                <item name="name" xsi:type="string">Gubee\Integration\Service\Hydration\Catalog\Product\Category\NameHydrator</item>
+                <item name="parent" xsi:type="string">Gubee\Integration\Service\Hydration\Catalog\Product\Category\ParentHydrator</item>
+            </argument>
+        </arguments>
+    </type>
 </config>
