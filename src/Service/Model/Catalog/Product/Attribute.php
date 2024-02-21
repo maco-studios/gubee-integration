@@ -8,17 +8,36 @@ use Exception;
 use Gubee\SDK\Api\Catalog\Product\AttributeApi;
 use Gubee\SDK\Library\HttpClient\Exception\NotFoundException;
 use Gubee\SDK\Model\Catalog\Product\Attribute as ProductAttribute;
+use Laminas\Hydrator\Strategy\StrategyChain;
 use Magento\Catalog\Api\Data\EavAttributeInterface;
+use Magento\Framework\ObjectManagerInterface;
 
 class Attribute extends ProductAttribute
 {
     protected EavAttributeInterface $eavAttribute;
     protected AttributeApi $attributeApi;
+    protected StrategyChain $hydrator;
 
     public function __construct(
-        AttributeApi $attributeApi
+        EavAttributeInterface $eavAttribute,
+        AttributeApi $attributeApi,
+        ObjectManagerInterface $objectManager,
+        iterable $strategies = []
     ) {
+        $this->eavAttribute = $eavAttribute;
         $this->attributeApi = $attributeApi;
+
+        foreach ($strategies as $strategy) {
+            $strategy->setEavAttribute($eavAttribute);
+        }
+
+        $this->hydrator = $objectManager->create(
+            StrategyChain::class,
+            [
+                'extractionStrategies' => $strategies,
+            ]
+        );
+        $this->hydrator->hydrate($this);
     }
 
     public function load(string $id, string $field = 'external_id')
