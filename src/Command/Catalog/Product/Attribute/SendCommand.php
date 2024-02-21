@@ -6,10 +6,10 @@ namespace Gubee\Integration\Command\Catalog\Product\Attribute;
 
 use Exception;
 use Gubee\Integration\Command\AbstractCommand;
-use Gubee\Integration\Service\Hydration\Catalog\Product\Attribute as AttributeHydrator;
 use Gubee\Integration\Service\Model\Catalog\Product\Attribute;
 use Magento\Catalog\Api\ProductAttributeRepositoryInterface;
 use Magento\Framework\Event\ManagerInterface;
+use Magento\Framework\ObjectManagerInterface;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\Console\Exception\LogicException;
 use Symfony\Component\Console\Input\InputArgument;
@@ -18,23 +18,21 @@ class SendCommand extends AbstractCommand
 {
     protected ProductAttributeRepositoryInterface $productAttributeRepository;
     protected Attribute $attribute;
-    protected AttributeHydrator $hydrator;
+    protected ObjectManagerInterface $objectManager;
 
     /**
      * @param string|null $name The name of the command; passing null means it must be set in configure()
      * @throws LogicException When the command name is empty.
      */
     public function __construct(
-        AttributeHydrator $hydrator,
-        Attribute $attribute,
         ProductAttributeRepositoryInterface $productAttributeRepository,
+        ObjectManagerInterface $objectManager,
         ManagerInterface $eventDispatcher,
         LoggerInterface $logger,
         ?string $name = null
     ) {
-        $this->attribute                  = $attribute;
-        $this->hydrator                   = $hydrator;
         $this->productAttributeRepository = $productAttributeRepository;
+        $this->objectManager              = $objectManager;
         parent::__construct(
             $eventDispatcher,
             $logger,
@@ -60,11 +58,15 @@ class SendCommand extends AbstractCommand
      */
     protected function doExecute(): int
     {
-        $eavAttribute = $this->productAttributeRepository->get(
+        $eavAttribute    = $this->productAttributeRepository->get(
             $this->input->getArgument('attribute_code')
         );
-
-        $this->hydrator->hydrate($this->attribute, $eavAttribute);
+        $this->attribute = $this->objectManager->create(
+            Attribute::class,
+            [
+                'eavAttribute' => $eavAttribute,
+            ]
+        );
 
         try {
             $this->attribute->save();
