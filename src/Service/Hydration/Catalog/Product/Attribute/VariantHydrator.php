@@ -42,8 +42,8 @@ class VariantHydrator extends AbstractHydrator
     protected function isVariant(): bool
     {
         if (
-            $this->eavAttribute->getIsGlobal() === 1
-            && $this->eavAttribute->getIsUserDefined() === 1
+            $this->eavAttribute->getIsGlobal() === "1"
+            && $this->eavAttribute->getIsUserDefined() === "1"
             && $this->eavAttribute->getFrontendInput() === "select"
         ) {
             if (

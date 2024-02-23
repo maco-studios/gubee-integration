@@ -6,7 +6,7 @@ namespace Gubee\Integration\Service\Hydration\Catalog\Product\Attribute;
 
 use Gubee\SDK\Interfaces\Catalog\Product\AttributeInterface;
 
-class LabelHydrator extends AbstractHydrator
+class IdHydrator extends AbstractHydrator
 {
     /**
      * Extract the attribute label from the object
@@ -28,9 +28,8 @@ class LabelHydrator extends AbstractHydrator
      */
     public function hydrate($value, ?array $data)
     {
-        $value->setLabel(
-            $this->eavAttribute->getFrontendLabel()
-                ?: $this->eavAttribute->getAttributeCode()
+        $value->setId(
+            $this->eavAttribute->getAttributeCode()
         );
 
         return $value;

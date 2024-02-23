@@ -60,6 +60,7 @@
             <argument name="strategies" xsi:type="array">
                 <item name="attrType" xsi:type="object">Gubee\Integration\Service\Hydration\Catalog\Product\Attribute\AttrTypeHydrator</item>
                 <item name="label" xsi:type="object">Gubee\Integration\Service\Hydration\Catalog\Product\Attribute\LabelHydrator</item>
+                <item name="id" xsi:type="object">Gubee\Integration\Service\Hydration\Catalog\Product\Attribute\IdHydrator</item>
                 <item name="name" xsi:type="object">Gubee\Integration\Service\Hydration\Catalog\Product\Attribute\NameHydrator</item>
                 <item name="options" xsi:type="object">Gubee\Integration\Service\Hydration\Catalog\Product\Attribute\OptionsHydrator</item>
                 <item name="required" xsi:type="object">Gubee\Integration\Service\Hydration\Catalog\Product\Attribute\RequiredHydrator</item>
