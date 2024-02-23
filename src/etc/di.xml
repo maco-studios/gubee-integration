@@ -57,6 +57,8 @@
         <arguments>
             <argument name="commands" xsi:type="array">
                 <item name="Gubee\Integration\Command\Gubee\Token\RenewCommand" xsi:type="object">Gubee\Integration\Command\Gubee\Token\RenewCommand</item>
+                <item name="Gubee\Integration\Command\Catalog\Product\Attribute\SyncCommand" xsi:type="object">Gubee\Integration\Command\Catalog\Product\Attribute\SyncCommand</item>
+                <item name="Gubee\Integration\Command\Catalog\Product\Attribute\SendCommand" xsi:type="object">Gubee\Integration\Command\Catalog\Product\Attribute\SendCommand</item>
             </argument>
         </arguments>
     </type>
