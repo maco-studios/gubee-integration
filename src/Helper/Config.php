@@ -9,6 +9,7 @@ use DateTimeInterface;
 use Exception;
 use Gubee\Integration\Api\Data\LogInterface;
 use Gubee\Integration\Command\Gubee\Token\RenewCommand;
+use Gubee\Integration\Service\Model\Catalog\Product\Attribute\Dimension\Weight;
 use Gubee\SDK\Interfaces\Catalog\Product\Attribute\Dimension\WeightInterface;
 use Magento\Framework\App\Config\ReinitableConfigInterface;
 use Magento\Framework\App\Config\Storage\WriterInterface;
@@ -128,6 +129,10 @@ class Config extends AbstractHelper
 
     public function isTokenExpired(): bool
     {
+        if (! $this->getConfig()->getApiTimeout()) {
+            return true;
+        }
+
         $expirationDate = DateTime::createFromFormat(
             DateTimeInterface::ISO8601,
             $this->getConfig()
@@ -141,7 +146,7 @@ class Config extends AbstractHelper
     {
         switch ($this->scopeConfig->getValue('general/locale/weight_unit')) {
             case 'lbs':
-                return WeightInterface::POUND;
+                return Weight::POUND;
             case 'kg':
             default:
                 return WeightInterface::KILOGRAM;
