@@ -28,7 +28,7 @@ class After extends AbstractObserver
     protected function isAllowed(): bool
     {
         $object = $this->getObserver()->getObject();
-        if (!$object instanceof EavAttributeInterface) {
+        if (! $object instanceof EavAttributeInterface) {
             return false;
         }
 
