@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Gubee\Integration\Service\Hydration\Catalog\Product\Category;
 
+use Exception;
 use Gubee\Integration\Service\Model\Catalog\Category;
 use Magento\Catalog\Api\CategoryRepositoryInterface;
 use Magento\Framework\ObjectManagerInterface;
@@ -50,20 +51,22 @@ class ParentHydrator extends AbstractHydrator
             return $value;
         }
         $this->register->register('category_parent_hydrator', true);
-        $parentCategory = $this->categoryRepository->get(
-            $this->category->getParentId()
-        );
+        try {
+            $parentCategory = $this->categoryRepository->get(
+                $this->category->getParentId()
+            );
+            $parent         = $this->objectManager->create(
+                Category::class,
+                [
+                    'category' => $parentCategory,
+                ]
+            );
 
-        $parent = $this->objectManager->create(
-            Category::class,
-            [
-                'category' => $parentCategory,
-            ]
-        );
-
-        $value->setParent($parent);
-
-        $this->register->unregister('category_parent_hydrator');
+            $value->setParent($parent);
+        } catch (Exception $e) {
+        } finally {
+            $this->register->unregister('category_parent_hydrator');
+        }
         return $value;
     }
 }

@@ -45,7 +45,7 @@ class HandlingTimeHydrator extends AbstractHydrator
             UnitTime::class
         );
         $unitTime->setValue(
-            $this->getRawAttributeValue(
+            (float) $this->getRawAttributeValue(
                 $this->product,
                 'gubee_handling_time'
             ) ?: 0

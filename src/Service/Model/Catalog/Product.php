@@ -62,6 +62,12 @@ class Product extends \Gubee\SDK\Model\Catalog\Product
 
     public function save(): self
     {
+        // echo json_encode(
+        //     $this,
+        //     JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES | JSON_NUMERIC_CHECK
+        // );
+        // exit;
+
         try {
             if ($this->getId()) {
                 $response = $this->getProductApi()

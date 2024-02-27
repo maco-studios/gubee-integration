@@ -45,7 +45,7 @@ class WarrantyTimeHydrator extends AbstractHydrator
             UnitTime::class
         );
         $warrantyTime->setValue(
-            (int) $this->getRawAttributeValue(
+            (float) $this->getRawAttributeValue(
                 $this->product,
                 'gubee_warranty_time'
             )

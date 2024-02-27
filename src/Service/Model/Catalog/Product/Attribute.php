@@ -80,19 +80,18 @@ class Attribute extends ProductAttribute
             throw $e;
         }
         try {
-            $this->attributeApi->loadByExternalId(
-                $this->getId()
-            );
-            $response = $this->attributeApi->update(
-                $this->getId(),
-                $this
-            );
+            if ($this->getId()) {
+                $this->attributeApi->loadByExternalId($this->getId());
+                $response = $this->attributeApi->update(
+                    $this->getId(),
+                    $this
+                );
+            } else {
+                $response = $this->attributeApi->create($this);
+            }
             $this->attributeApi->getHydrator()
                 ->hydrate($response, $this);
         } catch (NotFoundException $e) {
-            $response = $this->attributeApi->create($this);
-            $this->attributeApi->getHydrator()
-                ->hydrate($response, $this);
         } catch (Exception $e) {
             throw $e;
         }

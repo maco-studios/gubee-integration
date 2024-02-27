@@ -5,11 +5,11 @@ declare(strict_types=1);
 namespace Gubee\Integration\Service\Hydration\Catalog\Product\Variation;
 
 use Gubee\Integration\Helper\Config;
+use Gubee\Integration\Service\Model\Catalog\Product\Attribute\Dimension\Weight;
 use Gubee\SDK\Interfaces\Catalog\Product\Attribute\Dimension\MeasureInterface;
 use Gubee\SDK\Interfaces\Catalog\Product\Attribute\Dimension\WeightInterface;
 use Gubee\SDK\Model\Catalog\Product\Attribute\Dimension;
 use Gubee\SDK\Model\Catalog\Product\Attribute\Dimension\Measure;
-use Gubee\SDK\Model\Catalog\Product\Attribute\Dimension\Weight;
 use Gubee\SDK\Model\Catalog\Product\Variation;
 use Magento\Framework\ObjectManagerInterface;
 
@@ -92,23 +92,22 @@ class DimensionHydrator extends AbstractHydrator
         $weight = $this->objectManager->create(
             Weight::class
         );
-        $weight->setValue(
+        $weight->setType(
+            $this->config->getWeightUnit() ?: WeightInterface::KILOGRAM
+        )->setValue(
             (float) $this->getRawAttributeValue(
                 $this->product,
                 'weight'
             ) ?: 0
-        )->setType(
-            $this->config->getWeightUnit() ?: WeightInterface::KILOGRAM
         );
 
         $dimension = $this->objectManager->create(
             Dimension::class
         );
-        $dimension->setDepth($depth);
-        $dimension->setHeight($height);
-        $dimension->setWidth($width);
-        $dimension->setWeight($weight);
-
+        $dimension->setDepth($depth)
+            ->setHeight($height)
+            ->setWidth($width)
+            ->setWeight($weight);
         $value->setDimension($dimension);
 
         return $value;

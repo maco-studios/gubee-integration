@@ -63,7 +63,7 @@ class StocksHydrator extends AbstractHydrator
             UnitTime::class
         );
         $crossDockingTime->setValue(
-            (int) $this->getRawAttributeValue(
+            (float) $this->getRawAttributeValue(
                 $this->product,
                 'gubee_cross_docking_time'
             ) ?: -1

@@ -6,9 +6,12 @@ namespace Gubee\Integration\Service\Hydration\Catalog\Product\Variation;
 
 use Gubee\Integration\Helper\Config;
 use Gubee\Integration\Model\ResourceModel\Catalog\Attribute\CollectionFactory;
+use Gubee\SDK\Model\Catalog\Product\Attribute;
 use Gubee\SDK\Model\Catalog\Product\Attribute\Value;
 use Magento\Eav\Model\AttributeSearchResults;
 use Magento\Framework\ObjectManagerInterface;
+
+use function is_array;
 
 class VariantSpecificationHydrator extends AbstractHydrator
 {
@@ -46,24 +49,39 @@ class VariantSpecificationHydrator extends AbstractHydrator
      */
     public function hydrate($value, ?array $data)
     {
-        $values = [];
-        foreach ($this->attributeCollection as $attribute) {
-            $value = $this->objectManager->create(
-                Value::class
-            );
-            $value->setAttribute(
-                $attribute->getAttributeCode()
-            )->setValues(
+        $attrValues = [];
+        foreach ($this->attributeCollection->getItems() as $attribute) {
+            $attr = $this->objectManager->create(
+                Attribute::class,
                 [
-                    $this->getRawAttributeValue(
-                        $this->product,
-                        $attribute->getAttributeCode()
-                    ),
+                    'eavAttribute' => $attribute,
                 ]
             );
+            if (! $attr->isVariant()) {
+                continue;
+            }
+            $attrValue = $this->objectManager->create(
+                Value::class
+            );
+            $values    = $this->getAttributeValueLabel(
+                $this->product,
+                $attribute->getAttributeCode()
+            );
+
+            if (! $values || empty($values)) {
+                continue;
+            }
+
+            $attrValue->setAttribute(
+                $attribute->getAttributeCode()
+            )->setValues(
+                is_array($values) ? $values : [(string) $values]
+            );
+
+            $attrValues[] = $attrValue;
         }
 
-        $value->setVariantSpecification($values);
+        $value->setVariantSpecification($attrValues);
         return $value;
     }
 }

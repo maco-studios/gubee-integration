@@ -52,7 +52,7 @@ class PricesHydrator extends AbstractHydrator
             Price::class
         );
         $price->setValue(
-            $this->getRawAttributeValue(
+            (float) $this->getRawAttributeValue(
                 $this->product,
                 $this->config->getAttributePrice()
             ) ?: 0
