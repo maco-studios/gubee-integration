@@ -42,6 +42,18 @@ class CollectionFactory
                     ->create()
             )
             ->addFilter(
+                $this->filterBuilder->setField('attribute_code')
+                    ->setValue($this->config->getAttributeBrand())
+                    ->setConditionType('neq')
+                    ->create()
+            )
+            ->addFilter(
+                $this->filterBuilder->setField('frontend_label')
+                    ->setValue(true)
+                    ->setConditionType('notnull')
+                    ->create()
+            )
+            ->addFilter(
                 $this->filterBuilder->setField('frontend_input')
                     ->setValue('gallery')
                     ->setConditionType('neq')
@@ -51,6 +63,12 @@ class CollectionFactory
                 $this->filterBuilder->setField('backend_type')
                     ->setValue('static')
                     ->setConditionType('neq')
+                    ->create()
+            )
+            ->addFilter(
+                $this->filterBuilder->setField('is_user_defined')
+                    ->setValue(true)
+                    ->setConditionType('eq')
                     ->create()
             )
             ->create();
