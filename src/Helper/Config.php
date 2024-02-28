@@ -10,7 +10,7 @@ use Exception;
 use Gubee\Integration\Api\Data\LogInterface;
 use Gubee\Integration\Command\Gubee\Token\RenewCommand;
 use Gubee\Integration\Service\Model\Catalog\Product\Attribute\Dimension\Weight;
-use Gubee\SDK\Interfaces\Catalog\Product\Attribute\Dimension\WeightInterface;
+use Gubee\SDK\Api\Catalog\Product\Attribute\Dimension\WeightInterface;
 use Magento\Framework\App\Config\ReinitableConfigInterface;
 use Magento\Framework\App\Config\Storage\WriterInterface;
 use Magento\Framework\App\Helper\AbstractHelper;
@@ -68,10 +68,10 @@ class Config extends AbstractHelper
     {
         if (
             $this->getConfig()
-            ->getOrigData()
+                ->getOrigData()
             ===
             $this->getConfig()
-            ->getData()
+                ->getData()
         ) {
             return $this;
         }

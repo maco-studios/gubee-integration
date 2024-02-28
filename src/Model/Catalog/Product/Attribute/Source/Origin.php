@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Gubee\Integration\Model\Catalog\Product\Attribute\Source;
 
-use Gubee\SDK\Interfaces\Catalog\ProductInterface;
+use Gubee\SDK\Api\Catalog\ProductInterface;
 use Magento\Eav\Model\Entity\Attribute\Source\AbstractSource;
 
 use function __;

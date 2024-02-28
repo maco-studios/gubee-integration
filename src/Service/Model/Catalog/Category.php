@@ -5,24 +5,24 @@ declare(strict_types=1);
 namespace Gubee\Integration\Service\Model\Catalog;
 
 use Exception;
-use Gubee\SDK\Api\Catalog\CategoryApi;
 use Gubee\SDK\Library\HttpClient\Exception\NotFoundException;
+use Gubee\SDK\Resource\Catalog\CategoryResource;
 use Laminas\Hydrator\Strategy\StrategyChain;
 use Magento\Catalog\Api\Data\CategoryInterface;
 use Magento\Framework\ObjectManagerInterface;
 
 class Category extends \Gubee\SDK\Model\Catalog\Category
 {
-    protected CategoryApi $categoryApi;
+    protected CategoryResource $categoryResource;
     protected StrategyChain $hydrator;
 
     public function __construct(
         CategoryInterface $category,
-        CategoryApi $categoryApi,
+        CategoryResource $categoryResource,
         ObjectManagerInterface $objectManager,
         iterable $strategies = []
     ) {
-        $this->categoryApi = $categoryApi;
+        $this->categoryResource = $categoryResource;
         foreach ($strategies as &$strategy) {
             $strategy = $objectManager->create(
                 $strategy
@@ -78,8 +78,8 @@ class Category extends \Gubee\SDK\Model\Catalog\Category
         return $this;
     }
 
-    public function getCategoryApi(): CategoryApi
+    public function getCategoryApi(): CategoryResource
     {
-        return $this->categoryApi;
+        return $this->categoryResource;
     }
 }

@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Gubee\Integration\Model\System\Config\Source\Catalog\Product\Attribute;
 
-use Gubee\SDK\Interfaces\Catalog\Product\Attribute\Dimension\MeasureInterface;
+use Gubee\SDK\Api\Catalog\Product\Attribute\Dimension\MeasureInterface;
 use Magento\Framework\Option\ArrayInterface;
 use ReflectionClass;
 

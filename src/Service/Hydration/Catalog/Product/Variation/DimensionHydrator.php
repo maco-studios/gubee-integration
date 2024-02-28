@@ -6,8 +6,8 @@ namespace Gubee\Integration\Service\Hydration\Catalog\Product\Variation;
 
 use Gubee\Integration\Helper\Config;
 use Gubee\Integration\Service\Model\Catalog\Product\Attribute\Dimension\Weight;
-use Gubee\SDK\Interfaces\Catalog\Product\Attribute\Dimension\MeasureInterface;
-use Gubee\SDK\Interfaces\Catalog\Product\Attribute\Dimension\WeightInterface;
+use Gubee\SDK\Api\Catalog\Product\Attribute\Dimension\MeasureInterface;
+use Gubee\SDK\Api\Catalog\Product\Attribute\Dimension\WeightInterface;
 use Gubee\SDK\Model\Catalog\Product\Attribute\Dimension;
 use Gubee\SDK\Model\Catalog\Product\Attribute\Dimension\Measure;
 use Gubee\SDK\Model\Catalog\Product\Variation;

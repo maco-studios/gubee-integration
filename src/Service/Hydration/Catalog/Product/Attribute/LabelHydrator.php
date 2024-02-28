@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Gubee\Integration\Service\Hydration\Catalog\Product\Attribute;
 
-use Gubee\SDK\Interfaces\Catalog\Product\AttributeInterface;
+use Gubee\SDK\Api\Catalog\Product\AttributeInterface;
 
 class LabelHydrator extends AbstractHydrator
 {
@@ -30,7 +30,7 @@ class LabelHydrator extends AbstractHydrator
     {
         $value->setLabel(
             $this->eavAttribute->getFrontendLabel()
-                ?: $this->eavAttribute->getAttributeCode()
+            ?: $this->eavAttribute->getAttributeCode()
         );
 
         return $value;

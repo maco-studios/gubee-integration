@@ -5,9 +5,9 @@ declare(strict_types=1);
 namespace Gubee\Integration\Service\Model\Catalog\Product;
 
 use Exception;
-use Gubee\SDK\Api\Catalog\Product\AttributeApi;
 use Gubee\SDK\Library\HttpClient\Exception\NotFoundException;
 use Gubee\SDK\Model\Catalog\Product\Attribute as ProductAttribute;
+use Gubee\SDK\Resource\Catalog\Product\AttributeResource;
 use Laminas\Hydrator\Strategy\StrategyChain;
 use Magento\Catalog\Api\Data\EavAttributeInterface;
 use Magento\Framework\ObjectManagerInterface;
@@ -15,18 +15,16 @@ use Magento\Framework\ObjectManagerInterface;
 class Attribute extends ProductAttribute
 {
     protected EavAttributeInterface $eavAttribute;
-    protected AttributeApi $attributeApi;
-    protected StrategyChain $hydrator;
+    protected AttributeResource $attributeResource;
 
     public function __construct(
         EavAttributeInterface $eavAttribute,
-        AttributeApi $attributeApi,
+        AttributeResource $attributeResource,
         ObjectManagerInterface $objectManager,
         iterable $strategies = []
     ) {
-        $this->eavAttribute = $eavAttribute;
-        $this->attributeApi = $attributeApi;
-
+        $this->eavAttribute      = $eavAttribute;
+        $this->attributeResource = $attributeResource;
         foreach ($strategies as $strategy) {
             $strategy->setEavAttribute($eavAttribute);
         }
@@ -45,19 +43,19 @@ class Attribute extends ProductAttribute
         try {
             switch ($field) {
                 case 'external_id':
-                    $attribute = $this->attributeApi->loadByExternalId(
+                    $attribute = $this->attributeResource->loadByExternalId(
                         $id
                     );
                     break;
                 case 'name':
-                    $attribute = $this->attributeApi->loadByName(
+                    $attribute = $this->attributeResource->loadByName(
                         $id
                     );
                     break;
                 default:
                     throw new Exception('Invalid field');
             }
-            $this->attributeApi->getHydrator()
+            $this->attributeResource->getHydrator()
                 ->hydrate($attribute, $this);
         } catch (Exception $e) {
             throw new Exception($e->getMessage());
@@ -67,12 +65,12 @@ class Attribute extends ProductAttribute
     public function save(): self
     {
         try {
-            $this->attributeApi->loadByName($this->getName());
-            $response = $this->attributeApi->updateByName(
+            $this->attributeResource->loadByName($this->getName());
+            $response = $this->attributeResource->updateByName(
                 $this->getName(),
                 $this
             );
-            $this->attributeApi->getHydrator()
+            $this->attributeResource->getHydrator()
                 ->hydrate($response, $this);
             return $this;
         } catch (NotFoundException $e) {
@@ -81,15 +79,15 @@ class Attribute extends ProductAttribute
         }
         try {
             if ($this->getId()) {
-                $this->attributeApi->loadByExternalId($this->getId());
-                $response = $this->attributeApi->update(
+                $this->attributeResource->loadByExternalId($this->getId());
+                $response = $this->attributeResource->update(
                     $this->getId(),
                     $this
                 );
             } else {
-                $response = $this->attributeApi->create($this);
+                $response = $this->attributeResource->create($this);
             }
-            $this->attributeApi->getHydrator()
+            $this->attributeResource->getHydrator()
                 ->hydrate($response, $this);
         } catch (NotFoundException $e) {
         } catch (Exception $e) {

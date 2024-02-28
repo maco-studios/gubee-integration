@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Gubee\Integration\Service\Hydration\Catalog\Product\Category;
 
-use Gubee\SDK\Interfaces\Catalog\CategoryInterface;
+use Gubee\SDK\Api\Catalog\CategoryInterface;
 
 class ActiveHydrator extends AbstractHydrator
 {

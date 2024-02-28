@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Gubee\Integration\Service\Hydration\Catalog\Product\Attribute;
 
-use Gubee\SDK\Interfaces\Catalog\Product\AttributeInterface;
+use Gubee\SDK\Api\Catalog\Product\AttributeInterface;
 use Magento\ConfigurableProduct\Model\Product\Type\Configurable;
 
 use function in_array;

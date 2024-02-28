@@ -27,6 +27,7 @@ use const JSON_NUMERIC_CHECK;
 use const JSON_PRETTY_PRINT;
 use const JSON_UNESCAPED_SLASHES;
 use const JSON_UNESCAPED_UNICODE;
+use const PHP_EOL;
 use const PHP_SAPI;
 
 class Logger implements LoggerInterface
@@ -219,6 +220,7 @@ class Logger implements LoggerInterface
             });
 
             $log = $this->logFactory->create();
+            echo $message . PHP_EOL;
             $log->setLevel($level)
                 ->setMessage($message)
                 ->setContext(

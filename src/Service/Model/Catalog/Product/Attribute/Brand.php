@@ -5,17 +5,17 @@ declare(strict_types=1);
 namespace Gubee\Integration\Service\Model\Catalog\Product\Attribute;
 
 use Exception;
-use Gubee\SDK\Api\Catalog\Product\Attribute\BrandApi;
 use Gubee\SDK\Library\HttpClient\Exception\NotFoundException;
+use Gubee\SDK\Resource\Catalog\Product\Attribute\BrandResource;
 
 class Brand extends \Gubee\SDK\Model\Catalog\Product\Attribute\Brand
 {
-    protected BrandApi $brandApi;
+    protected BrandResource $brandResource;
 
     public function __construct(
-        BrandApi $brandApi
+        BrandResource $brandResource
     ) {
-        $this->brandApi = $brandApi;
+        $this->brandResource = $brandResource;
     }
 
     public function load(string $id, string $field = 'external_id'): self
@@ -71,8 +71,8 @@ class Brand extends \Gubee\SDK\Model\Catalog\Product\Attribute\Brand
         return $this;
     }
 
-    public function getBrandApi(): BrandApi
+    public function getBrandApi(): BrandResource
     {
-        return $this->brandApi;
+        return $this->brandResource;
     }
 }

@@ -58,6 +58,10 @@
             <argument name="commands" xsi:type="array">
                 <item name="Gubee\Integration\Command\Gubee\Token\RenewCommand" xsi:type="object">Gubee\Integration\Command\Gubee\Token\RenewCommand</item>
                 <item name="Gubee\Integration\Command\Catalog\Product\SendCommand" xsi:type="object">Gubee\Integration\Command\Catalog\Product\SendCommand</item>
+                <item name="Gubee\Integration\Command\Catalog\Product\Price\SendCommand" xsi:type="object">Gubee\Integration\Command\Catalog\Product\Price\SendCommand</item>
+                <item name="Gubee\Integration\Command\Catalog\Product\Stock\SendCommand" xsi:type="object">Gubee\Integration\Command\Catalog\Product\Stock\SendCommand</item>
+                <item name="Gubee\Integration\Command\Catalog\Product\Stock\DesativateCommand" xsi:type="object">Gubee\Integration\Command\Catalog\Product\Stock\DesativateCommand</item>
+                <item name="Gubee\Integration\Command\Catalog\Category\SyncCommand" xsi:type="object">Gubee\Integration\Command\Catalog\Category\SyncCommand</item>
                 <item name="Gubee\Integration\Command\Catalog\Product\Attribute\SyncCommand" xsi:type="object">Gubee\Integration\Command\Catalog\Product\Attribute\SyncCommand</item>
                 <item name="Gubee\Integration\Command\Catalog\Product\Attribute\SendCommand" xsi:type="object">Gubee\Integration\Command\Catalog\Product\Attribute\SendCommand</item>
             </argument>

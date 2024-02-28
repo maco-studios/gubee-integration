@@ -9,6 +9,8 @@ use Gubee\Integration\Service\Model\Catalog\Category;
 use Magento\Catalog\Api\CategoryRepositoryInterface;
 use Magento\Framework\ObjectManagerInterface;
 
+use function print_r;
+
 class CategoriesHydrator extends AbstractHydrator
 {
     protected ObjectManagerInterface $objectManager;
@@ -44,6 +46,8 @@ class CategoriesHydrator extends AbstractHydrator
      */
     public function hydrate($value, ?array $data)
     {
+        print_r($data);
+
         $categoryIds = $this->product->getCategoryIds();
         $categories  = [];
         foreach ($categoryIds as $categoryId) {

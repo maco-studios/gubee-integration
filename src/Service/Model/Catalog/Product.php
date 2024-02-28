@@ -5,24 +5,28 @@ declare(strict_types=1);
 namespace Gubee\Integration\Service\Model\Catalog;
 
 use Exception;
-use Gubee\SDK\Api\Catalog\ProductApi;
 use Gubee\SDK\Library\HttpClient\Exception\NotFoundException;
+use Gubee\SDK\Resource\Catalog\Product\StockResource;
+use Gubee\SDK\Resource\Catalog\ProductResource;
 use Laminas\Hydrator\Strategy\StrategyChain;
 use Magento\Catalog\Api\Data\ProductInterface;
 use Magento\Framework\ObjectManagerInterface;
 
 class Product extends \Gubee\SDK\Model\Catalog\Product
 {
-    protected ProductApi $productApi;
+    protected ProductResource $productResource;
+    protected StockResource $stockResource;
     protected StrategyChain $hydrator;
 
     public function __construct(
         ProductInterface $product,
         ObjectManagerInterface $objectManager,
-        ProductApi $productApi,
+        ProductResource $productResource,
+        StockResource $stockResource,
         iterable $strategies = []
     ) {
-        $this->productApi = $productApi;
+        $this->productResource = $productResource;
+        $this->stockResource   = $stockResource;
         foreach ($strategies as &$strategy) {
             $strategy = $objectManager->create(
                 $strategy
@@ -62,16 +66,13 @@ class Product extends \Gubee\SDK\Model\Catalog\Product
 
     public function save(): self
     {
-        // echo json_encode(
-        //     $this,
-        //     JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES | JSON_NUMERIC_CHECK
-        // );
-        // exit;
-
         try {
             if ($this->getId()) {
-                $response = $this->getProductApi()
+                $this->getProductApi()
                     ->update($this);
+                $response = $this->getProductApi()->loadById(
+                    $this->getId()
+                );
             } else {
                 $response = $this->getProductApi()
                     ->create($this);
@@ -81,20 +82,34 @@ class Product extends \Gubee\SDK\Model\Catalog\Product
                 ->create($this);
         } catch (Exception $e) {
             throw $e;
-        } finally {
-            $this->getProductApi()
-                ->getHydrator()
-                ->hydrate(
-                    $response,
-                    $this
-                );
         }
 
         return $this;
     }
 
-    public function getProductApi(): ProductApi
+    public function desativate()
     {
-        return $this->productApi;
+        $this->setStatus(self::INACTIVE);
+        foreach ($this->getVariations() as $variation) {
+            foreach ($variation->getStocks() as $stock) {
+                $stock->setQty(0);
+                $this->getStockResource()
+                    ->updateStockBySkuId(
+                        $this->getId(),
+                        $variation->getSkuId(),
+                        $stock
+                    );
+            }
+        }
+    }
+
+    public function getProductApi(): ProductResource
+    {
+        return $this->productResource;
+    }
+
+    public function getStockResource(): StockResource
+    {
+        return $this->stockResource;
     }
 }

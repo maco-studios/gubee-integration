@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Gubee\Integration\Model\Catalog\Product\Attribute\Source;
 
-use Gubee\SDK\Interfaces\Catalog\Product\Attribute\Dimension\UnitTimeInterface;
+use Gubee\SDK\Api\Catalog\Product\Attribute\Dimension\UnitTimeInterface;
 use Magento\Eav\Model\Entity\Attribute\Source\AbstractSource;
 
 use function __;

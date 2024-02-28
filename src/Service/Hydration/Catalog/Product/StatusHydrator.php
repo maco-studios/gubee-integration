@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace Gubee\Integration\Service\Hydration\Catalog\Product;
 
 use Gubee\Integration\Helper\Config;
-use Gubee\SDK\Interfaces\Catalog\ProductInterface;
+use Gubee\SDK\Api\Catalog\ProductInterface;
 use Magento\CatalogInventory\Api\StockRegistryInterface;
 
 class StatusHydrator extends AbstractHydrator

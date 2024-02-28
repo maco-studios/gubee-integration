@@ -55,4 +55,3 @@ interface LogRepositoryInterface
      */
     public function deleteById($logId);
 }
-

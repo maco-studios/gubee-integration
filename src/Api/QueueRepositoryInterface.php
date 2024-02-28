@@ -55,4 +55,3 @@ interface QueueRepositoryInterface
      */
     public function deleteById($queueId);
 }
-

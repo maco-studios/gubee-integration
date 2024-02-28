@@ -10,7 +10,7 @@ use Gubee\Integration\Library\Setup\Migration\Context;
 use Gubee\Integration\Library\Setup\Migration\Facade\Catalog\Product\Attribute;
 use Gubee\Integration\Model\Catalog\Product\Attribute\Source\HandlingTime;
 use Gubee\Integration\Model\Catalog\Product\Attribute\Source\Origin;
-use Gubee\SDK\Interfaces\Catalog\Product\Attribute\Dimension\UnitTimeInterface;
+use Gubee\SDK\Api\Catalog\Product\Attribute\Dimension\UnitTimeInterface;
 use Magento\Eav\Model\Entity\Attribute\Source\Boolean;
 use Magento\Eav\Model\Entity\Attribute\Source\Table;
 
