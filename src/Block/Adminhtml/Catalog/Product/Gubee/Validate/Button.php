@@ -10,11 +10,18 @@ use Gubee\SDK\Resource\Catalog\Product\ValidateResource;
 use Magento\Backend\Block\Widget\Container;
 use Magento\Backend\Block\Widget\Context;
 use Magento\Catalog\Api\Data\ProductInterface;
-use Magento\Framework\App\ObjectManager;
 use Magento\Framework\ObjectManagerInterface;
 use Magento\Framework\Registry;
 use Magento\Store\Model\App\Emulation;
 use Throwable;
+
+use function json_encode;
+use function sprintf;
+
+use const JSON_NUMERIC_CHECK;
+use const JSON_PRETTY_PRINT;
+use const JSON_UNESCAPED_SLASHES;
+use const JSON_UNESCAPED_UNICODE;
 
 class Button extends Container
 {
@@ -43,16 +50,16 @@ class Button extends Container
         $this->_request      = $context->getRequest();
         //phpcs:enable
         $this->objectManager = $objectManager;
-        $this->coreRegistry = $registry;
-        $this->product      = $product;
-        $this->emulation    = $emulation;
+        $this->coreRegistry  = $registry;
+        $this->product       = $product;
+        $this->emulation     = $emulation;
         parent::__construct($context, $data);
     }
-
 
     /**
      * Block constructor adds buttons
      */
+    //phpcs:disable
     protected function _construct()
     {
         $this->addButton(
@@ -70,11 +77,13 @@ class Button extends Container
         $product = $this->coreRegistry->registry('current_product');
         return parent::_toHtml();
     }
+    //phpcs:enable
+
 
     /**
      * Return button attributes array
      */
-    public function getButtonData()
+    public function getButtonData(): array
     {
         $problems = $this->validate() ?: [];
         return [
@@ -86,7 +95,7 @@ class Button extends Container
                     | JSON_UNESCAPED_UNICODE
             ),
             'sort_order' => 800,
-            'class' => 'relative action-secondary'
+            'class'      => 'relative action-secondary',
         ];
     }
 
@@ -95,10 +104,12 @@ class Button extends Container
      *
      * @return mixed
      */
+    //phpcs:disable
     protected function _getProductUrl()
     {
         return null;
     }
+    //phpcs:enable
 
     /**
      * @return mixed
@@ -113,7 +124,7 @@ class Button extends Container
                     'product' => $this->coreRegistry->registry('current_product'),
                 ]
             );
-            $errors = $this->validateResource->create(
+            $errors  = $this->validateResource->create(
                 $product
             );
             foreach ($errors as $error) {
