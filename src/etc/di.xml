@@ -36,6 +36,23 @@
         </arguments>
     </virtualType>
 
+    <preference for="Gubee\Integration\Api\InvoiceRepositoryInterface" type="Gubee\Integration\Model\InvoiceRepository"/>
+    <preference for="Gubee\Integration\Api\Data\InvoiceInterface" type="Gubee\Integration\Model\Invoice"/>
+    <preference for="Gubee\Integration\Api\Data\InvoiceSearchResultsInterface" type="Magento\Framework\Api\SearchResults"/>
+    <virtualType name="Gubee\Integration\Model\ResourceModel\Invoice\Grid\Collection" type="Magento\Framework\View\Element\UiComponent\DataProvider\SearchResult">
+        <arguments>
+            <argument name="mainTable" xsi:type="string">gubee_integration_invoice</argument>
+            <argument name="resourceModel" xsi:type="string">Gubee\Integration\Model\ResourceModel\Invoice\Collection</argument>
+        </arguments>
+    </virtualType>
+    <type name="Magento\Framework\View\Element\UiComponent\DataProvider\CollectionFactory">
+        <arguments>
+            <argument name="collections" xsi:type="array">
+                <item name="gubee_integration_invoice_listing_data_source" xsi:type="string">Gubee\Integration\Model\ResourceModel\Invoice\Grid\Collection</item>
+            </argument>
+        </arguments>
+    </type>
+
     <type name="Gubee\Integration\Library\Setup\Migration\Context">
         <arguments>
             <argument name="logger" xsi:type="object">Gubee\Integration\Model\Logger</argument>

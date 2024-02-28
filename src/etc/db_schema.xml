@@ -25,4 +25,19 @@
             <column name="log_id"/>
         </constraint>
     </table>
+
+    <table name="gubee_integration_invoice" resource="default" engine="innodb" comment="Table for storing integration invoice data">
+        <column xsi:type="int" name="invoice_id" padding="10" unsigned="true" nullable="false" identity="true" comment="Entity Id"/>
+        <column name="danfeLink" nullable="true" xsi:type="varchar" comment="danfeLink" length="255"/>
+        <column name="danfeXml" nullable="true" xsi:type="text" comment="danfeXml"/>
+        <column name="issueDate" nullable="true" xsi:type="timestamp" comment="issueDate"/>
+        <column name="key" nullable="true" xsi:type="varchar" comment="key" length="255"/>
+        <column name="line" nullable="true" xsi:type="text" comment="line"/>
+        <column name="number" nullable="true" xsi:type="text" comment="number"/>
+        <column name="created_at" nullable="true" xsi:type="timestamp" default="CURRENT_TIMESTAMP" on_update="false" comment="Timestamp when the queue item was created"/>
+        <column name="updated_at" nullable="true" xsi:type="timestamp" default="CURRENT_TIMESTAMP" on_update="true" comment="Timestamp when the queue item was last updated"/>
+        <constraint xsi:type="primary" referenceId="PRIMARY">
+            <column name="invoice_id"/>
+        </constraint>
+    </table>
 </schema>
