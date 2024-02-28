@@ -1,0 +1,26 @@
+<?xml version="1.0" ?>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Store:etc/config.xsd">
+    <default>
+        <payment>
+            <gubee>
+                <active>1</active>
+                <model>Gubee\Integration\Model\Payment\Gubee</model>
+                <order_status>pending</order_status>
+                <title>gubee</title>
+                <allowspecific>0</allowspecific>
+                <group>offline</group>
+            </gubee>
+        </payment>
+        <carriers>
+            <gubee>
+                <model>Gubee\Integration\Model\Carrier\Gubee</model>
+                <active>0</active>
+                <title>gubee</title>
+                <name>gubee</name>
+                <price>0.00</price>
+                <specificerrmsg>This shipping method is not available. To use this shipping method, please contact us.</specificerrmsg>
+                <sallowspecific>0</sallowspecific>
+            </gubee>
+        </carriers>
+    </default>
+</config>
