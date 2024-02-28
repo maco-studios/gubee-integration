@@ -1,0 +1,12 @@
+<?xml version="1.0"?>
+<page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/page_configuration.xsd">
+    <head>
+        <css src="Gubee_Integration::dist/main.css"/>
+        <script src="Gubee_Integration::dist/main.js"/>
+    </head>
+    <body>
+        <referenceBlock name="page.actions.toolbar">
+            <block class="Gubee\Integration\Block\Adminhtml\Catalog\Product\Gubee\Validate\Button" ifconfig="gubee/integration/active" as="gubee_validation_button"/>
+        </referenceBlock>
+    </body>
+</page>

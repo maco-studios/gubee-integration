@@ -27,7 +27,6 @@ use const JSON_NUMERIC_CHECK;
 use const JSON_PRETTY_PRINT;
 use const JSON_UNESCAPED_SLASHES;
 use const JSON_UNESCAPED_UNICODE;
-use const PHP_EOL;
 use const PHP_SAPI;
 
 class Logger implements LoggerInterface
@@ -220,16 +219,16 @@ class Logger implements LoggerInterface
             });
 
             $log = $this->logFactory->create();
-            echo $message . PHP_EOL;
+            // echo $message . PHP_EOL;
             $log->setLevel($level)
                 ->setMessage($message)
                 ->setContext(
                     json_encode(
                         $context,
                         JSON_UNESCAPED_SLASHES
-                        | JSON_UNESCAPED_UNICODE
-                        | JSON_PRETTY_PRINT
-                        | JSON_NUMERIC_CHECK
+                            | JSON_UNESCAPED_UNICODE
+                            | JSON_PRETTY_PRINT
+                            | JSON_NUMERIC_CHECK
                     )
                 )->save();
         } catch (Exception $e) {

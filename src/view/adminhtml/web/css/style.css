@@ -75,3 +75,28 @@
     background: rgba(255, 165, 0, 0.5);
     border: 1px solid rgba(255, 140, 0, 0.8);
 }
+
+#gubee_validation::after {
+    @apply absolute inline-flex items-center justify-center text-xs font-bold text-white bg-red-500 border-2 border-white rounded-full -top-2 -end-2;
+    width: 2rem;
+    height: 2rem;
+    font-size: 1rem;
+    content: attr(data-errors);
+}
+
+
+#gubee_validation::before {
+    @apply w-6 h-6 text-gray-800 dark:text-white bg-no-repeat bg-center bg-contain top-0 left-0 z-0 content-[''] inline-block pr-10 relative align-middle mr-2 gubee-logo-white;
+}
+
+.gubee-logo-white {
+    background-image: url('./img/logo-white.svg');
+}
+
+.gubee-logo-black {
+    background-image: url('./img/logo-black.svg');
+}
+
+.gubee-logo {
+    background-image: url('./img/logo.svg');
+}
