@@ -1,0 +1,20 @@
+# Vendor directory
+/vendor/
+auth.json
+
+# PHPCS cache
+/.phpcs-cache
+
+# Test cache
+/.phpunit.cache
+/.phpunit.result.cache
+/phpunit.xml
+
+# asdf version manager
+/.tool-versions
+
+# tests cache
+/var
+
+# node
+/node_modules
