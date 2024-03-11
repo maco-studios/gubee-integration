@@ -8,6 +8,9 @@
             "email": "marcos.aurelio@bis2bis.com.br"
         }
     ],
+    "require": {
+        "magento/framework": "^103"
+    },
     "autoload": {
         "psr-4": {
             "Gubee\\Integration\\": "src/"
@@ -21,11 +24,18 @@
             "Gubee\\Integration\\Test\\": "test/"
         }
     },
+    "repositories": {
+        "magento": {
+            "type": "composer",
+            "url": "https://repo.magento.com/"
+        }
+    },
     "config": {
         "optimize-autoloader": true,
         "sort-packages": true,
         "allow-plugins": {
-            "dealerdirect/phpcodesniffer-composer-installer": true
+            "dealerdirect/phpcodesniffer-composer-installer": true,
+            "magento/composer-dependency-version-audit-plugin": true
         }
     },
     "scripts": {
@@ -38,7 +48,7 @@
         "test:unit": "phpunit --testsuite=Unit"
     },
     "require-dev": {
-        "captainhook/captainhook": "^5.18",
+        "captainhook/captainhook": "^5.10",
         "laminas/laminas-coding-standard": "^2.5",
         "phpstan/phpstan": "^1.10",
         "phpunit/phpunit": "^9.6",
