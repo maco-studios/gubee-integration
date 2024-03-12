@@ -9,7 +9,9 @@
         }
     ],
     "require": {
-        "magento/framework": "^103"
+        "gubee/sdk": "@dev",
+        "magento/framework": "^103",
+        "magento/module-catalog": "^104"
     },
     "autoload": {
         "psr-4": {
@@ -28,6 +30,10 @@
         "magento": {
             "type": "composer",
             "url": "https://repo.magento.com/"
+        },
+        "gubee/sdk": {
+            "type": "path",
+            "url": "../gubee-sdk"
         }
     },
     "config": {
