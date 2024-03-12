@@ -11,7 +11,8 @@ export default defineConfig({
       output: {
         dir: resolve(__dirname, './src/view/adminhtml/web/js/dist'),
         entryFileNames: '[name].js',
-        chunkFileNames: '[name].js'
+        chunkFileNames: '[name].js',
+        assetFileNames: '[name].[ext]'
       }
     }
   }
