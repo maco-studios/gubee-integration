@@ -9,6 +9,7 @@ use Gubee\Integration\Model\Config;
 use Gubee\Integration\Observer\AbstractObserver;
 use Magento\Framework\App\Cache\Frontend\Pool;
 use Magento\Framework\App\Cache\TypeListInterface;
+use Magento\Framework\ObjectManagerInterface;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\Console\Input\ArrayInput;
 use Symfony\Component\Console\Output\BufferedOutput;
@@ -20,25 +21,22 @@ class OnChange extends AbstractObserver
 {
     protected TypeListInterface $typeList;
     protected Pool $pool;
-    protected ArrayInput $arrayInput;
-    protected BufferedOutput $bufferedOutput;
     protected RenewCommand $renewCommand;
+    protected ObjectManagerInterface $objectManager;
 
     public function __construct(
         Config $config,
         LoggerInterface $logger,
         TypeListInterface $typeList,
-        ArrayInput $arrayInput,
-        BufferedOutput $bufferedOutput,
+        ObjectManagerInterface $objectManager,
         RenewCommand $renewCommand,
         Pool $pool
     ) {
         parent::__construct($config, $logger);
-        $this->typeList       = $typeList;
-        $this->renewCommand   = $renewCommand;
-        $this->arrayInput     = $arrayInput;
-        $this->bufferedOutput = $bufferedOutput;
-        $this->pool           = $pool;
+        $this->typeList      = $typeList;
+        $this->renewCommand  = $renewCommand;
+        $this->objectManager = $objectManager;
+        $this->pool          = $pool;
     }
 
     protected function process(): void
@@ -76,13 +74,20 @@ class OnChange extends AbstractObserver
 
     protected function generateToken(): void
     {
-        $this->getArrayInput()->setArgument(
-            'token',
-            $this->getConfig()->getApiKey()
+        $input  = $this->getObjectManager()->create(
+            ArrayInput::class,
+            [
+                'parameters' => [
+                    'token' => $this->getConfig()->getApiKey(),
+                ],
+            ]
+        );
+        $output = $this->getObjectManager()->create(
+            BufferedOutput::class
         );
         $this->renewCommand->run(
-            $this->getArrayInput(),
-            $this->getBufferedOutput()
+            $input,
+            $output
         );
         $this->getLogger()->debug(
             __(
@@ -127,13 +132,8 @@ class OnChange extends AbstractObserver
         return $this->pool;
     }
 
-    public function getArrayInput(): ArrayInput
+    public function getObjectManager(): ObjectManagerInterface
     {
-        return $this->arrayInput;
-    }
-
-    public function getBufferedOutput(): BufferedOutput
-    {
-        return $this->bufferedOutput;
+        return $this->objectManager;
     }
 }

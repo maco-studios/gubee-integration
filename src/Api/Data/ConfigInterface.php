@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Gubee\Integration\Api\Data;
 
+use DateTimeInterface;
 use Gubee\Integration\Api\Enum\MainCategoryEnum;
 
 interface ConfigInterface
@@ -204,7 +205,7 @@ interface ConfigInterface
     /**
      * Get the 'api_timeout' system config.
      */
-    public function getApiTimeout(): int;
+    public function getApiTimeout(): ?DateTimeInterface;
 
     /**
      * Set the 'max_backoff_attempts' system config.

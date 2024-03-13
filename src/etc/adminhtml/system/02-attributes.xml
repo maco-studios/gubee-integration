@@ -100,7 +100,7 @@
         <field id="cross_docking_time" type="select" sortOrder="110" showInWebsite="1" showInStore="1" showInDefault="1" translate="label">
             <label>Cross docking time Attribute</label>
             <validate>required-entry</validate>
-            <source_model>Gubee\Integration\Model\Source\System\Config\Catalog\Product\Decimal</source_model>
+            <source_model>Gubee\Integration\Model\Source\System\Config\Catalog\Product\Attribute</source_model>
             <depends>
                 <field id="gubee/integration/active">1</field>
             </depends>
@@ -108,7 +108,7 @@
         <field id="warranty_time" type="select" sortOrder="120" showInWebsite="1" showInStore="1" showInDefault="1" translate="label">
             <label>Warranty time Attribute</label>
             <validate>required-entry</validate>
-            <source_model>Gubee\Integration\Model\Source\System\Config\Catalog\Product\Decimal</source_model>
+            <source_model>Gubee\Integration\Model\Source\System\Config\Catalog\Product\Attribute</source_model>
             <depends>
                 <field id="gubee/integration/active">1</field>
             </depends>

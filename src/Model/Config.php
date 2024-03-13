@@ -4,13 +4,22 @@ declare(strict_types=1);
 
 namespace Gubee\Integration\Model;
 
+use DateTime;
+use DateTimeInterface;
 use Gubee\Integration\Api\Data\ConfigInterface;
 use Gubee\Integration\Api\Enum\MainCategoryEnum;
+use Gubee\Integration\Command\Gubee\Token\RenewCommand;
+use LogicException;
 use Magento\Framework\App\Config\ReinitableConfigInterface;
 use Magento\Framework\App\Config\Storage\WriterInterface;
 use Magento\Framework\App\Helper\AbstractHelper;
 use Magento\Framework\App\Helper\Context;
+use Magento\Framework\ObjectManagerInterface;
+use Psr\Log\LoggerInterface;
+use Symfony\Component\Console\Input\ArrayInput;
+use Symfony\Component\Console\Output\BufferedOutput;
 
+use function __;
 use function array_map;
 use function explode;
 
@@ -19,15 +28,21 @@ class Config extends AbstractHelper implements ConfigInterface
     protected Context $context;
     protected WriterInterface $configWriter;
     protected ReinitableConfigInterface $reinitableConfig;
+    protected ObjectManagerInterface $objectManager;
+    protected LoggerInterface $logger;
 
     public function __construct(
         Context $context,
         WriterInterface $configWriter,
-        ReinitableConfigInterface $reinitableConfig
+        ReinitableConfigInterface $reinitableConfig,
+        ObjectManagerInterface $objectManager,
+        LoggerInterface $logger
     ) {
         parent::__construct($context);
         $this->reinitableConfig = $reinitableConfig;
+        $this->objectManager    = $objectManager;
         $this->configWriter     = $configWriter;
+        $this->logger           = $logger;
     }
 
     /**
@@ -74,10 +89,52 @@ class Config extends AbstractHelper implements ConfigInterface
 
     /**
      * Get the 'api_token' system config.
+     *
+     * @throws LogicException If the API Key is not set.
      */
     public function getApiToken(): string
     {
+        if (! $this->getApiKey()) {
+            throw new LogicException(
+                __("The API Key is not set")->__toString()
+            );
+        }
+        if (! $this->isTokenValid()) {
+            $this->getLogger()->debug(
+                __("The API Token is not valid. Renewing it.")
+                ->__toString()
+            );
+            $command = $this->objectManager->create(
+                RenewCommand::class
+            );
+            $input   = $this->objectManager->create(
+                ArrayInput::class,
+                [
+                    'parameters' => [
+                        'token' => $this->getApiKey(),
+                    ],
+                ]
+            );
+            $output  = $this->objectManager->create(
+                BufferedOutput::class
+            );
+            $command->run($input, $output);
+            $this->getLogger()->debug(
+                $output->fetch()
+            );
+        }
         return (string) $this->scopeConfig->getValue(ConfigInterface::CONFIG_PATH_API_TOKEN);
+    }
+
+    protected function isTokenValid(): bool
+    {
+        $tokenTimeout = $this->getApiTimeout();
+        if (! $tokenTimeout) {
+            return false;
+        }
+
+        $now = new DateTime();
+        return $now < $tokenTimeout;
     }
 
     /**
@@ -93,9 +150,15 @@ class Config extends AbstractHelper implements ConfigInterface
     /**
      * Get the 'api_timeout' system config.
      */
-    public function getApiTimeout(): int
+    public function getApiTimeout(): ?DateTimeInterface
     {
-        return (int) $this->scopeConfig->getValue(ConfigInterface::CONFIG_PATH_API_TIMEOUT);
+        if (! $value = $this->scopeConfig->getValue(ConfigInterface::CONFIG_PATH_API_TIMEOUT)) {
+            return null;
+        }
+        return DateTime::createFromFormat(
+            DateTimeInterface::ISO8601,
+            $this->scopeConfig->getValue(ConfigInterface::CONFIG_PATH_API_TIMEOUT)
+        ) ?: null;
     }
 
     /**
@@ -417,5 +480,10 @@ class Config extends AbstractHelper implements ConfigInterface
         $this->configWriter->save($path, $value);
         $this->reinitableConfig->reinit();
         return $this;
+    }
+
+    public function getLogger(): LoggerInterface
+    {
+        return $this->logger;
     }
 }
