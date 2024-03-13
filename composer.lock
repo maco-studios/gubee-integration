@@ -116,6 +116,10 @@
                 "stream_filter_append",
                 "stream_filter_register"
             ],
+            "support": {
+                "issues": "https://github.com/clue/stream-filter/issues",
+                "source": "https://github.com/clue/stream-filter/tree/v1.7.0"
+            },
             "funding": [
                 {
                     "url": "https://clue.engineering/support",
@@ -133,12 +137,12 @@
             "version": "v1.16.0",
             "source": {
                 "type": "git",
-                "url": "https://github.com/brick/math.git",
+                "url": "https://github.com/colinmollenhour/credis.git",
                 "reference": "5641140e14a9679f5a6f66c97268727f9558b881"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/brick/math/zipball/5641140e14a9679f5a6f66c97268727f9558b881",
+                "url": "https://api.github.com/repos/colinmollenhour/credis/zipball/5641140e14a9679f5a6f66c97268727f9558b881",
                 "reference": "5641140e14a9679f5a6f66c97268727f9558b881",
                 "shasum": ""
             },
@@ -180,12 +184,12 @@
             "version": "v1.4.7",
             "source": {
                 "type": "git",
-                "url": "https://github.com/brick/math.git",
+                "url": "https://github.com/colinmollenhour/php-redis-session-abstract.git",
                 "reference": "15209b18ba69819b6638c720640b0bdb48f395a7"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/brick/math/zipball/15209b18ba69819b6638c720640b0bdb48f395a7",
+                "url": "https://api.github.com/repos/colinmollenhour/php-redis-session-abstract/zipball/15209b18ba69819b6638c720640b0bdb48f395a7",
                 "reference": "15209b18ba69819b6638c720640b0bdb48f395a7",
                 "shasum": ""
             },
@@ -224,12 +228,12 @@
             "version": "1.4.1",
             "source": {
                 "type": "git",
-                "url": "https://github.com/brick/math.git",
+                "url": "https://github.com/composer/ca-bundle.git",
                 "reference": "3ce240142f6d59b808dd65c1f52f7a1c252e6cfd"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/brick/math/zipball/3ce240142f6d59b808dd65c1f52f7a1c252e6cfd",
+                "url": "https://api.github.com/repos/composer/ca-bundle/zipball/3ce240142f6d59b808dd65c1f52f7a1c252e6cfd",
                 "reference": "3ce240142f6d59b808dd65c1f52f7a1c252e6cfd",
                 "shasum": ""
             },
@@ -300,12 +304,12 @@
             "version": "2.2.23",
             "source": {
                 "type": "git",
-                "url": "https://github.com/brick/math.git",
+                "url": "https://github.com/composer/composer.git",
                 "reference": "d1542e89636abf422fde328cb28d53752efb69e5"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/brick/math/zipball/d1542e89636abf422fde328cb28d53752efb69e5",
+                "url": "https://api.github.com/repos/composer/composer/zipball/d1542e89636abf422fde328cb28d53752efb69e5",
                 "reference": "d1542e89636abf422fde328cb28d53752efb69e5",
                 "shasum": ""
             },
@@ -399,12 +403,12 @@
             "version": "1.0.0",
             "source": {
                 "type": "git",
-                "url": "https://github.com/brick/math.git",
+                "url": "https://github.com/composer/metadata-minifier.git",
                 "reference": "c549d23829536f0d0e984aaabbf02af91f443207"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/brick/math/zipball/c549d23829536f0d0e984aaabbf02af91f443207",
+                "url": "https://api.github.com/repos/composer/metadata-minifier/zipball/c549d23829536f0d0e984aaabbf02af91f443207",
                 "reference": "c549d23829536f0d0e984aaabbf02af91f443207",
                 "shasum": ""
             },
@@ -468,12 +472,12 @@
             "version": "1.0.1",
             "source": {
                 "type": "git",
-                "url": "https://github.com/brick/math.git",
+                "url": "https://github.com/composer/pcre.git",
                 "reference": "67a32d7d6f9f560b726ab25a061b38ff3a80c560"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/brick/math/zipball/67a32d7d6f9f560b726ab25a061b38ff3a80c560",
+                "url": "https://api.github.com/repos/composer/pcre/zipball/67a32d7d6f9f560b726ab25a061b38ff3a80c560",
                 "reference": "67a32d7d6f9f560b726ab25a061b38ff3a80c560",
                 "shasum": ""
             },
@@ -539,12 +543,12 @@
             "version": "3.4.0",
             "source": {
                 "type": "git",
-                "url": "https://github.com/brick/math.git",
+                "url": "https://github.com/composer/semver.git",
                 "reference": "35e8d0af4486141bc745f23a29cc2091eb624a32"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/brick/math/zipball/35e8d0af4486141bc745f23a29cc2091eb624a32",
+                "url": "https://api.github.com/repos/composer/semver/zipball/35e8d0af4486141bc745f23a29cc2091eb624a32",
                 "reference": "35e8d0af4486141bc745f23a29cc2091eb624a32",
                 "shasum": ""
             },
@@ -620,12 +624,12 @@
             "version": "1.5.8",
             "source": {
                 "type": "git",
-                "url": "https://github.com/brick/math.git",
+                "url": "https://github.com/composer/spdx-licenses.git",
                 "reference": "560bdcf8deb88ae5d611c80a2de8ea9d0358cc0a"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/brick/math/zipball/560bdcf8deb88ae5d611c80a2de8ea9d0358cc0a",
+                "url": "https://api.github.com/repos/composer/spdx-licenses/zipball/560bdcf8deb88ae5d611c80a2de8ea9d0358cc0a",
                 "reference": "560bdcf8deb88ae5d611c80a2de8ea9d0358cc0a",
                 "shasum": ""
             },
@@ -700,12 +704,12 @@
             "version": "3.0.3",
             "source": {
                 "type": "git",
-                "url": "https://github.com/brick/math.git",
+                "url": "https://github.com/composer/xdebug-handler.git",
                 "reference": "ced299686f41dce890debac69273b47ffe98a40c"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/brick/math/zipball/ced299686f41dce890debac69273b47ffe98a40c",
+                "url": "https://api.github.com/repos/composer/xdebug-handler/zipball/ced299686f41dce890debac69273b47ffe98a40c",
                 "reference": "ced299686f41dce890debac69273b47ffe98a40c",
                 "shasum": ""
             },
@@ -766,12 +770,12 @@
             "version": "v4.17.0",
             "source": {
                 "type": "git",
-                "url": "https://github.com/brick/math.git",
+                "url": "https://github.com/ezyang/htmlpurifier.git",
                 "reference": "bbc513d79acf6691fa9cf10f192c90dd2957f18c"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/brick/math/zipball/bbc513d79acf6691fa9cf10f192c90dd2957f18c",
+                "url": "https://api.github.com/repos/ezyang/htmlpurifier/zipball/bbc513d79acf6691fa9cf10f192c90dd2957f18c",
                 "reference": "bbc513d79acf6691fa9cf10f192c90dd2957f18c",
                 "shasum": ""
             },
@@ -825,16 +829,10 @@
         {
             "name": "gubee/sdk",
             "version": "dev-wip",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/brick/math.git",
-                "reference": "ca57d18f028f84f777b2168cd1911b0dee2343ae"
-            },
             "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/brick/math/zipball/ca57d18f028f84f777b2168cd1911b0dee2343ae",
-                "reference": "ca57d18f028f84f777b2168cd1911b0dee2343ae",
-                "shasum": ""
+                "type": "path",
+                "url": "../gubee-sdk",
+                "reference": "4adcb92402ed6dfb520c3c18e8219e95ee416d4f"
             },
             "require": {
                 "php": "^7.4",
@@ -909,19 +907,22 @@
                     "email": "contato@gubee.com.br"
                 }
             ],
-            "description": "Gubee SDK for PHP"
+            "description": "Gubee SDK for PHP",
+            "transport-options": {
+                "relative": true
+            }
         },
         {
             "name": "guzzlehttp/guzzle",
             "version": "7.8.1",
             "source": {
                 "type": "git",
-                "url": "https://github.com/brick/math.git",
+                "url": "https://github.com/guzzle/guzzle.git",
                 "reference": "41042bc7ab002487b876a0683fc8dce04ddce104"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/brick/math/zipball/41042bc7ab002487b876a0683fc8dce04ddce104",
+                "url": "https://api.github.com/repos/guzzle/guzzle/zipball/41042bc7ab002487b876a0683fc8dce04ddce104",
                 "reference": "41042bc7ab002487b876a0683fc8dce04ddce104",
                 "shasum": ""
             },
@@ -1042,12 +1043,12 @@
             "version": "2.0.2",
             "source": {
                 "type": "git",
-                "url": "https://github.com/brick/math.git",
+                "url": "https://github.com/guzzle/promises.git",
                 "reference": "bbff78d96034045e58e13dedd6ad91b5d1253223"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/brick/math/zipball/bbff78d96034045e58e13dedd6ad91b5d1253223",
+                "url": "https://api.github.com/repos/guzzle/promises/zipball/bbff78d96034045e58e13dedd6ad91b5d1253223",
                 "reference": "bbff78d96034045e58e13dedd6ad91b5d1253223",
                 "shasum": ""
             },
@@ -1125,12 +1126,12 @@
             "version": "2.6.2",
             "source": {
                 "type": "git",
-                "url": "https://github.com/brick/math.git",
+                "url": "https://github.com/guzzle/psr7.git",
                 "reference": "45b30f99ac27b5ca93cb4831afe16285f57b8221"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/brick/math/zipball/45b30f99ac27b5ca93cb4831afe16285f57b8221",
+                "url": "https://api.github.com/repos/guzzle/psr7/zipball/45b30f99ac27b5ca93cb4831afe16285f57b8221",
                 "reference": "45b30f99ac27b5ca93cb4831afe16285f57b8221",
                 "shasum": ""
             },
@@ -1241,12 +1242,12 @@
             "version": "v5.2.13",
             "source": {
                 "type": "git",
-                "url": "https://github.com/brick/math.git",
+                "url": "https://github.com/justinrainbow/json-schema.git",
                 "reference": "fbbe7e5d79f618997bc3332a6f49246036c45793"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/brick/math/zipball/fbbe7e5d79f618997bc3332a6f49246036c45793",
+                "url": "https://api.github.com/repos/justinrainbow/json-schema/zipball/fbbe7e5d79f618997bc3332a6f49246036c45793",
                 "reference": "fbbe7e5d79f618997bc3332a6f49246036c45793",
                 "shasum": ""
             },
@@ -1311,12 +1312,12 @@
             "version": "2.14.0",
             "source": {
                 "type": "git",
-                "url": "https://github.com/brick/math.git",
+                "url": "https://github.com/laminas/laminas-captcha.git",
                 "reference": "1213445d2017aa869990e9b8cae6e1e4ed05e1e4"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/brick/math/zipball/1213445d2017aa869990e9b8cae6e1e4ed05e1e4",
+                "url": "https://api.github.com/repos/laminas/laminas-captcha/zipball/1213445d2017aa869990e9b8cae6e1e4ed05e1e4",
                 "reference": "1213445d2017aa869990e9b8cae6e1e4ed05e1e4",
                 "shasum": ""
             },
@@ -1378,12 +1379,12 @@
             "version": "4.5.2",
             "source": {
                 "type": "git",
-                "url": "https://github.com/brick/math.git",
+                "url": "https://github.com/laminas/laminas-code.git",
                 "reference": "da01fb74c08f37e20e7ae49f1e3ee09aa401ebad"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/brick/math/zipball/da01fb74c08f37e20e7ae49f1e3ee09aa401ebad",
+                "url": "https://api.github.com/repos/laminas/laminas-code/zipball/da01fb74c08f37e20e7ae49f1e3ee09aa401ebad",
                 "reference": "da01fb74c08f37e20e7ae49f1e3ee09aa401ebad",
                 "shasum": ""
             },
@@ -1444,12 +1445,12 @@
             "version": "2.15.1",
             "source": {
                 "type": "git",
-                "url": "https://github.com/brick/math.git",
+                "url": "https://github.com/laminas/laminas-db.git",
                 "reference": "a03d8df79c36c07b9031d05bfd605dfed3ddf9a3"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/brick/math/zipball/a03d8df79c36c07b9031d05bfd605dfed3ddf9a3",
+                "url": "https://api.github.com/repos/laminas/laminas-db/zipball/a03d8df79c36c07b9031d05bfd605dfed3ddf9a3",
                 "reference": "a03d8df79c36c07b9031d05bfd605dfed3ddf9a3",
                 "shasum": ""
             },
@@ -1515,12 +1516,12 @@
             "version": "2.10.0",
             "source": {
                 "type": "git",
-                "url": "https://github.com/brick/math.git",
+                "url": "https://github.com/laminas/laminas-escaper.git",
                 "reference": "58af67282db37d24e584a837a94ee55b9c7552be"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/brick/math/zipball/58af67282db37d24e584a837a94ee55b9c7552be",
+                "url": "https://api.github.com/repos/laminas/laminas-escaper/zipball/58af67282db37d24e584a837a94ee55b9c7552be",
                 "reference": "58af67282db37d24e584a837a94ee55b9c7552be",
                 "shasum": ""
             },
@@ -1577,12 +1578,12 @@
             "version": "3.5.0",
             "source": {
                 "type": "git",
-                "url": "https://github.com/brick/math.git",
+                "url": "https://github.com/laminas/laminas-eventmanager.git",
                 "reference": "41f7209428f37cab9573365e361f4078209aaafa"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/brick/math/zipball/41f7209428f37cab9573365e361f4078209aaafa",
+                "url": "https://api.github.com/repos/laminas/laminas-eventmanager/zipball/41f7209428f37cab9573365e361f4078209aaafa",
                 "reference": "41f7209428f37cab9573365e361f4078209aaafa",
                 "shasum": ""
             },
@@ -1644,12 +1645,12 @@
             "version": "2.16.1",
             "source": {
                 "type": "git",
-                "url": "https://github.com/brick/math.git",
+                "url": "https://github.com/laminas/laminas-http.git",
                 "reference": "838825d42b03aedcb1d8b5a61ebfe28967bbfbfb"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/brick/math/zipball/838825d42b03aedcb1d8b5a61ebfe28967bbfbfb",
+                "url": "https://api.github.com/repos/laminas/laminas-http/zipball/838825d42b03aedcb1d8b5a61ebfe28967bbfbfb",
                 "reference": "838825d42b03aedcb1d8b5a61ebfe28967bbfbfb",
                 "shasum": ""
             },
@@ -1709,12 +1710,12 @@
             "version": "3.3.0",
             "source": {
                 "type": "git",
-                "url": "https://github.com/brick/math.git",
+                "url": "https://github.com/laminas/laminas-json.git",
                 "reference": "9a0ce9f330b7d11e70c4acb44d67e8c4f03f437f"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/brick/math/zipball/9a0ce9f330b7d11e70c4acb44d67e8c4f03f437f",
+                "url": "https://api.github.com/repos/laminas/laminas-json/zipball/9a0ce9f330b7d11e70c4acb44d67e8c4f03f437f",
                 "reference": "9a0ce9f330b7d11e70c4acb44d67e8c4f03f437f",
                 "shasum": ""
             },
@@ -1770,12 +1771,12 @@
             "version": "2.8.0",
             "source": {
                 "type": "git",
-                "url": "https://github.com/brick/math.git",
+                "url": "https://github.com/laminas/laminas-loader.git",
                 "reference": "d0589ec9dd48365fd95ad10d1c906efd7711c16b"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/brick/math/zipball/d0589ec9dd48365fd95ad10d1c906efd7711c16b",
+                "url": "https://api.github.com/repos/laminas/laminas-loader/zipball/d0589ec9dd48365fd95ad10d1c906efd7711c16b",
                 "reference": "d0589ec9dd48365fd95ad10d1c906efd7711c16b",
                 "shasum": ""
             },
@@ -1826,12 +1827,12 @@
             "version": "2.16.0",
             "source": {
                 "type": "git",
-                "url": "https://github.com/brick/math.git",
+                "url": "https://github.com/laminas/laminas-mail.git",
                 "reference": "1ee1a384b96c8af29ecad9b3a7adc27a150ebc49"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/brick/math/zipball/1ee1a384b96c8af29ecad9b3a7adc27a150ebc49",
+                "url": "https://api.github.com/repos/laminas/laminas-mail/zipball/1ee1a384b96c8af29ecad9b3a7adc27a150ebc49",
                 "reference": "1ee1a384b96c8af29ecad9b3a7adc27a150ebc49",
                 "shasum": ""
             },
@@ -1906,12 +1907,12 @@
             "version": "2.10.0",
             "source": {
                 "type": "git",
-                "url": "https://github.com/brick/math.git",
+                "url": "https://github.com/laminas/laminas-mime.git",
                 "reference": "62a899a7c9100889c2d2386b1357003a2cb52fa9"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/brick/math/zipball/62a899a7c9100889c2d2386b1357003a2cb52fa9",
+                "url": "https://api.github.com/repos/laminas/laminas-mime/zipball/62a899a7c9100889c2d2386b1357003a2cb52fa9",
                 "reference": "62a899a7c9100889c2d2386b1357003a2cb52fa9",
                 "shasum": ""
             },
@@ -1967,12 +1968,12 @@
             "version": "3.4.0",
             "source": {
                 "type": "git",
-                "url": "https://github.com/brick/math.git",
+                "url": "https://github.com/laminas/laminas-recaptcha.git",
                 "reference": "f3bdb2fcaf859b9f725f397dc1bc38b4a7696a71"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/brick/math/zipball/f3bdb2fcaf859b9f725f397dc1bc38b4a7696a71",
+                "url": "https://api.github.com/repos/laminas/laminas-recaptcha/zipball/f3bdb2fcaf859b9f725f397dc1bc38b4a7696a71",
                 "reference": "f3bdb2fcaf859b9f725f397dc1bc38b4a7696a71",
                 "shasum": ""
             },
@@ -2032,12 +2033,12 @@
             "version": "3.17.0",
             "source": {
                 "type": "git",
-                "url": "https://github.com/brick/math.git",
+                "url": "https://github.com/laminas/laminas-servicemanager.git",
                 "reference": "360be5f16955dd1edbcce1cfaa98ed82a17f02ec"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/brick/math/zipball/360be5f16955dd1edbcce1cfaa98ed82a17f02ec",
+                "url": "https://api.github.com/repos/laminas/laminas-servicemanager/zipball/360be5f16955dd1edbcce1cfaa98ed82a17f02ec",
                 "reference": "360be5f16955dd1edbcce1cfaa98ed82a17f02ec",
                 "shasum": ""
             },
@@ -2123,12 +2124,12 @@
             "version": "2.13.0",
             "source": {
                 "type": "git",
-                "url": "https://github.com/brick/math.git",
+                "url": "https://github.com/laminas/laminas-session.git",
                 "reference": "9f8a6077dd22b3b253583b1be84ddd5bf6fa1ef4"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/brick/math/zipball/9f8a6077dd22b3b253583b1be84ddd5bf6fa1ef4",
+                "url": "https://api.github.com/repos/laminas/laminas-session/zipball/9f8a6077dd22b3b253583b1be84ddd5bf6fa1ef4",
                 "reference": "9f8a6077dd22b3b253583b1be84ddd5bf6fa1ef4",
                 "shasum": ""
             },
@@ -2206,12 +2207,12 @@
             "version": "3.13.0",
             "source": {
                 "type": "git",
-                "url": "https://github.com/brick/math.git",
+                "url": "https://github.com/laminas/laminas-stdlib.git",
                 "reference": "66a6d03c381f6c9f1dd988bf8244f9afb9380d76"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/brick/math/zipball/66a6d03c381f6c9f1dd988bf8244f9afb9380d76",
+                "url": "https://api.github.com/repos/laminas/laminas-stdlib/zipball/66a6d03c381f6c9f1dd988bf8244f9afb9380d76",
                 "reference": "66a6d03c381f6c9f1dd988bf8244f9afb9380d76",
                 "shasum": ""
             },
@@ -2266,12 +2267,12 @@
             "version": "2.9.0",
             "source": {
                 "type": "git",
-                "url": "https://github.com/brick/math.git",
+                "url": "https://github.com/laminas/laminas-text.git",
                 "reference": "8879e75d03e09b0d6787e6680cfa255afd4645a7"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/brick/math/zipball/8879e75d03e09b0d6787e6680cfa255afd4645a7",
+                "url": "https://api.github.com/repos/laminas/laminas-text/zipball/8879e75d03e09b0d6787e6680cfa255afd4645a7",
                 "reference": "8879e75d03e09b0d6787e6680cfa255afd4645a7",
                 "shasum": ""
             },
@@ -2324,12 +2325,12 @@
             "version": "2.9.1",
             "source": {
                 "type": "git",
-                "url": "https://github.com/brick/math.git",
+                "url": "https://github.com/laminas/laminas-uri.git",
                 "reference": "7e837dc15c8fd3949df7d1213246fd7c8640032b"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/brick/math/zipball/7e837dc15c8fd3949df7d1213246fd7c8640032b",
+                "url": "https://api.github.com/repos/laminas/laminas-uri/zipball/7e837dc15c8fd3949df7d1213246fd7c8640032b",
                 "reference": "7e837dc15c8fd3949df7d1213246fd7c8640032b",
                 "shasum": ""
             },
@@ -2382,12 +2383,12 @@
             "version": "2.25.0",
             "source": {
                 "type": "git",
-                "url": "https://github.com/brick/math.git",
+                "url": "https://github.com/laminas/laminas-validator.git",
                 "reference": "42de39b78e73b321db7d948cf8530a2764f8b9aa"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/brick/math/zipball/42de39b78e73b321db7d948cf8530a2764f8b9aa",
+                "url": "https://api.github.com/repos/laminas/laminas-validator/zipball/42de39b78e73b321db7d948cf8530a2764f8b9aa",
                 "reference": "42de39b78e73b321db7d948cf8530a2764f8b9aa",
                 "shasum": ""
             },
@@ -2517,21 +2518,19 @@
                 "laravel",
                 "serializable"
             ],
+            "support": {
+                "issues": "https://github.com/laravel/serializable-closure/issues",
+                "source": "https://github.com/laravel/serializable-closure"
+            },
             "time": "2023-11-08T14:08:06+00:00"
         },
         {
             "name": "magento/composer-dependency-version-audit-plugin",
             "version": "0.1.5",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/brick/math.git",
-                "reference": "ca57d18f028f84f777b2168cd1911b0dee2343ae"
-            },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/brick/math/zipball/ca57d18f028f84f777b2168cd1911b0dee2343ae",
-                "reference": "ca57d18f028f84f777b2168cd1911b0dee2343ae",
-                "shasum": ""
+                "url": "https://repo.magento.com/archives/magento/composer-dependency-version-audit-plugin/magento-composer-dependency-version-audit-plugin-0.1.5.0.zip",
+                "shasum": "5bbab92d2727217628a6806ad59d6c7fe1ec0651"
             },
             "require": {
                 "composer-plugin-api": "^1.0 || ^2.0",
@@ -2557,16 +2556,10 @@
         {
             "name": "magento/framework",
             "version": "103.0.5-p6",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/brick/math.git",
-                "reference": "ca57d18f028f84f777b2168cd1911b0dee2343ae"
-            },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/brick/math/zipball/ca57d18f028f84f777b2168cd1911b0dee2343ae",
-                "reference": "ca57d18f028f84f777b2168cd1911b0dee2343ae",
-                "shasum": ""
+                "url": "https://repo.magento.com/archives/magento/framework/magento-framework-103.0.5.0-patch6.zip",
+                "shasum": "ebffa4ef58d567b24de31b9829b3550e0f1229eb"
             },
             "require": {
                 "colinmollenhour/php-redis-session-abstract": "~1.4.5",
@@ -2625,16 +2618,10 @@
         {
             "name": "magento/framework-bulk",
             "version": "101.0.1",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/brick/math.git",
-                "reference": "ca57d18f028f84f777b2168cd1911b0dee2343ae"
-            },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/brick/math/zipball/ca57d18f028f84f777b2168cd1911b0dee2343ae",
-                "reference": "ca57d18f028f84f777b2168cd1911b0dee2343ae",
-                "shasum": ""
+                "url": "https://repo.magento.com/archives/magento/framework-bulk/magento-framework-bulk-101.0.1.0.zip",
+                "shasum": "0509f701466b6c6403b97f625a723029ae922754"
             },
             "require": {
                 "magento/framework": "103.0.*",
@@ -2658,16 +2645,10 @@
         {
             "name": "magento/framework-message-queue",
             "version": "100.4.5",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/brick/math.git",
-                "reference": "ca57d18f028f84f777b2168cd1911b0dee2343ae"
-            },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/brick/math/zipball/ca57d18f028f84f777b2168cd1911b0dee2343ae",
-                "reference": "ca57d18f028f84f777b2168cd1911b0dee2343ae",
-                "shasum": ""
+                "url": "https://repo.magento.com/archives/magento/framework-message-queue/magento-framework-message-queue-100.4.5.0.zip",
+                "shasum": "6b31ce9cba29824f5c2f2d29841ecc889c8c2a2d"
             },
             "require": {
                 "magento/framework": "103.0.*",
@@ -2691,16 +2672,10 @@
         {
             "name": "magento/module-asynchronous-operations",
             "version": "100.4.5",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/brick/math.git",
-                "reference": "ca57d18f028f84f777b2168cd1911b0dee2343ae"
-            },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/brick/math/zipball/ca57d18f028f84f777b2168cd1911b0dee2343ae",
-                "reference": "ca57d18f028f84f777b2168cd1911b0dee2343ae",
-                "shasum": ""
+                "url": "https://repo.magento.com/archives/magento/module-asynchronous-operations/magento-module-asynchronous-operations-100.4.5.0.zip",
+                "shasum": "0da25cb7acdf1862079994164bf445d8ac7f6af5"
             },
             "require": {
                 "magento/framework": "103.0.*",
@@ -2733,16 +2708,10 @@
         {
             "name": "magento/module-authorization",
             "version": "100.4.5",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/brick/math.git",
-                "reference": "ca57d18f028f84f777b2168cd1911b0dee2343ae"
-            },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/brick/math/zipball/ca57d18f028f84f777b2168cd1911b0dee2343ae",
-                "reference": "ca57d18f028f84f777b2168cd1911b0dee2343ae",
-                "shasum": ""
+                "url": "https://repo.magento.com/archives/magento/module-authorization/magento-module-authorization-100.4.5.0.zip",
+                "shasum": "06afa70d3b4b0cc033421bbac7c5aa3d24bebdbb"
             },
             "require": {
                 "magento/framework": "103.0.*",
@@ -2767,16 +2736,10 @@
         {
             "name": "magento/module-backend",
             "version": "102.0.5-p2",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/brick/math.git",
-                "reference": "ca57d18f028f84f777b2168cd1911b0dee2343ae"
-            },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/brick/math/zipball/ca57d18f028f84f777b2168cd1911b0dee2343ae",
-                "reference": "ca57d18f028f84f777b2168cd1911b0dee2343ae",
-                "shasum": ""
+                "url": "https://repo.magento.com/archives/magento/module-backend/magento-module-backend-102.0.5.0-patch2.zip",
+                "shasum": "8ae2f2cf9de86ee6e79412f284dc4fbc8d28bab0"
             },
             "require": {
                 "magento/framework": "103.0.*",
@@ -2821,16 +2784,10 @@
         {
             "name": "magento/module-backup",
             "version": "100.4.5",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/brick/math.git",
-                "reference": "ca57d18f028f84f777b2168cd1911b0dee2343ae"
-            },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/brick/math/zipball/ca57d18f028f84f777b2168cd1911b0dee2343ae",
-                "reference": "ca57d18f028f84f777b2168cd1911b0dee2343ae",
-                "shasum": ""
+                "url": "https://repo.magento.com/archives/magento/module-backup/magento-module-backup-100.4.5.0.zip",
+                "shasum": "9d5b5a27ddb44e4f657973e8b1a9bac810cad8b3"
             },
             "require": {
                 "magento/framework": "103.0.*",
@@ -2857,16 +2814,10 @@
         {
             "name": "magento/module-bundle",
             "version": "101.0.5-p6",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/brick/math.git",
-                "reference": "ca57d18f028f84f777b2168cd1911b0dee2343ae"
-            },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/brick/math/zipball/ca57d18f028f84f777b2168cd1911b0dee2343ae",
-                "reference": "ca57d18f028f84f777b2168cd1911b0dee2343ae",
-                "shasum": ""
+                "url": "https://repo.magento.com/archives/magento/module-bundle/magento-module-bundle-101.0.5.0-patch6.zip",
+                "shasum": "e0cb631d4e82ffb1c80aa940bd3759af198c2cbd"
             },
             "require": {
                 "magento/framework": "103.0.*",
@@ -2911,16 +2862,10 @@
         {
             "name": "magento/module-captcha",
             "version": "100.4.5-p3",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/brick/math.git",
-                "reference": "ca57d18f028f84f777b2168cd1911b0dee2343ae"
-            },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/brick/math/zipball/ca57d18f028f84f777b2168cd1911b0dee2343ae",
-                "reference": "ca57d18f028f84f777b2168cd1911b0dee2343ae",
-                "shasum": ""
+                "url": "https://repo.magento.com/archives/magento/module-captcha/magento-module-captcha-100.4.5.0-patch3.zip",
+                "shasum": "5e6370a2aa48546e29cbbc3cd2c0ca7ee38c6d44"
             },
             "require": {
                 "laminas/laminas-captcha": "^2.12",
@@ -2952,16 +2897,10 @@
         {
             "name": "magento/module-catalog",
             "version": "104.0.5-p6",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/brick/math.git",
-                "reference": "ca57d18f028f84f777b2168cd1911b0dee2343ae"
-            },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/brick/math/zipball/ca57d18f028f84f777b2168cd1911b0dee2343ae",
-                "reference": "ca57d18f028f84f777b2168cd1911b0dee2343ae",
-                "shasum": ""
+                "url": "https://repo.magento.com/archives/magento/module-catalog/magento-module-catalog-104.0.5.0-patch6.zip",
+                "shasum": "f46fda56edcb5d4865adffc38027647263c554cb"
             },
             "require": {
                 "magento/framework": "103.0.*",
@@ -3015,16 +2954,10 @@
         {
             "name": "magento/module-catalog-import-export",
             "version": "101.1.5-p3",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/brick/math.git",
-                "reference": "ca57d18f028f84f777b2168cd1911b0dee2343ae"
-            },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/brick/math/zipball/ca57d18f028f84f777b2168cd1911b0dee2343ae",
-                "reference": "ca57d18f028f84f777b2168cd1911b0dee2343ae",
-                "shasum": ""
+                "url": "https://repo.magento.com/archives/magento/module-catalog-import-export/magento-module-catalog-import-export-101.1.5.0-patch3.zip",
+                "shasum": "f9442c7fbbdc652de602dc089b2ae8ee70075d7b"
             },
             "require": {
                 "ext-ctype": "*",
@@ -3059,16 +2992,10 @@
         {
             "name": "magento/module-catalog-inventory",
             "version": "100.4.5",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/brick/math.git",
-                "reference": "ca57d18f028f84f777b2168cd1911b0dee2343ae"
-            },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/brick/math/zipball/ca57d18f028f84f777b2168cd1911b0dee2343ae",
-                "reference": "ca57d18f028f84f777b2168cd1911b0dee2343ae",
-                "shasum": ""
+                "url": "https://repo.magento.com/archives/magento/module-catalog-inventory/magento-module-catalog-inventory-100.4.5.0.zip",
+                "shasum": "919dbee1a07ec5f1f4728f23262534936ba05e9b"
             },
             "require": {
                 "magento/framework": "103.0.*",
@@ -3099,16 +3026,10 @@
         {
             "name": "magento/module-catalog-rule",
             "version": "101.2.5-p5",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/brick/math.git",
-                "reference": "ca57d18f028f84f777b2168cd1911b0dee2343ae"
-            },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/brick/math/zipball/ca57d18f028f84f777b2168cd1911b0dee2343ae",
-                "reference": "ca57d18f028f84f777b2168cd1911b0dee2343ae",
-                "shasum": ""
+                "url": "https://repo.magento.com/archives/magento/module-catalog-rule/magento-module-catalog-rule-101.2.5.0-patch5.zip",
+                "shasum": "88743b359bc3f88f2f39beedc342e80929060119"
             },
             "require": {
                 "magento/framework": "103.0.*",
@@ -3143,16 +3064,10 @@
         {
             "name": "magento/module-catalog-url-rewrite",
             "version": "100.4.5",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/brick/math.git",
-                "reference": "ca57d18f028f84f777b2168cd1911b0dee2343ae"
-            },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/brick/math/zipball/ca57d18f028f84f777b2168cd1911b0dee2343ae",
-                "reference": "ca57d18f028f84f777b2168cd1911b0dee2343ae",
-                "shasum": ""
+                "url": "https://repo.magento.com/archives/magento/module-catalog-url-rewrite/magento-module-catalog-url-rewrite-100.4.5.0.zip",
+                "shasum": "1bd5ff2eb854696a84be74c33892c42e622ecc90"
             },
             "require": {
                 "magento/framework": "103.0.*",
@@ -3187,16 +3102,10 @@
         {
             "name": "magento/module-checkout",
             "version": "100.4.5-p6",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/brick/math.git",
-                "reference": "ca57d18f028f84f777b2168cd1911b0dee2343ae"
-            },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/brick/math/zipball/ca57d18f028f84f777b2168cd1911b0dee2343ae",
-                "reference": "ca57d18f028f84f777b2168cd1911b0dee2343ae",
-                "shasum": ""
+                "url": "https://repo.magento.com/archives/magento/module-checkout/magento-module-checkout-100.4.5.0-patch6.zip",
+                "shasum": "b478521a3d1cfdb07736c8ca1f55c60190ddf731"
             },
             "require": {
                 "magento/framework": "103.0.*",
@@ -3243,16 +3152,10 @@
         {
             "name": "magento/module-cms",
             "version": "104.0.5-p1",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/brick/math.git",
-                "reference": "ca57d18f028f84f777b2168cd1911b0dee2343ae"
-            },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/brick/math/zipball/ca57d18f028f84f777b2168cd1911b0dee2343ae",
-                "reference": "ca57d18f028f84f777b2168cd1911b0dee2343ae",
-                "shasum": ""
+                "url": "https://repo.magento.com/archives/magento/module-cms/magento-module-cms-104.0.5.0-patch1.zip",
+                "shasum": "aa92fdce172d7e481eb6bf6cf8d9dee074ee63a8"
             },
             "require": {
                 "magento/framework": "103.0.*",
@@ -3288,16 +3191,10 @@
         {
             "name": "magento/module-cms-url-rewrite",
             "version": "100.4.4",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/brick/math.git",
-                "reference": "ca57d18f028f84f777b2168cd1911b0dee2343ae"
-            },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/brick/math/zipball/ca57d18f028f84f777b2168cd1911b0dee2343ae",
-                "reference": "ca57d18f028f84f777b2168cd1911b0dee2343ae",
-                "shasum": ""
+                "url": "https://repo.magento.com/archives/magento/module-cms-url-rewrite/magento-module-cms-url-rewrite-100.4.4.0.zip",
+                "shasum": "58feb0325230324416a662735e85a2c5a4689dd6"
             },
             "require": {
                 "magento/framework": "103.0.*",
@@ -3324,16 +3221,10 @@
         {
             "name": "magento/module-config",
             "version": "101.2.5-p6",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/brick/math.git",
-                "reference": "ca57d18f028f84f777b2168cd1911b0dee2343ae"
-            },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/brick/math/zipball/ca57d18f028f84f777b2168cd1911b0dee2343ae",
-                "reference": "ca57d18f028f84f777b2168cd1911b0dee2343ae",
-                "shasum": ""
+                "url": "https://repo.magento.com/archives/magento/module-config/magento-module-config-101.2.5.0-patch6.zip",
+                "shasum": "f63000279ebae7fa4e7c69cb9b687edf2cd97142"
             },
             "require": {
                 "magento/framework": "103.0.*",
@@ -3364,16 +3255,10 @@
         {
             "name": "magento/module-contact",
             "version": "100.4.4",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/brick/math.git",
-                "reference": "ca57d18f028f84f777b2168cd1911b0dee2343ae"
-            },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/brick/math/zipball/ca57d18f028f84f777b2168cd1911b0dee2343ae",
-                "reference": "ca57d18f028f84f777b2168cd1911b0dee2343ae",
-                "shasum": ""
+                "url": "https://repo.magento.com/archives/magento/module-contact/magento-module-contact-100.4.4.0.zip",
+                "shasum": "f59890ba23fff0b4174eca28e9eb9631da272fdf"
             },
             "require": {
                 "magento/framework": "103.0.*",
@@ -3401,16 +3286,10 @@
         {
             "name": "magento/module-cron",
             "version": "100.4.5",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/brick/math.git",
-                "reference": "ca57d18f028f84f777b2168cd1911b0dee2343ae"
-            },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/brick/math/zipball/ca57d18f028f84f777b2168cd1911b0dee2343ae",
-                "reference": "ca57d18f028f84f777b2168cd1911b0dee2343ae",
-                "shasum": ""
+                "url": "https://repo.magento.com/archives/magento/module-cron/magento-module-cron-100.4.5.0.zip",
+                "shasum": "21c72975a3851a4cdb57380674a0afff02379d22"
             },
             "require": {
                 "magento/framework": "103.0.*",
@@ -3438,16 +3317,10 @@
         {
             "name": "magento/module-customer",
             "version": "103.0.5-p5",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/brick/math.git",
-                "reference": "ca57d18f028f84f777b2168cd1911b0dee2343ae"
-            },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/brick/math/zipball/ca57d18f028f84f777b2168cd1911b0dee2343ae",
-                "reference": "ca57d18f028f84f777b2168cd1911b0dee2343ae",
-                "shasum": ""
+                "url": "https://repo.magento.com/archives/magento/module-customer/magento-module-customer-103.0.5.0-patch5.zip",
+                "shasum": "72f8c5e8856fd8b938da5d2bb04ce86521dc4c1a"
             },
             "require": {
                 "magento/framework": "103.0.*",
@@ -3494,16 +3367,10 @@
         {
             "name": "magento/module-deploy",
             "version": "100.4.5",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/brick/math.git",
-                "reference": "ca57d18f028f84f777b2168cd1911b0dee2343ae"
-            },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/brick/math/zipball/ca57d18f028f84f777b2168cd1911b0dee2343ae",
-                "reference": "ca57d18f028f84f777b2168cd1911b0dee2343ae",
-                "shasum": ""
+                "url": "https://repo.magento.com/archives/magento/module-deploy/magento-module-deploy-100.4.5.0.zip",
+                "shasum": "a213853f0a0fdb9c4253dd3fc733e5a0fd73ba60"
             },
             "require": {
                 "magento/framework": "103.0.*",
@@ -3532,16 +3399,10 @@
         {
             "name": "magento/module-developer",
             "version": "100.4.5",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/brick/math.git",
-                "reference": "ca57d18f028f84f777b2168cd1911b0dee2343ae"
-            },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/brick/math/zipball/ca57d18f028f84f777b2168cd1911b0dee2343ae",
-                "reference": "ca57d18f028f84f777b2168cd1911b0dee2343ae",
-                "shasum": ""
+                "url": "https://repo.magento.com/archives/magento/module-developer/magento-module-developer-100.4.5.0.zip",
+                "shasum": "dfa60efc615392b056754cb6a81c78a6ffef80f8"
             },
             "require": {
                 "magento/framework": "103.0.*",
@@ -3567,16 +3428,10 @@
         {
             "name": "magento/module-directory",
             "version": "100.4.5-p3",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/brick/math.git",
-                "reference": "ca57d18f028f84f777b2168cd1911b0dee2343ae"
-            },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/brick/math/zipball/ca57d18f028f84f777b2168cd1911b0dee2343ae",
-                "reference": "ca57d18f028f84f777b2168cd1911b0dee2343ae",
-                "shasum": ""
+                "url": "https://repo.magento.com/archives/magento/module-directory/magento-module-directory-100.4.5.0-patch3.zip",
+                "shasum": "2325f5c81eab085809165d191f24cb59817556f7"
             },
             "require": {
                 "lib-libxml": "*",
@@ -3604,16 +3459,10 @@
         {
             "name": "magento/module-downloadable",
             "version": "100.4.5",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/brick/math.git",
-                "reference": "ca57d18f028f84f777b2168cd1911b0dee2343ae"
-            },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/brick/math/zipball/ca57d18f028f84f777b2168cd1911b0dee2343ae",
-                "reference": "ca57d18f028f84f777b2168cd1911b0dee2343ae",
-                "shasum": ""
+                "url": "https://repo.magento.com/archives/magento/module-downloadable/magento-module-downloadable-100.4.5.0.zip",
+                "shasum": "78a7f641efd6f7297cd5f046bfda9565de415192"
             },
             "require": {
                 "magento/framework": "103.0.*",
@@ -3656,16 +3505,10 @@
         {
             "name": "magento/module-eav",
             "version": "102.1.5",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/brick/math.git",
-                "reference": "ca57d18f028f84f777b2168cd1911b0dee2343ae"
-            },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/brick/math/zipball/ca57d18f028f84f777b2168cd1911b0dee2343ae",
-                "reference": "ca57d18f028f84f777b2168cd1911b0dee2343ae",
-                "shasum": ""
+                "url": "https://repo.magento.com/archives/magento/module-eav/magento-module-eav-102.1.5.0.zip",
+                "shasum": "c340cf0993448f1abd5ad0caf61734249611943e"
             },
             "require": {
                 "magento/framework": "103.0.*",
@@ -3694,16 +3537,10 @@
         {
             "name": "magento/module-email",
             "version": "101.1.5-p6",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/brick/math.git",
-                "reference": "ca57d18f028f84f777b2168cd1911b0dee2343ae"
-            },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/brick/math/zipball/ca57d18f028f84f777b2168cd1911b0dee2343ae",
-                "reference": "ca57d18f028f84f777b2168cd1911b0dee2343ae",
-                "shasum": ""
+                "url": "https://repo.magento.com/archives/magento/module-email/magento-module-email-101.1.5.0-patch6.zip",
+                "shasum": "7d77ce378a5e2ed2ef80a3ac1075649ecacaa84f"
             },
             "require": {
                 "magento/framework": "103.0.*",
@@ -3739,16 +3576,10 @@
         {
             "name": "magento/module-gift-message",
             "version": "100.4.4",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/brick/math.git",
-                "reference": "ca57d18f028f84f777b2168cd1911b0dee2343ae"
-            },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/brick/math/zipball/ca57d18f028f84f777b2168cd1911b0dee2343ae",
-                "reference": "ca57d18f028f84f777b2168cd1911b0dee2343ae",
-                "shasum": ""
+                "url": "https://repo.magento.com/archives/magento/module-gift-message/magento-module-gift-message-100.4.4.0.zip",
+                "shasum": "921b0e4ec989c1e9038b96a32a747498f3932b94"
             },
             "require": {
                 "magento/framework": "103.0.*",
@@ -3784,16 +3615,10 @@
         {
             "name": "magento/module-import-export",
             "version": "101.0.5",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/brick/math.git",
-                "reference": "ca57d18f028f84f777b2168cd1911b0dee2343ae"
-            },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/brick/math/zipball/ca57d18f028f84f777b2168cd1911b0dee2343ae",
-                "reference": "ca57d18f028f84f777b2168cd1911b0dee2343ae",
-                "shasum": ""
+                "url": "https://repo.magento.com/archives/magento/module-import-export/magento-module-import-export-101.0.5.0.zip",
+                "shasum": "d83b1dd4c0dac78116eb9c750c3ce0e50a5bd514"
             },
             "require": {
                 "ext-ctype": "*",
@@ -3824,16 +3649,10 @@
         {
             "name": "magento/module-indexer",
             "version": "100.4.5",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/brick/math.git",
-                "reference": "ca57d18f028f84f777b2168cd1911b0dee2343ae"
-            },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/brick/math/zipball/ca57d18f028f84f777b2168cd1911b0dee2343ae",
-                "reference": "ca57d18f028f84f777b2168cd1911b0dee2343ae",
-                "shasum": ""
+                "url": "https://repo.magento.com/archives/magento/module-indexer/magento-module-indexer-100.4.5.0.zip",
+                "shasum": "6b16b0e77c9b562b93a6489dacc3602726f0f970"
             },
             "require": {
                 "magento/framework": "103.0.*",
@@ -3858,16 +3677,10 @@
         {
             "name": "magento/module-integration",
             "version": "100.4.5",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/brick/math.git",
-                "reference": "ca57d18f028f84f777b2168cd1911b0dee2343ae"
-            },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/brick/math/zipball/ca57d18f028f84f777b2168cd1911b0dee2343ae",
-                "reference": "ca57d18f028f84f777b2168cd1911b0dee2343ae",
-                "shasum": ""
+                "url": "https://repo.magento.com/archives/magento/module-integration/magento-module-integration-100.4.5.0.zip",
+                "shasum": "9128a75504ec75ae3f6c9eb241e47cd59ca0a79a"
             },
             "require": {
                 "magento/framework": "103.0.*",
@@ -3898,16 +3711,10 @@
         {
             "name": "magento/module-media-storage",
             "version": "100.4.4",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/brick/math.git",
-                "reference": "ca57d18f028f84f777b2168cd1911b0dee2343ae"
-            },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/brick/math/zipball/ca57d18f028f84f777b2168cd1911b0dee2343ae",
-                "reference": "ca57d18f028f84f777b2168cd1911b0dee2343ae",
-                "shasum": ""
+                "url": "https://repo.magento.com/archives/magento/module-media-storage/magento-module-media-storage-100.4.4.0.zip",
+                "shasum": "6e3b469674fe41e8f8bd36b296908734028fd45b"
             },
             "require": {
                 "magento/framework": "103.0.*",
@@ -3939,16 +3746,10 @@
         {
             "name": "magento/module-msrp",
             "version": "100.4.4",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/brick/math.git",
-                "reference": "ca57d18f028f84f777b2168cd1911b0dee2343ae"
-            },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/brick/math/zipball/ca57d18f028f84f777b2168cd1911b0dee2343ae",
-                "reference": "ca57d18f028f84f777b2168cd1911b0dee2343ae",
-                "shasum": ""
+                "url": "https://repo.magento.com/archives/magento/module-msrp/magento-module-msrp-100.4.4.0.zip",
+                "shasum": "bd055d354e6ac6d952af52deb3b4cffd58f20b26"
             },
             "require": {
                 "magento/framework": "103.0.*",
@@ -3981,16 +3782,10 @@
         {
             "name": "magento/module-newsletter",
             "version": "100.4.5-p6",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/brick/math.git",
-                "reference": "ca57d18f028f84f777b2168cd1911b0dee2343ae"
-            },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/brick/math/zipball/ca57d18f028f84f777b2168cd1911b0dee2343ae",
-                "reference": "ca57d18f028f84f777b2168cd1911b0dee2343ae",
-                "shasum": ""
+                "url": "https://repo.magento.com/archives/magento/module-newsletter/magento-module-newsletter-100.4.5.0-patch6.zip",
+                "shasum": "bdd8df31cbee26c8b192a1027a20f98186104540"
             },
             "require": {
                 "magento/framework": "103.0.*",
@@ -4023,16 +3818,10 @@
         {
             "name": "magento/module-page-cache",
             "version": "100.4.5-p6",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/brick/math.git",
-                "reference": "ca57d18f028f84f777b2168cd1911b0dee2343ae"
-            },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/brick/math/zipball/ca57d18f028f84f777b2168cd1911b0dee2343ae",
-                "reference": "ca57d18f028f84f777b2168cd1911b0dee2343ae",
-                "shasum": ""
+                "url": "https://repo.magento.com/archives/magento/module-page-cache/magento-module-page-cache-100.4.5.0-patch6.zip",
+                "shasum": "c7df3fe8728ed4ac0cd19dbdbc835b05844cf45f"
             },
             "require": {
                 "magento/framework": "103.0.*",
@@ -4060,16 +3849,10 @@
         {
             "name": "magento/module-payment",
             "version": "100.4.5",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/brick/math.git",
-                "reference": "ca57d18f028f84f777b2168cd1911b0dee2343ae"
-            },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/brick/math/zipball/ca57d18f028f84f777b2168cd1911b0dee2343ae",
-                "reference": "ca57d18f028f84f777b2168cd1911b0dee2343ae",
-                "shasum": ""
+                "url": "https://repo.magento.com/archives/magento/module-payment/magento-module-payment-100.4.5.0.zip",
+                "shasum": "1729b982a9c1ce9419459e06991ed8d63b4af6cc"
             },
             "require": {
                 "magento/framework": "103.0.*",
@@ -4100,16 +3883,10 @@
         {
             "name": "magento/module-product-alert",
             "version": "100.4.4",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/brick/math.git",
-                "reference": "ca57d18f028f84f777b2168cd1911b0dee2343ae"
-            },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/brick/math/zipball/ca57d18f028f84f777b2168cd1911b0dee2343ae",
-                "reference": "ca57d18f028f84f777b2168cd1911b0dee2343ae",
-                "shasum": ""
+                "url": "https://repo.magento.com/archives/magento/module-product-alert/magento-module-product-alert-100.4.4.0.zip",
+                "shasum": "d46bb9bd950e11d3d012a44d1a3602858559b2f4"
             },
             "require": {
                 "magento/framework": "103.0.*",
@@ -4144,16 +3921,10 @@
         {
             "name": "magento/module-quote",
             "version": "101.2.5-p3",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/brick/math.git",
-                "reference": "ca57d18f028f84f777b2168cd1911b0dee2343ae"
-            },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/brick/math/zipball/ca57d18f028f84f777b2168cd1911b0dee2343ae",
-                "reference": "ca57d18f028f84f777b2168cd1911b0dee2343ae",
-                "shasum": ""
+                "url": "https://repo.magento.com/archives/magento/module-quote/magento-module-quote-101.2.5.0-patch3.zip",
+                "shasum": "a9c3973cfe0beb23cec46d61258e21b7fec4d176"
             },
             "require": {
                 "magento/framework": "103.0.*",
@@ -4194,16 +3965,10 @@
         {
             "name": "magento/module-reports",
             "version": "100.4.5",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/brick/math.git",
-                "reference": "ca57d18f028f84f777b2168cd1911b0dee2343ae"
-            },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/brick/math/zipball/ca57d18f028f84f777b2168cd1911b0dee2343ae",
-                "reference": "ca57d18f028f84f777b2168cd1911b0dee2343ae",
-                "shasum": ""
+                "url": "https://repo.magento.com/archives/magento/module-reports/magento-module-reports-100.4.5.0.zip",
+                "shasum": "f83a31e94a46f6ffdbf2c62d6ec0db87e7ebdd34"
             },
             "require": {
                 "magento/framework": "103.0.*",
@@ -4244,16 +4009,10 @@
         {
             "name": "magento/module-require-js",
             "version": "100.4.1",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/brick/math.git",
-                "reference": "ca57d18f028f84f777b2168cd1911b0dee2343ae"
-            },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/brick/math/zipball/ca57d18f028f84f777b2168cd1911b0dee2343ae",
-                "reference": "ca57d18f028f84f777b2168cd1911b0dee2343ae",
-                "shasum": ""
+                "url": "https://repo.magento.com/archives/magento/module-require-js/magento-module-require-js-100.4.1.0.zip",
+                "shasum": "8a573426813a22a6a1253711bda515303e6f7796"
             },
             "require": {
                 "magento/framework": "103.0.*",
@@ -4277,16 +4036,10 @@
         {
             "name": "magento/module-review",
             "version": "100.4.5",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/brick/math.git",
-                "reference": "ca57d18f028f84f777b2168cd1911b0dee2343ae"
-            },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/brick/math/zipball/ca57d18f028f84f777b2168cd1911b0dee2343ae",
-                "reference": "ca57d18f028f84f777b2168cd1911b0dee2343ae",
-                "shasum": ""
+                "url": "https://repo.magento.com/archives/magento/module-review/magento-module-review-100.4.5.0.zip",
+                "shasum": "70e4692bf3f0da7b5e607f736b32a87e4b5124f2"
             },
             "require": {
                 "magento/framework": "103.0.*",
@@ -4322,16 +4075,10 @@
         {
             "name": "magento/module-rss",
             "version": "100.4.3",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/brick/math.git",
-                "reference": "ca57d18f028f84f777b2168cd1911b0dee2343ae"
-            },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/brick/math/zipball/ca57d18f028f84f777b2168cd1911b0dee2343ae",
-                "reference": "ca57d18f028f84f777b2168cd1911b0dee2343ae",
-                "shasum": ""
+                "url": "https://repo.magento.com/archives/magento/module-rss/magento-module-rss-100.4.3.0.zip",
+                "shasum": "dc0efb744c3bc59bdec1b8e3dc8d07695dcf92bb"
             },
             "require": {
                 "magento/framework": "103.0.*",
@@ -4358,16 +4105,10 @@
         {
             "name": "magento/module-rule",
             "version": "100.4.4",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/brick/math.git",
-                "reference": "ca57d18f028f84f777b2168cd1911b0dee2343ae"
-            },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/brick/math/zipball/ca57d18f028f84f777b2168cd1911b0dee2343ae",
-                "reference": "ca57d18f028f84f777b2168cd1911b0dee2343ae",
-                "shasum": ""
+                "url": "https://repo.magento.com/archives/magento/module-rule/magento-module-rule-100.4.4.0.zip",
+                "shasum": "98fe15231d183581f48dcfe72813705fe3327389"
             },
             "require": {
                 "lib-libxml": "*",
@@ -4396,16 +4137,10 @@
         {
             "name": "magento/module-sales",
             "version": "103.0.5-p5",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/brick/math.git",
-                "reference": "ca57d18f028f84f777b2168cd1911b0dee2343ae"
-            },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/brick/math/zipball/ca57d18f028f84f777b2168cd1911b0dee2343ae",
-                "reference": "ca57d18f028f84f777b2168cd1911b0dee2343ae",
-                "shasum": ""
+                "url": "https://repo.magento.com/archives/magento/module-sales/magento-module-sales-103.0.5.0-patch5.zip",
+                "shasum": "8a29adf733dbfcae0269e488a2d0e4c7ecc63783"
             },
             "require": {
                 "magento/framework": "103.0.*",
@@ -4456,16 +4191,10 @@
         {
             "name": "magento/module-sales-rule",
             "version": "101.2.5-p6",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/brick/math.git",
-                "reference": "ca57d18f028f84f777b2168cd1911b0dee2343ae"
-            },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/brick/math/zipball/ca57d18f028f84f777b2168cd1911b0dee2343ae",
-                "reference": "ca57d18f028f84f777b2168cd1911b0dee2343ae",
-                "shasum": ""
+                "url": "https://repo.magento.com/archives/magento/module-sales-rule/magento-module-sales-rule-101.2.5.0-patch6.zip",
+                "shasum": "f4749bcadbf5b8a8c8721afd394da5bc01f01f95"
             },
             "require": {
                 "magento/framework": "103.0.*",
@@ -4513,16 +4242,10 @@
         {
             "name": "magento/module-sales-sequence",
             "version": "100.4.2",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/brick/math.git",
-                "reference": "ca57d18f028f84f777b2168cd1911b0dee2343ae"
-            },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/brick/math/zipball/ca57d18f028f84f777b2168cd1911b0dee2343ae",
-                "reference": "ca57d18f028f84f777b2168cd1911b0dee2343ae",
-                "shasum": ""
+                "url": "https://repo.magento.com/archives/magento/module-sales-sequence/magento-module-sales-sequence-100.4.2.0.zip",
+                "shasum": "4e5880119eecf16b3e66dba1f9e9985f07d2d58d"
             },
             "require": {
                 "magento/framework": "103.0.*",
@@ -4546,16 +4269,10 @@
         {
             "name": "magento/module-security",
             "version": "100.4.5",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/brick/math.git",
-                "reference": "ca57d18f028f84f777b2168cd1911b0dee2343ae"
-            },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/brick/math/zipball/ca57d18f028f84f777b2168cd1911b0dee2343ae",
-                "reference": "ca57d18f028f84f777b2168cd1911b0dee2343ae",
-                "shasum": ""
+                "url": "https://repo.magento.com/archives/magento/module-security/magento-module-security-100.4.5.0.zip",
+                "shasum": "324e5973bdf16cf28690873edb6b2cf21edefb4f"
             },
             "require": {
                 "magento/framework": "103.0.*",
@@ -4586,16 +4303,10 @@
         {
             "name": "magento/module-shipping",
             "version": "100.4.5",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/brick/math.git",
-                "reference": "ca57d18f028f84f777b2168cd1911b0dee2343ae"
-            },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/brick/math/zipball/ca57d18f028f84f777b2168cd1911b0dee2343ae",
-                "reference": "ca57d18f028f84f777b2168cd1911b0dee2343ae",
-                "shasum": ""
+                "url": "https://repo.magento.com/archives/magento/module-shipping/magento-module-shipping-100.4.5.0.zip",
+                "shasum": "325b2b9f9b77143187698d4a2d815887e6a563f8"
             },
             "require": {
                 "ext-gd": "*",
@@ -4638,16 +4349,10 @@
         {
             "name": "magento/module-store",
             "version": "101.1.5-p6",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/brick/math.git",
-                "reference": "ca57d18f028f84f777b2168cd1911b0dee2343ae"
-            },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/brick/math/zipball/ca57d18f028f84f777b2168cd1911b0dee2343ae",
-                "reference": "ca57d18f028f84f777b2168cd1911b0dee2343ae",
-                "shasum": ""
+                "url": "https://repo.magento.com/archives/magento/module-store/magento-module-store-101.1.5.0-patch6.zip",
+                "shasum": "bbf3b719ad0b73e2011e13c18a92aa511de0d625"
             },
             "require": {
                 "magento/framework": "103.0.*",
@@ -4682,16 +4387,10 @@
         {
             "name": "magento/module-tax",
             "version": "100.4.5-p5",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/brick/math.git",
-                "reference": "ca57d18f028f84f777b2168cd1911b0dee2343ae"
-            },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/brick/math/zipball/ca57d18f028f84f777b2168cd1911b0dee2343ae",
-                "reference": "ca57d18f028f84f777b2168cd1911b0dee2343ae",
-                "shasum": ""
+                "url": "https://repo.magento.com/archives/magento/module-tax/magento-module-tax-100.4.5.0-patch5.zip",
+                "shasum": "8f0fa32d2bda0376f15935a96e5839f3eb223125"
             },
             "require": {
                 "magento/framework": "103.0.*",
@@ -4732,16 +4431,10 @@
         {
             "name": "magento/module-theme",
             "version": "101.1.5",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/brick/math.git",
-                "reference": "ca57d18f028f84f777b2168cd1911b0dee2343ae"
-            },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/brick/math/zipball/ca57d18f028f84f777b2168cd1911b0dee2343ae",
-                "reference": "ca57d18f028f84f777b2168cd1911b0dee2343ae",
-                "shasum": ""
+                "url": "https://repo.magento.com/archives/magento/module-theme/magento-module-theme-101.1.5.0.zip",
+                "shasum": "ba3c3fbb5755319774bf11d3104b302637bc7dcb"
             },
             "require": {
                 "magento/framework": "103.0.*",
@@ -4780,16 +4473,10 @@
         {
             "name": "magento/module-translation",
             "version": "100.4.5",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/brick/math.git",
-                "reference": "ca57d18f028f84f777b2168cd1911b0dee2343ae"
-            },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/brick/math/zipball/ca57d18f028f84f777b2168cd1911b0dee2343ae",
-                "reference": "ca57d18f028f84f777b2168cd1911b0dee2343ae",
-                "shasum": ""
+                "url": "https://repo.magento.com/archives/magento/module-translation/magento-module-translation-100.4.5.0.zip",
+                "shasum": "a8ff494922576f2874b66a913f14528f9ee1418b"
             },
             "require": {
                 "magento/framework": "103.0.*",
@@ -4821,16 +4508,10 @@
         {
             "name": "magento/module-ui",
             "version": "101.2.5",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/brick/math.git",
-                "reference": "ca57d18f028f84f777b2168cd1911b0dee2343ae"
-            },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/brick/math/zipball/ca57d18f028f84f777b2168cd1911b0dee2343ae",
-                "reference": "ca57d18f028f84f777b2168cd1911b0dee2343ae",
-                "shasum": ""
+                "url": "https://repo.magento.com/archives/magento/module-ui/magento-module-ui-101.2.5.0.zip",
+                "shasum": "7a2f25eba5ec07a4b26bdda98b60fb393f5bfff4"
             },
             "require": {
                 "magento/framework": "103.0.*",
@@ -4862,16 +4543,10 @@
         {
             "name": "magento/module-url-rewrite",
             "version": "102.0.4-p4",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/brick/math.git",
-                "reference": "ca57d18f028f84f777b2168cd1911b0dee2343ae"
-            },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/brick/math/zipball/ca57d18f028f84f777b2168cd1911b0dee2343ae",
-                "reference": "ca57d18f028f84f777b2168cd1911b0dee2343ae",
-                "shasum": ""
+                "url": "https://repo.magento.com/archives/magento/module-url-rewrite/magento-module-url-rewrite-102.0.4.0-patch4.zip",
+                "shasum": "f0369fb05433b86f47315a8037c6ab2cba2036db"
             },
             "require": {
                 "magento/framework": "103.0.*",
@@ -4902,16 +4577,10 @@
         {
             "name": "magento/module-user",
             "version": "101.2.5",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/brick/math.git",
-                "reference": "ca57d18f028f84f777b2168cd1911b0dee2343ae"
-            },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/brick/math/zipball/ca57d18f028f84f777b2168cd1911b0dee2343ae",
-                "reference": "ca57d18f028f84f777b2168cd1911b0dee2343ae",
-                "shasum": ""
+                "url": "https://repo.magento.com/archives/magento/module-user/magento-module-user-101.2.5.0.zip",
+                "shasum": "7940b349b7adaac56d97b87d85304a28c21d6592"
             },
             "require": {
                 "magento/framework": "103.0.*",
@@ -4942,16 +4611,10 @@
         {
             "name": "magento/module-variable",
             "version": "100.4.3",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/brick/math.git",
-                "reference": "ca57d18f028f84f777b2168cd1911b0dee2343ae"
-            },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/brick/math/zipball/ca57d18f028f84f777b2168cd1911b0dee2343ae",
-                "reference": "ca57d18f028f84f777b2168cd1911b0dee2343ae",
-                "shasum": ""
+                "url": "https://repo.magento.com/archives/magento/module-variable/magento-module-variable-100.4.3.0.zip",
+                "shasum": "2246cbc8bf2a87ec0a6f2bae77e3b73813b18bb9"
             },
             "require": {
                 "magento/framework": "103.0.*",
@@ -4979,16 +4642,10 @@
         {
             "name": "magento/module-widget",
             "version": "101.2.5",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/brick/math.git",
-                "reference": "ca57d18f028f84f777b2168cd1911b0dee2343ae"
-            },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/brick/math/zipball/ca57d18f028f84f777b2168cd1911b0dee2343ae",
-                "reference": "ca57d18f028f84f777b2168cd1911b0dee2343ae",
-                "shasum": ""
+                "url": "https://repo.magento.com/archives/magento/module-widget/magento-module-widget-101.2.5.0.zip",
+                "shasum": "eed0cbbc112ec23dada39cc6f1556de69550c2db"
             },
             "require": {
                 "magento/framework": "103.0.*",
@@ -5023,16 +4680,10 @@
         {
             "name": "magento/module-wishlist",
             "version": "101.2.5-p5",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/brick/math.git",
-                "reference": "ca57d18f028f84f777b2168cd1911b0dee2343ae"
-            },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/brick/math/zipball/ca57d18f028f84f777b2168cd1911b0dee2343ae",
-                "reference": "ca57d18f028f84f777b2168cd1911b0dee2343ae",
-                "shasum": ""
+                "url": "https://repo.magento.com/archives/magento/module-wishlist/magento-module-wishlist-101.2.5.0-patch5.zip",
+                "shasum": "8ce8fbf0e3415926174a7cf36c414d8a4d086d12"
             },
             "require": {
                 "magento/framework": "103.0.*",
@@ -5077,12 +4728,12 @@
             "version": "1.15.1",
             "source": {
                 "type": "git",
-                "url": "https://github.com/brick/math.git",
+                "url": "https://github.com/magento/zf1.git",
                 "reference": "2381396d2a9a528be2f367b5ce2dddf650eac1d0"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/brick/math/zipball/2381396d2a9a528be2f367b5ce2dddf650eac1d0",
+                "url": "https://api.github.com/repos/magento/zf1/zipball/2381396d2a9a528be2f367b5ce2dddf650eac1d0",
                 "reference": "2381396d2a9a528be2f367b5ce2dddf650eac1d0",
                 "shasum": ""
             },
@@ -5128,12 +4779,12 @@
             "version": "2.9.2",
             "source": {
                 "type": "git",
-                "url": "https://github.com/brick/math.git",
+                "url": "https://github.com/Seldaek/monolog.git",
                 "reference": "437cb3628f4cf6042cc10ae97fc2b8472e48ca1f"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/brick/math/zipball/437cb3628f4cf6042cc10ae97fc2b8472e48ca1f",
+                "url": "https://api.github.com/repos/Seldaek/monolog/zipball/437cb3628f4cf6042cc10ae97fc2b8472e48ca1f",
                 "reference": "437cb3628f4cf6042cc10ae97fc2b8472e48ca1f",
                 "shasum": ""
             },
@@ -5268,6 +4919,10 @@
                 "invoke",
                 "invoker"
             ],
+            "support": {
+                "issues": "https://github.com/PHP-DI/Invoker/issues",
+                "source": "https://github.com/PHP-DI/Invoker/tree/2.3.4"
+            },
             "funding": [
                 {
                     "url": "https://github.com/mnapoli",
@@ -5336,6 +4991,10 @@
                 "ioc",
                 "psr11"
             ],
+            "support": {
+                "issues": "https://github.com/PHP-DI/PHP-DI/issues",
+                "source": "https://github.com/PHP-DI/PHP-DI/tree/6.4.0"
+            },
             "funding": [
                 {
                     "url": "https://github.com/mnapoli",
@@ -5384,6 +5043,10 @@
                 "phpdoc",
                 "reflection"
             ],
+            "support": {
+                "issues": "https://github.com/PHP-DI/PhpDocReader/issues",
+                "source": "https://github.com/PHP-DI/PhpDocReader/tree/2.2.1"
+            },
             "time": "2020-10-12T12:39:22+00:00"
         },
         {
@@ -5449,6 +5112,10 @@
                 "http",
                 "httplug"
             ],
+            "support": {
+                "issues": "https://github.com/php-http/client-common/issues",
+                "source": "https://github.com/php-http/client-common/tree/2.7.1"
+            },
             "time": "2023-11-30T10:31:25+00:00"
         },
         {
@@ -5523,6 +5190,10 @@
                 "psr17",
                 "psr7"
             ],
+            "support": {
+                "issues": "https://github.com/php-http/discovery/issues",
+                "source": "https://github.com/php-http/discovery/tree/1.19.2"
+            },
             "time": "2023-11-30T16:49:05+00:00"
         },
         {
@@ -5576,6 +5247,10 @@
                 "client",
                 "http"
             ],
+            "support": {
+                "issues": "https://github.com/php-http/httplug/issues",
+                "source": "https://github.com/php-http/httplug/tree/2.4.0"
+            },
             "time": "2023-04-14T15:10:03+00:00"
         },
         {
@@ -5641,6 +5316,10 @@
                 "message",
                 "psr-7"
             ],
+            "support": {
+                "issues": "https://github.com/php-http/message/issues",
+                "source": "https://github.com/php-http/message/tree/1.16.1"
+            },
             "time": "2024-03-07T13:22:09+00:00"
         },
         {
@@ -5693,6 +5372,10 @@
                 "multipart stream",
                 "stream"
             ],
+            "support": {
+                "issues": "https://github.com/php-http/multipart-stream-builder/issues",
+                "source": "https://github.com/php-http/multipart-stream-builder/tree/1.3.0"
+            },
             "time": "2023-04-28T14:10:22+00:00"
         },
         {
@@ -5741,6 +5424,10 @@
             "keywords": [
                 "promise"
             ],
+            "support": {
+                "issues": "https://github.com/php-http/promise/issues",
+                "source": "https://github.com/php-http/promise/tree/1.3.0"
+            },
             "time": "2024-01-04T18:49:48+00:00"
         },
         {
@@ -5748,12 +5435,12 @@
             "version": "1.1.2",
             "source": {
                 "type": "git",
-                "url": "https://github.com/brick/math.git",
+                "url": "https://github.com/php-fig/container.git",
                 "reference": "513e0666f7216c7459170d56df27dfcefe1689ea"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/brick/math/zipball/513e0666f7216c7459170d56df27dfcefe1689ea",
+                "url": "https://api.github.com/repos/php-fig/container/zipball/513e0666f7216c7459170d56df27dfcefe1689ea",
                 "reference": "513e0666f7216c7459170d56df27dfcefe1689ea",
                 "shasum": ""
             },
@@ -5796,12 +5483,12 @@
             "version": "1.0.3",
             "source": {
                 "type": "git",
-                "url": "https://github.com/brick/math.git",
+                "url": "https://github.com/php-fig/http-client.git",
                 "reference": "bb5906edc1c324c9a05aa0873d40117941e5fa90"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/brick/math/zipball/bb5906edc1c324c9a05aa0873d40117941e5fa90",
+                "url": "https://api.github.com/repos/php-fig/http-client/zipball/bb5906edc1c324c9a05aa0873d40117941e5fa90",
                 "reference": "bb5906edc1c324c9a05aa0873d40117941e5fa90",
                 "shasum": ""
             },
@@ -5848,12 +5535,12 @@
             "version": "1.0.2",
             "source": {
                 "type": "git",
-                "url": "https://github.com/brick/math.git",
+                "url": "https://github.com/php-fig/http-factory.git",
                 "reference": "e616d01114759c4c489f93b099585439f795fe35"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/brick/math/zipball/e616d01114759c4c489f93b099585439f795fe35",
+                "url": "https://api.github.com/repos/php-fig/http-factory/zipball/e616d01114759c4c489f93b099585439f795fe35",
                 "reference": "e616d01114759c4c489f93b099585439f795fe35",
                 "shasum": ""
             },
@@ -5903,12 +5590,12 @@
             "version": "2.0",
             "source": {
                 "type": "git",
-                "url": "https://github.com/brick/math.git",
+                "url": "https://github.com/php-fig/http-message.git",
                 "reference": "402d35bcb92c70c026d1a6a9883f06b2ead23d71"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/brick/math/zipball/402d35bcb92c70c026d1a6a9883f06b2ead23d71",
+                "url": "https://api.github.com/repos/php-fig/http-message/zipball/402d35bcb92c70c026d1a6a9883f06b2ead23d71",
                 "reference": "402d35bcb92c70c026d1a6a9883f06b2ead23d71",
                 "shasum": ""
             },
@@ -5956,12 +5643,12 @@
             "version": "1.1.4",
             "source": {
                 "type": "git",
-                "url": "https://github.com/brick/math.git",
+                "url": "https://github.com/php-fig/log.git",
                 "reference": "d49695b909c3b7628b6289db5479a1c204601f11"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/brick/math/zipball/d49695b909c3b7628b6289db5479a1c204601f11",
+                "url": "https://api.github.com/repos/php-fig/log/zipball/d49695b909c3b7628b6289db5479a1c204601f11",
                 "reference": "d49695b909c3b7628b6289db5479a1c204601f11",
                 "shasum": ""
             },
@@ -6006,12 +5693,12 @@
             "version": "3.0.3",
             "source": {
                 "type": "git",
-                "url": "https://github.com/brick/math.git",
+                "url": "https://github.com/ralouphie/getallheaders.git",
                 "reference": "120b605dfeb996808c31b6477290a714d356e822"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/brick/math/zipball/120b605dfeb996808c31b6477290a714d356e822",
+                "url": "https://api.github.com/repos/ralouphie/getallheaders/zipball/120b605dfeb996808c31b6477290a714d356e822",
                 "reference": "120b605dfeb996808c31b6477290a714d356e822",
                 "shasum": ""
             },
@@ -6050,12 +5737,12 @@
             "version": "1.3.0",
             "source": {
                 "type": "git",
-                "url": "https://github.com/brick/math.git",
+                "url": "https://github.com/ramsey/collection.git",
                 "reference": "ad7475d1c9e70b190ecffc58f2d989416af339b4"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/brick/math/zipball/ad7475d1c9e70b190ecffc58f2d989416af339b4",
+                "url": "https://api.github.com/repos/ramsey/collection/zipball/ad7475d1c9e70b190ecffc58f2d989416af339b4",
                 "reference": "ad7475d1c9e70b190ecffc58f2d989416af339b4",
                 "shasum": ""
             },
@@ -6140,12 +5827,12 @@
             "version": "4.2.3",
             "source": {
                 "type": "git",
-                "url": "https://github.com/brick/math.git",
+                "url": "https://github.com/ramsey/uuid.git",
                 "reference": "fc9bb7fb5388691fd7373cd44dcb4d63bbcf24df"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/brick/math/zipball/fc9bb7fb5388691fd7373cd44dcb4d63bbcf24df",
+                "url": "https://api.github.com/repos/ramsey/uuid/zipball/fc9bb7fb5388691fd7373cd44dcb4d63bbcf24df",
                 "reference": "fc9bb7fb5388691fd7373cd44dcb4d63bbcf24df",
                 "shasum": ""
             },
@@ -6238,12 +5925,12 @@
             "version": "v2.11.0",
             "source": {
                 "type": "git",
-                "url": "https://github.com/brick/math.git",
+                "url": "https://github.com/reactphp/promise.git",
                 "reference": "1a8460931ea36dc5c76838fec5734d55c88c6831"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/brick/math/zipball/1a8460931ea36dc5c76838fec5734d55c88c6831",
+                "url": "https://api.github.com/repos/reactphp/promise/zipball/1a8460931ea36dc5c76838fec5734d55c88c6831",
                 "reference": "1a8460931ea36dc5c76838fec5734d55c88c6831",
                 "shasum": ""
             },
@@ -6310,12 +5997,12 @@
             "version": "1.10.2",
             "source": {
                 "type": "git",
-                "url": "https://github.com/brick/math.git",
+                "url": "https://github.com/Seldaek/jsonlint.git",
                 "reference": "9bb7db07b5d66d90f6ebf542f09fc67d800e5259"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/brick/math/zipball/9bb7db07b5d66d90f6ebf542f09fc67d800e5259",
+                "url": "https://api.github.com/repos/Seldaek/jsonlint/zipball/9bb7db07b5d66d90f6ebf542f09fc67d800e5259",
                 "reference": "9bb7db07b5d66d90f6ebf542f09fc67d800e5259",
                 "shasum": ""
             },
@@ -6374,12 +6061,12 @@
             "version": "1.2.1",
             "source": {
                 "type": "git",
-                "url": "https://github.com/brick/math.git",
+                "url": "https://github.com/Seldaek/phar-utils.git",
                 "reference": "ea2f4014f163c1be4c601b9b7bd6af81ba8d701c"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/brick/math/zipball/ea2f4014f163c1be4c601b9b7bd6af81ba8d701c",
+                "url": "https://api.github.com/repos/Seldaek/phar-utils/zipball/ea2f4014f163c1be4c601b9b7bd6af81ba8d701c",
                 "reference": "ea2f4014f163c1be4c601b9b7bd6af81ba8d701c",
                 "shasum": ""
             },
@@ -6422,12 +6109,12 @@
             "version": "v4.4.49",
             "source": {
                 "type": "git",
-                "url": "https://github.com/brick/math.git",
+                "url": "https://github.com/symfony/console.git",
                 "reference": "33fa45ffc81fdcc1ca368d4946da859c8cdb58d9"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/brick/math/zipball/33fa45ffc81fdcc1ca368d4946da859c8cdb58d9",
+                "url": "https://api.github.com/repos/symfony/console/zipball/33fa45ffc81fdcc1ca368d4946da859c8cdb58d9",
                 "reference": "33fa45ffc81fdcc1ca368d4946da859c8cdb58d9",
                 "shasum": ""
             },
@@ -6512,12 +6199,12 @@
             "version": "v2.5.2",
             "source": {
                 "type": "git",
-                "url": "https://github.com/brick/math.git",
+                "url": "https://github.com/symfony/deprecation-contracts.git",
                 "reference": "e8b495ea28c1d97b5e0c121748d6f9b53d075c66"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/brick/math/zipball/e8b495ea28c1d97b5e0c121748d6f9b53d075c66",
+                "url": "https://api.github.com/repos/symfony/deprecation-contracts/zipball/e8b495ea28c1d97b5e0c121748d6f9b53d075c66",
                 "reference": "e8b495ea28c1d97b5e0c121748d6f9b53d075c66",
                 "shasum": ""
             },
@@ -6579,12 +6266,12 @@
             "version": "v5.4.35",
             "source": {
                 "type": "git",
-                "url": "https://github.com/brick/math.git",
+                "url": "https://github.com/symfony/filesystem.git",
                 "reference": "5a553607d4ffbfa9c0ab62facadea296c9db7086"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/brick/math/zipball/5a553607d4ffbfa9c0ab62facadea296c9db7086",
+                "url": "https://api.github.com/repos/symfony/filesystem/zipball/5a553607d4ffbfa9c0ab62facadea296c9db7086",
                 "reference": "5a553607d4ffbfa9c0ab62facadea296c9db7086",
                 "shasum": ""
             },
@@ -6643,12 +6330,12 @@
             "version": "v5.4.35",
             "source": {
                 "type": "git",
-                "url": "https://github.com/brick/math.git",
+                "url": "https://github.com/symfony/finder.git",
                 "reference": "abe6d6f77d9465fed3cd2d029b29d03b56b56435"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/brick/math/zipball/abe6d6f77d9465fed3cd2d029b29d03b56b56435",
+                "url": "https://api.github.com/repos/symfony/finder/zipball/abe6d6f77d9465fed3cd2d029b29d03b56b56435",
                 "reference": "abe6d6f77d9465fed3cd2d029b29d03b56b56435",
                 "shasum": ""
             },
@@ -6751,6 +6438,9 @@
                 "configuration",
                 "options"
             ],
+            "support": {
+                "source": "https://github.com/symfony/options-resolver/tree/v5.4.21"
+            },
             "funding": [
                 {
                     "url": "https://symfony.com/sponsor",
@@ -6772,12 +6462,12 @@
             "version": "v1.29.0",
             "source": {
                 "type": "git",
-                "url": "https://github.com/brick/math.git",
+                "url": "https://github.com/symfony/polyfill-ctype.git",
                 "reference": "ef4d7e442ca910c4764bce785146269b30cb5fc4"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/brick/math/zipball/ef4d7e442ca910c4764bce785146269b30cb5fc4",
+                "url": "https://api.github.com/repos/symfony/polyfill-ctype/zipball/ef4d7e442ca910c4764bce785146269b30cb5fc4",
                 "reference": "ef4d7e442ca910c4764bce785146269b30cb5fc4",
                 "shasum": ""
             },
@@ -6851,12 +6541,12 @@
             "version": "v1.29.0",
             "source": {
                 "type": "git",
-                "url": "https://github.com/brick/math.git",
+                "url": "https://github.com/symfony/polyfill-intl-idn.git",
                 "reference": "a287ed7475f85bf6f61890146edbc932c0fff919"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/brick/math/zipball/a287ed7475f85bf6f61890146edbc932c0fff919",
+                "url": "https://api.github.com/repos/symfony/polyfill-intl-idn/zipball/a287ed7475f85bf6f61890146edbc932c0fff919",
                 "reference": "a287ed7475f85bf6f61890146edbc932c0fff919",
                 "shasum": ""
             },
@@ -6935,12 +6625,12 @@
             "version": "v1.29.0",
             "source": {
                 "type": "git",
-                "url": "https://github.com/brick/math.git",
+                "url": "https://github.com/symfony/polyfill-intl-normalizer.git",
                 "reference": "bc45c394692b948b4d383a08d7753968bed9a83d"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/brick/math/zipball/bc45c394692b948b4d383a08d7753968bed9a83d",
+                "url": "https://api.github.com/repos/symfony/polyfill-intl-normalizer/zipball/bc45c394692b948b4d383a08d7753968bed9a83d",
                 "reference": "bc45c394692b948b4d383a08d7753968bed9a83d",
                 "shasum": ""
             },
@@ -7016,12 +6706,12 @@
             "version": "v1.29.0",
             "source": {
                 "type": "git",
-                "url": "https://github.com/brick/math.git",
+                "url": "https://github.com/symfony/polyfill-mbstring.git",
                 "reference": "9773676c8a1bb1f8d4340a62efe641cf76eda7ec"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/brick/math/zipball/9773676c8a1bb1f8d4340a62efe641cf76eda7ec",
+                "url": "https://api.github.com/repos/symfony/polyfill-mbstring/zipball/9773676c8a1bb1f8d4340a62efe641cf76eda7ec",
                 "reference": "9773676c8a1bb1f8d4340a62efe641cf76eda7ec",
                 "shasum": ""
             },
@@ -7096,12 +6786,12 @@
             "version": "v1.29.0",
             "source": {
                 "type": "git",
-                "url": "https://github.com/brick/math.git",
+                "url": "https://github.com/symfony/polyfill-php72.git",
                 "reference": "861391a8da9a04cbad2d232ddd9e4893220d6e25"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/brick/math/zipball/861391a8da9a04cbad2d232ddd9e4893220d6e25",
+                "url": "https://api.github.com/repos/symfony/polyfill-php72/zipball/861391a8da9a04cbad2d232ddd9e4893220d6e25",
                 "reference": "861391a8da9a04cbad2d232ddd9e4893220d6e25",
                 "shasum": ""
             },
@@ -7169,12 +6859,12 @@
             "version": "v1.29.0",
             "source": {
                 "type": "git",
-                "url": "https://github.com/brick/math.git",
+                "url": "https://github.com/symfony/polyfill-php73.git",
                 "reference": "21bd091060673a1177ae842c0ef8fe30893114d2"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/brick/math/zipball/21bd091060673a1177ae842c0ef8fe30893114d2",
+                "url": "https://api.github.com/repos/symfony/polyfill-php73/zipball/21bd091060673a1177ae842c0ef8fe30893114d2",
                 "reference": "21bd091060673a1177ae842c0ef8fe30893114d2",
                 "shasum": ""
             },
@@ -7245,12 +6935,12 @@
             "version": "v1.29.0",
             "source": {
                 "type": "git",
-                "url": "https://github.com/brick/math.git",
+                "url": "https://github.com/symfony/polyfill-php80.git",
                 "reference": "87b68208d5c1188808dd7839ee1e6c8ec3b02f1b"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/brick/math/zipball/87b68208d5c1188808dd7839ee1e6c8ec3b02f1b",
+                "url": "https://api.github.com/repos/symfony/polyfill-php80/zipball/87b68208d5c1188808dd7839ee1e6c8ec3b02f1b",
                 "reference": "87b68208d5c1188808dd7839ee1e6c8ec3b02f1b",
                 "shasum": ""
             },
@@ -7325,12 +7015,12 @@
             "version": "v1.29.0",
             "source": {
                 "type": "git",
-                "url": "https://github.com/brick/math.git",
+                "url": "https://github.com/symfony/polyfill-php81.git",
                 "reference": "c565ad1e63f30e7477fc40738343c62b40bc672d"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/brick/math/zipball/c565ad1e63f30e7477fc40738343c62b40bc672d",
+                "url": "https://api.github.com/repos/symfony/polyfill-php81/zipball/c565ad1e63f30e7477fc40738343c62b40bc672d",
                 "reference": "c565ad1e63f30e7477fc40738343c62b40bc672d",
                 "shasum": ""
             },
@@ -7401,12 +7091,12 @@
             "version": "v4.4.44",
             "source": {
                 "type": "git",
-                "url": "https://github.com/brick/math.git",
+                "url": "https://github.com/symfony/process.git",
                 "reference": "5cee9cdc4f7805e2699d9fd66991a0e6df8252a2"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/brick/math/zipball/5cee9cdc4f7805e2699d9fd66991a0e6df8252a2",
+                "url": "https://api.github.com/repos/symfony/process/zipball/5cee9cdc4f7805e2699d9fd66991a0e6df8252a2",
                 "reference": "5cee9cdc4f7805e2699d9fd66991a0e6df8252a2",
                 "shasum": ""
             },
@@ -7463,12 +7153,12 @@
             "version": "v2.5.2",
             "source": {
                 "type": "git",
-                "url": "https://github.com/brick/math.git",
+                "url": "https://github.com/symfony/service-contracts.git",
                 "reference": "4b426aac47d6427cc1a1d0f7e2ac724627f5966c"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/brick/math/zipball/4b426aac47d6427cc1a1d0f7e2ac724627f5966c",
+                "url": "https://api.github.com/repos/symfony/service-contracts/zipball/4b426aac47d6427cc1a1d0f7e2ac724627f5966c",
                 "reference": "4b426aac47d6427cc1a1d0f7e2ac724627f5966c",
                 "shasum": ""
             },
@@ -7546,12 +7236,12 @@
             "version": "v1.4.0",
             "source": {
                 "type": "git",
-                "url": "https://github.com/brick/math.git",
+                "url": "https://github.com/tedious/JShrink.git",
                 "reference": "0513ba1407b1f235518a939455855e6952a48bbc"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/brick/math/zipball/0513ba1407b1f235518a939455855e6952a48bbc",
+                "url": "https://api.github.com/repos/tedious/JShrink/zipball/0513ba1407b1f235518a939455855e6952a48bbc",
                 "reference": "0513ba1407b1f235518a939455855e6952a48bbc",
                 "shasum": ""
             },
@@ -7602,12 +7292,12 @@
             "version": "1.11.0",
             "source": {
                 "type": "git",
-                "url": "https://github.com/brick/math.git",
+                "url": "https://github.com/webmozarts/assert.git",
                 "reference": "11cb2199493b2f8a3b53e7f19068fc6aac760991"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/brick/math/zipball/11cb2199493b2f8a3b53e7f19068fc6aac760991",
+                "url": "https://api.github.com/repos/webmozarts/assert/zipball/11cb2199493b2f8a3b53e7f19068fc6aac760991",
                 "reference": "11cb2199493b2f8a3b53e7f19068fc6aac760991",
                 "shasum": ""
             },
@@ -7660,12 +7350,12 @@
             "version": "v14.11.10",
             "source": {
                 "type": "git",
-                "url": "https://github.com/brick/math.git",
+                "url": "https://github.com/webonyx/graphql-php.git",
                 "reference": "d9c2fdebc6aa01d831bc2969da00e8588cffef19"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/brick/math/zipball/d9c2fdebc6aa01d831bc2969da00e8588cffef19",
+                "url": "https://api.github.com/repos/webonyx/graphql-php/zipball/d9c2fdebc6aa01d831bc2969da00e8588cffef19",
                 "reference": "d9c2fdebc6aa01d831bc2969da00e8588cffef19",
                 "shasum": ""
             },
@@ -7725,12 +7415,12 @@
             "version": "v3.2.1",
             "source": {
                 "type": "git",
-                "url": "https://github.com/brick/math.git",
+                "url": "https://github.com/wikimedia/less.php.git",
                 "reference": "0d5b30ba792bdbf8991a646fc9c30561b38a5559"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/brick/math/zipball/0d5b30ba792bdbf8991a646fc9c30561b38a5559",
+                "url": "https://api.github.com/repos/wikimedia/less.php/zipball/0d5b30ba792bdbf8991a646fc9c30561b38a5559",
                 "reference": "0d5b30ba792bdbf8991a646fc9c30561b38a5559",
                 "shasum": ""
             },
@@ -10239,5 +9929,5 @@
     "prefer-lowest": false,
     "platform": [],
     "platform-dev": [],
-    "plugin-api-version": "1.1.0"
+    "plugin-api-version": "2.2.0"
 }

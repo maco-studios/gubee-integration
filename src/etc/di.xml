@@ -1,0 +1,21 @@
+<?xml version="1.0" ?>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
+    <preference for="Gubee\Integration\Api\MessageRepositoryInterface" type="Gubee\Integration\Model\MessageRepository"/>
+    <preference for="Gubee\Integration\Api\Data\MessageInterface" type="Gubee\Integration\Model\Message"/>
+    <preference for="Gubee\Integration\Api\Data\MessageSearchResultsInterface" type="Magento\Framework\Api\SearchResults"/>
+
+    <virtualType name="Gubee\Integration\Model\ResourceModel\Message\Grid\Collection" type="Magento\Framework\View\Element\UiComponent\DataProvider\SearchResult">
+        <arguments>
+            <argument name="mainTable" xsi:type="string">gubee_integration_queue_message</argument>
+            <argument name="resourceModel" xsi:type="string">Gubee\Integration\Model\ResourceModel\Message\Collection</argument>
+        </arguments>
+    </virtualType>
+
+    <type name="Magento\Framework\View\Element\UiComponent\DataProvider\CollectionFactory">
+        <arguments>
+            <argument name="collections" xsi:type="array">
+                <item name="gubee_integration_queue_message_listing_data_source" xsi:type="string">Gubee\Integration\Model\ResourceModel\Message\Grid\Collection</item>
+            </argument>
+        </arguments>
+    </type>
+</config>
