@@ -6,6 +6,7 @@ namespace Gubee\Integration\Observer\Adminhtml\System\Config\Gubee;
 
 use Gubee\Integration\Command\Gubee\Token\RenewCommand;
 use Gubee\Integration\Model\Config;
+use Gubee\Integration\Model\Queue\Management;
 use Gubee\Integration\Observer\AbstractObserver;
 use Magento\Framework\App\Cache\Frontend\Pool;
 use Magento\Framework\App\Cache\TypeListInterface;
@@ -27,12 +28,13 @@ class OnChange extends AbstractObserver
     public function __construct(
         Config $config,
         LoggerInterface $logger,
+        Management $queueManagement,
         TypeListInterface $typeList,
         ObjectManagerInterface $objectManager,
         RenewCommand $renewCommand,
         Pool $pool
     ) {
-        parent::__construct($config, $logger);
+        parent::__construct($config, $logger, $queueManagement);
         $this->typeList      = $typeList;
         $this->renewCommand  = $renewCommand;
         $this->objectManager = $objectManager;
