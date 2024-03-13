@@ -14,6 +14,8 @@ use Magento\Framework\Model\AbstractModel;
 
 use function __;
 use function is_subclass_of;
+use function json_decode;
+use function json_encode;
 
 class Message extends AbstractModel implements MessageInterface
 {
@@ -27,6 +29,19 @@ class Message extends AbstractModel implements MessageInterface
     }
     // phpcs:enable
 
+    public function beforeSave(): self
+    {
+        if ($this->getData(self::PAYLOAD)) {
+            $this->setData(
+                self::PAYLOAD,
+                json_encode(
+                    $this->getData(self::PAYLOAD)
+                )
+            );
+        }
+        return parent::beforeSave();
+    }
+
     /**
      * Object after load processing. Implemented as public interface for supporting objects after load in collections
      *
@@ -34,6 +49,16 @@ class Message extends AbstractModel implements MessageInterface
      */
     public function afterLoad()
     {
+        if ($this->getData(self::PAYLOAD)) {
+            $this->setData(
+                self::PAYLOAD,
+                json_decode(
+                    $this->getData(self::PAYLOAD),
+                    true
+                )
+            );
+        }
+
         if ($this->getData(self::CREATED_AT)) {
             $this->setData(
                 self::CREATED_AT,

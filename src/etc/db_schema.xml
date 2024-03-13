@@ -5,6 +5,7 @@
         <column name="command" xsi:type="varchar" length="255" nullable="false" comment="Command"/>
         <column name="status" xsi:type="int" padding="10" unsigned="true" nullable="false" comment="Status" default="0"/>
         <column name="payload" xsi:type="text" nullable="true" comment="Payload"/>
+        <column name="priority" xsi:type="int" padding="10" unsigned="true" nullable="false" comment="Priority" default="0"/>
         <column name="attempts" xsi:type="int" padding="10" unsigned="true" nullable="false" comment="Attempts" default="0"/>
         <column name="message" xsi:type="text" nullable="true" comment="Message"/>
         <column name="created_at" xsi:type="timestamp" nullable="false" default="CURRENT_TIMESTAMP" comment="Created At"/>

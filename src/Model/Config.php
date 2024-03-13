@@ -464,7 +464,7 @@ class Config extends AbstractHelper implements ConfigInterface
      */
     public function getBlacklistAttribute(): array
     {
-        $value = $this->scopeConfig->getValue(ConfigInterface::CONFIG_PATH_BLACKLIST);
+        $value = $this->scopeConfig->getValue(ConfigInterface::CONFIG_PATH_BLACKLIST) ?: '';
         $value = explode(',', $value);
         return array_map('trim', $value);
     }

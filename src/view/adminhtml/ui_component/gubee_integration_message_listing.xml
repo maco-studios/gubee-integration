@@ -54,6 +54,12 @@
                 <label translate="true">command</label>
             </settings>
         </column>
+        <column name="priority">
+            <settings>
+                <filter>text</filter>
+                <label translate="true">priority</label>
+            </settings>
+        </column>
         <column name="status">
             <settings>
                 <label translate="true">Status</label>

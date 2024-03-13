@@ -5,26 +5,24 @@ declare(strict_types=1);
 namespace Gubee\Integration\Model\Queue;
 
 use Gubee\Integration\Api\Data\MessageInterface;
+use Gubee\Integration\Api\Data\MessageInterfaceFactory;
 use Gubee\Integration\Api\Enum\Message\StatusEnum;
 use Gubee\Integration\Api\MessageRepositoryInterface;
-use Gubee\Integration\Model\MessageFactory;
 use Gubee\Integration\Model\ResourceModel\Message\CollectionFactory as MessageCollectionFactory;
 use Psr\Log\LoggerInterface;
 use Throwable;
-
-use function json_encode;
 
 class Management
 {
     protected LoggerInterface $logger;
     protected MessageCollectionFactory $messageCollectionFactory; /* @phpstan-ignore-line */
-    protected MessageFactory $messageFactory; /* @phpstan-ignore-line */
+    protected MessageInterfaceFactory $messageFactory; /* @phpstan-ignore-line */
     protected MessageRepositoryInterface $messageRepository;
 
     public function __construct(
         LoggerInterface $logger,
         MessageCollectionFactory $messageCollectionFactory, /* @phpstan-ignore-line */
-        MessageFactory $messageFactory, /* @phpstan-ignore-line */
+        MessageInterfaceFactory $messageFactory, /* @phpstan-ignore-line */
         MessageRepositoryInterface $messageRepository
     ) {
         $this->logger                   = $logger;
@@ -43,7 +41,8 @@ class Management
         try {
             /* @phpstan-ignore-next-line */
             $message = $this->messageFactory->create();
-            $message->setPayload(json_encode($params));
+            $message->setCommand($command);
+            $message->setPayload($params);
 
             if (! $this->alreadyQueued($message)) {
                 $this->messageRepository->save($message);
