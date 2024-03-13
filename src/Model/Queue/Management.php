@@ -7,8 +7,8 @@ namespace Gubee\Integration\Model\Queue;
 use Gubee\Integration\Api\Data\MessageInterface;
 use Gubee\Integration\Api\Enum\Message\StatusEnum;
 use Gubee\Integration\Api\MessageRepositoryInterface;
-use Gubee\Integration\Model\Message\MessageCollectionFactory;
 use Gubee\Integration\Model\MessageFactory;
+use Gubee\Integration\Model\ResourceModel\Message\CollectionFactory as MessageCollectionFactory;
 use Psr\Log\LoggerInterface;
 use Throwable;
 

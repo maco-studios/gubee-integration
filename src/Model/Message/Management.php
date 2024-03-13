@@ -37,7 +37,7 @@ class Management implements ManagementInterface
         MessageRepositoryInterface $messageRepository,
         ObjectManagerInterface $objectManager,
         ScopeConfigInterface $scopeConfig,
-        SearchCriteriaBuilder $searchCriteriaBuilder,
+        SearchCriteriaBuilder $searchCriteriaBuilder
     ) {
         $this->date                  = $date;
         $this->logger                = $logger;
