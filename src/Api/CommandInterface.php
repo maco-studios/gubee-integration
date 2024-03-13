@@ -8,9 +8,6 @@ interface CommandInterface
 {
     /**
      * Get the command max attempts.
-     * 
-     * @return int
      */
     public function getMaxAttempts(): int;
-
 }
