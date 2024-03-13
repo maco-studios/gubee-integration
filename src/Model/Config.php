@@ -35,7 +35,7 @@ class Config extends AbstractHelper implements ConfigInterface
      */
     public function setActive(bool $active): self
     {
-        return $this->save(ConfigInterface::CONFIG_PATH_ACTIVE, $active);
+        return $this->saveConfig(ConfigInterface::CONFIG_PATH_ACTIVE, $active);
     }
 
     /**
@@ -51,7 +51,7 @@ class Config extends AbstractHelper implements ConfigInterface
      */
     public function setApiKey(string $apiKey): self
     {
-        return $this->save(ConfigInterface::CONFIG_PATH_API_KEY, $apiKey);
+        return $this->saveConfig(ConfigInterface::CONFIG_PATH_API_KEY, $apiKey);
     }
 
     /**
@@ -69,7 +69,7 @@ class Config extends AbstractHelper implements ConfigInterface
      */
     public function setApiToken($apiToken): self
     {
-        return $this->save(ConfigInterface::CONFIG_PATH_API_TOKEN, $apiToken);
+        return $this->saveConfig(ConfigInterface::CONFIG_PATH_API_TOKEN, $apiToken);
     }
 
     /**
@@ -87,7 +87,7 @@ class Config extends AbstractHelper implements ConfigInterface
      */
     public function setApiTimeout($apiTimeout): self
     {
-        return $this->save(ConfigInterface::CONFIG_PATH_API_TIMEOUT, $apiTimeout);
+        return $this->saveConfig(ConfigInterface::CONFIG_PATH_API_TIMEOUT, $apiTimeout);
     }
 
     /**
@@ -103,7 +103,7 @@ class Config extends AbstractHelper implements ConfigInterface
      */
     public function setMaxBackoffAttempts(int $maxBackoffAttempts): self
     {
-        return $this->save(ConfigInterface::CONFIG_PATH_MAX_BACKOFF_ATTEMPTS, $maxBackoffAttempts);
+        return $this->saveConfig(ConfigInterface::CONFIG_PATH_MAX_BACKOFF_ATTEMPTS, $maxBackoffAttempts);
     }
 
     /**
@@ -119,7 +119,7 @@ class Config extends AbstractHelper implements ConfigInterface
      */
     public function setMaxAttempts(int $maxAttempts): self
     {
-        return $this->save(ConfigInterface::CONFIG_PATH_MAX_ATTEMPTS, $maxAttempts);
+        return $this->saveConfig(ConfigInterface::CONFIG_PATH_MAX_ATTEMPTS, $maxAttempts);
     }
 
     /**
@@ -137,7 +137,7 @@ class Config extends AbstractHelper implements ConfigInterface
      */
     public function setLogLevel(array $logLevel): self
     {
-        return $this->save(ConfigInterface::CONFIG_PATH_LOG_LEVEL, $logLevel);
+        return $this->saveConfig(ConfigInterface::CONFIG_PATH_LOG_LEVEL, $logLevel);
     }
 
     /**
@@ -157,7 +157,7 @@ class Config extends AbstractHelper implements ConfigInterface
      */
     public function setBrandAttribute($brand): self
     {
-        return $this->save(ConfigInterface::CONFIG_PATH_BRAND, $brand);
+        return $this->saveConfig(ConfigInterface::CONFIG_PATH_BRAND, $brand);
     }
 
     /**
@@ -175,7 +175,7 @@ class Config extends AbstractHelper implements ConfigInterface
      */
     public function setPriceAttribute($price): self
     {
-        return $this->save(ConfigInterface::CONFIG_PATH_PRICE, $price);
+        return $this->saveConfig(ConfigInterface::CONFIG_PATH_PRICE, $price);
     }
 
     /**
@@ -193,7 +193,7 @@ class Config extends AbstractHelper implements ConfigInterface
      */
     public function setNbmAttribute($nbm): self
     {
-        return $this->save(ConfigInterface::CONFIG_PATH_NBM, $nbm);
+        return $this->saveConfig(ConfigInterface::CONFIG_PATH_NBM, $nbm);
     }
 
     /**
@@ -211,7 +211,7 @@ class Config extends AbstractHelper implements ConfigInterface
      */
     public function setEanAttribute($ean): self
     {
-        return $this->save(ConfigInterface::CONFIG_PATH_EAN, $ean);
+        return $this->saveConfig(ConfigInterface::CONFIG_PATH_EAN, $ean);
     }
 
     /**
@@ -229,7 +229,7 @@ class Config extends AbstractHelper implements ConfigInterface
      */
     public function setColorAttribute($color): self
     {
-        return $this->save(ConfigInterface::CONFIG_PATH_COLOR, $color);
+        return $this->saveConfig(ConfigInterface::CONFIG_PATH_COLOR, $color);
     }
 
     /**
@@ -247,7 +247,7 @@ class Config extends AbstractHelper implements ConfigInterface
      */
     public function setMeasureHeadingAttribute($measureHeading): self
     {
-        return $this->save(ConfigInterface::CONFIG_PATH_MEASURE_HEADING, $measureHeading);
+        return $this->saveConfig(ConfigInterface::CONFIG_PATH_MEASURE_HEADING, $measureHeading);
     }
 
     /**
@@ -265,7 +265,7 @@ class Config extends AbstractHelper implements ConfigInterface
      */
     public function setWidthAttribute($width): self
     {
-        return $this->save(ConfigInterface::CONFIG_PATH_WIDTH, $width);
+        return $this->saveConfig(ConfigInterface::CONFIG_PATH_WIDTH, $width);
     }
 
     /**
@@ -283,7 +283,7 @@ class Config extends AbstractHelper implements ConfigInterface
      */
     public function setHeightAttribute($height): self
     {
-        return $this->save(ConfigInterface::CONFIG_PATH_HEIGHT, $height);
+        return $this->saveConfig(ConfigInterface::CONFIG_PATH_HEIGHT, $height);
     }
 
     /**
@@ -301,7 +301,7 @@ class Config extends AbstractHelper implements ConfigInterface
      */
     public function setDepthAttribute($depth): self
     {
-        return $this->save(ConfigInterface::CONFIG_PATH_DEPTH, $depth);
+        return $this->saveConfig(ConfigInterface::CONFIG_PATH_DEPTH, $depth);
     }
 
     /**
@@ -319,7 +319,7 @@ class Config extends AbstractHelper implements ConfigInterface
      */
     public function setMeasureUnitAttribute($measureUnit): self
     {
-        return $this->save(ConfigInterface::CONFIG_PATH_MEASURE_UNIT, $measureUnit);
+        return $this->saveConfig(ConfigInterface::CONFIG_PATH_MEASURE_UNIT, $measureUnit);
     }
 
     /**
@@ -337,7 +337,7 @@ class Config extends AbstractHelper implements ConfigInterface
      */
     public function setCrossDockingTimeAttribute($crossDockingTime): self
     {
-        return $this->save(ConfigInterface::CONFIG_PATH_CROSS_DOCKING_TIME, $crossDockingTime);
+        return $this->saveConfig(ConfigInterface::CONFIG_PATH_CROSS_DOCKING_TIME, $crossDockingTime);
     }
 
     /**
@@ -355,7 +355,7 @@ class Config extends AbstractHelper implements ConfigInterface
      */
     public function setWarrantyTimeAttribute($warrantyTime): self
     {
-        return $this->save(ConfigInterface::CONFIG_PATH_WARRANTY_TIME, $warrantyTime);
+        return $this->saveConfig(ConfigInterface::CONFIG_PATH_WARRANTY_TIME, $warrantyTime);
     }
 
     /**
@@ -371,7 +371,7 @@ class Config extends AbstractHelper implements ConfigInterface
      */
     public function setMainCategoryPosition(MainCategoryEnum $mainCategory): self
     {
-        return $this->save(ConfigInterface::CONFIG_PATH_MAIN_CATEGORY, $mainCategory->__toString());
+        return $this->saveConfig(ConfigInterface::CONFIG_PATH_MAIN_CATEGORY, $mainCategory->__toString());
     }
 
     /**
@@ -391,7 +391,7 @@ class Config extends AbstractHelper implements ConfigInterface
      */
     public function setBlacklistAttribute(array $blacklist): self
     {
-        return $this->save(ConfigInterface::CONFIG_PATH_BLACKLIST, $blacklist);
+        return $this->saveConfig(ConfigInterface::CONFIG_PATH_BLACKLIST, $blacklist);
     }
 
     /**
@@ -412,7 +412,7 @@ class Config extends AbstractHelper implements ConfigInterface
      * @param mixed $value
      * @return Config
      */
-    protected function save(string $path, $value): self
+    protected function saveConfig(string $path, $value): self
     {
         $this->configWriter->save($path, $value);
         $this->reinitableConfig->reinit();
