@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace Gubee\Integration\Api\Message;
 
 use Gubee\Integration\Api\Data\MessageInterface;
-use Magento\Framework\Api\SearchResults;
+use Magento\Framework\Api\SearchResultsInterface;
 
 interface ManagementInterface
 {
@@ -17,14 +17,14 @@ interface ManagementInterface
     /**
      * Process a bunch of messages at once
      *
-     * @param iterable<MessageInterface> $message
+     * @param iterable<MessageInterface> $messages
      */
-    public function massProcess(iterable $message): void;
+    public function massProcess(iterable $messages): void;
 
     /**
      * Get messages waiting to be processed
      */
-    public function getPending(): SearchResults;
+    public function getPending(): SearchResultsInterface;
 
     /**
      * Get failed messages waiting to be retried

@@ -10,9 +10,10 @@ class StatusEnum extends AbstractEnum
 {
     private const PENDING  = "0";
     private const RUNNING  = "1";
+    private const DONE     = "2";
     private const ERROR    = "3";
-    private const FINISHED = "2";
-    private const FAILED   = "4";
+    private const FINISHED = "4";
+    private const FAILED   = "5";
 
     public static function PENDING(): self
     {
@@ -22,6 +23,11 @@ class StatusEnum extends AbstractEnum
     public static function RUNNING(): self
     {
         return new self(self::RUNNING);
+    }
+
+    public static function DONE(): self
+    {
+        return new self(self::DONE);
     }
 
     public static function ERROR(): self
