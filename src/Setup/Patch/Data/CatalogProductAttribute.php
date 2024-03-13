@@ -9,6 +9,7 @@ use Gubee\Integration\Model\Catalog\Product\Attribute\Source\Origin;
 use Gubee\Integration\Setup\AbstractMigration;
 use Gubee\Integration\Setup\Migration\Context;
 use Gubee\Integration\Setup\Migration\Facade\ProductAttribute;
+use Magento\Eav\Model\Entity\Attribute\ScopedAttributeInterface;
 use Magento\Eav\Model\Entity\Attribute\Source\Boolean;
 use Magento\Eav\Model\Entity\Attribute\Source\Table;
 
@@ -122,13 +123,27 @@ class CatalogProductAttribute extends AbstractMigration
     public function execute(): void
     {
         foreach ($this->attributes as $attributeCode => $attrValue) {
+            $this->context->getLogger()
+                ->info(
+                    sprintf(
+                        "Creating/Updating attribute '%s'",
+                        $attributeCode
+                    )
+                );
             $attrValue = array_merge(
                 [
-                    'label'        => $this->getAttributeLabel($attrValue['label']),
-                    'user_defined' => true,
-                    'required'     => false,
+                    'global'          => ScopedAttributeInterface::SCOPE_STORE,
+                    'user_defined'    => true,
+                    'required'        => false,
+                    'is_used_in_grid' => true,
+                    'visible'         => true,
+                    'input'           => 'text',
+                    'group'           => 'Gubee',
                 ],
-                $attrValue
+                $attrValue,
+                [
+                    'label' => $this->getAttributeLabel($attrValue['label']),
+                ]
             );
             if ($this->productAttribute->exists($attributeCode)) {
                 $this->productAttribute->update(

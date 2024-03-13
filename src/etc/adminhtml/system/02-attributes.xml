@@ -17,7 +17,7 @@
         <field id="brand" type="select" sortOrder="20" showInWebsite="1" showInStore="1" showInDefault="1" translate="label">
             <label>Brand Attribute</label>
             <validate>required-entry</validate>
-            <source_model>Gubee\Integration\Model\System\Config\Source\Product\Attribute</source_model>
+            <source_model>Gubee\Integration\Model\Source\System\Config\Catalog\Product\Attribute</source_model>
             <depends>
                 <field id="gubee/integration/active">1</field>
             </depends>
@@ -25,7 +25,7 @@
         <field id="price" type="select" sortOrder="30" showInWebsite="1" showInStore="1" showInDefault="1" translate="label">
             <label>Price Attribute</label>
             <validate>required-entry</validate>
-            <source_model>Gubee\Integration\Model\System\Config\Source\Product\Attribute\Price</source_model>
+            <source_model>Gubee\Integration\Model\Source\System\Config\Catalog\Product\Price</source_model>
             <depends>
                 <field id="gubee/integration/active">1</field>
             </depends>
@@ -33,7 +33,7 @@
         <field id="nbm" type="select" sortOrder="40" showInWebsite="1" showInStore="1" showInDefault="1" translate="label">
             <label>Nbm Attribute</label>
             <validate>required-entry</validate>
-            <source_model>Gubee\Integration\Model\System\Config\Source\Product\Attribute</source_model>
+            <source_model>Gubee\Integration\Model\Source\System\Config\Catalog\Product\Attribute</source_model>
             <depends>
                 <field id="gubee/integration/active">1</field>
             </depends>
@@ -41,7 +41,7 @@
         <field id="ean" type="select" sortOrder="50" showInWebsite="1" showInStore="1" showInDefault="1" translate="label">
             <label>Ean Attribute</label>
             <validate>required-entry</validate>
-            <source_model>Gubee\Integration\Model\System\Config\Source\Product\Attribute</source_model>
+            <source_model>Gubee\Integration\Model\Source\System\Config\Catalog\Product\Attribute</source_model>
             <depends>
                 <field id="gubee/integration/active">1</field>
             </depends>
@@ -49,7 +49,7 @@
         <field id="color" type="select" sortOrder="60" showInWebsite="1" showInStore="1" showInDefault="1" translate="label">
             <label>Color Attribute</label>
             <validate>required-entry</validate>
-            <source_model>Gubee\Integration\Model\System\Config\Source\Product\Attribute</source_model>
+            <source_model>Gubee\Integration\Model\Source\System\Config\Catalog\Product\Attribute</source_model>
             <depends>
                 <field id="gubee/integration/active">1</field>
             </depends>
@@ -67,7 +67,7 @@
         <field id="width" type="select" sortOrder="70" showInWebsite="1" showInStore="1" showInDefault="1" translate="label">
             <label>Width Attribute</label>
             <validate>required-entry</validate>
-            <source_model>Gubee\Integration\Model\System\Config\Source\Product\Attribute</source_model>
+            <source_model>Gubee\Integration\Model\Source\System\Config\Catalog\Product\Decimal</source_model>
             <depends>
                 <field id="gubee/integration/active">1</field>
             </depends>
@@ -75,7 +75,7 @@
         <field id="height" type="select" sortOrder="80" showInWebsite="1" showInStore="1" showInDefault="1" translate="label">
             <label>Height Attribute</label>
             <validate>required-entry</validate>
-            <source_model>Gubee\Integration\Model\System\Config\Source\Product\Attribute</source_model>
+            <source_model>Gubee\Integration\Model\Source\System\Config\Catalog\Product\Decimal</source_model>
             <depends>
                 <field id="gubee/integration/active">1</field>
             </depends>
@@ -83,7 +83,7 @@
         <field id="depth" type="select" sortOrder="90" showInWebsite="1" showInStore="1" showInDefault="1" translate="label">
             <label>Depth Attribute</label>
             <validate>required-entry</validate>
-            <source_model>Gubee\Integration\Model\System\Config\Source\Product\Attribute</source_model>
+            <source_model>Gubee\Integration\Model\Source\System\Config\Catalog\Product\Decimal</source_model>
             <depends>
                 <field id="gubee/integration/active">1</field>
             </depends>
@@ -92,7 +92,7 @@
         <field id="measure_unit" type="select" sortOrder="110" showInWebsite="1" showInStore="1" showInDefault="1" translate="label">
             <label>Measure unit Attribute</label>
             <validate>required-entry</validate>
-            <source_model>Gubee\Integration\Model\System\Config\Source\MeasureUnit</source_model>
+            <source_model>Gubee\Integration\Model\Source\System\Config\Catalog\Product\MeasureUnit</source_model>
             <depends>
                 <field id="gubee/integration/active">1</field>
             </depends>
@@ -100,7 +100,7 @@
         <field id="cross_docking_time" type="select" sortOrder="110" showInWebsite="1" showInStore="1" showInDefault="1" translate="label">
             <label>Cross docking time Attribute</label>
             <validate>required-entry</validate>
-            <source_model>Gubee\Integration\Model\System\Config\Source\Product\Attribute\Integer</source_model>
+            <source_model>Gubee\Integration\Model\Source\System\Config\Catalog\Product\Decimal</source_model>
             <depends>
                 <field id="gubee/integration/active">1</field>
             </depends>
@@ -108,7 +108,7 @@
         <field id="warranty_time" type="select" sortOrder="120" showInWebsite="1" showInStore="1" showInDefault="1" translate="label">
             <label>Warranty time Attribute</label>
             <validate>required-entry</validate>
-            <source_model>Gubee\Integration\Model\System\Config\Source\Product\Attribute</source_model>
+            <source_model>Gubee\Integration\Model\Source\System\Config\Catalog\Product\Decimal</source_model>
             <depends>
                 <field id="gubee/integration/active">1</field>
             </depends>
@@ -116,7 +116,7 @@
         <field id="main_category" type="select" sortOrder="130" showInWebsite="1" showInStore="1" showInDefault="1" translate="label">
             <label>Main category</label>
             <validate>required-entry</validate>
-            <source_model>Gubee\Integration\Model\System\Config\Source\MainCategory</source_model>
+            <source_model>Gubee\Integration\Model\Source\System\Config\Catalog\Product\MainCategory</source_model>
             <comment>
                 <![CDATA[This configuration specifies the primary category of the product in the Gubee platform.
                 <ul class="note">
@@ -132,7 +132,7 @@
         <field id="blacklist" type="multiselect" sortOrder="140" showInWebsite="1" showInStore="1" showInDefault="1" translate="label">
             <label>Blacklist</label>
             <validate>required-entry</validate>
-            <source_model>Gubee\Integration\Model\System\Config\Source\Product\Attribute</source_model>
+            <source_model>Gubee\Integration\Model\Source\System\Config\Catalog\Product\Attribute</source_model>
             <comment>
                 <![CDATA[This configuration specifies the attributes that will <b>not</b> be integrated into the Gubee platform.]]>
             </comment>

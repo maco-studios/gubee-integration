@@ -5,13 +5,16 @@ declare(strict_types=1);
 namespace Gubee\Integration\Model\Catalog\Product\Attribute\Source;
 
 use Gubee\SDK\Enum\Catalog\Product\Attribute\OriginEnum;
+use Magento\Eav\Model\Entity\Attribute\Source\AbstractSource;
 use Magento\Eav\Model\Entity\Attribute\Source\SourceInterface;
 use ReflectionClass;
 
+use function explode;
+use function implode;
 use function strtolower;
 use function ucfirst;
 
-class Origin implements SourceInterface
+class Origin extends AbstractSource implements SourceInterface
 {
     /**
      * Retrieve All options
@@ -25,12 +28,22 @@ class Origin implements SourceInterface
         $result    = [];
         foreach ($constants as $key => $value) {
             $result[] = [
-                'label' => ucfirst(strtolower($value)),
+                'label' => $this->fixLabel($value),
                 'value' => $key,
             ];
         }
 
         return $result;
+    }
+
+    private function fixLabel(string $label): string
+    {
+        return ucfirst(strtolower(
+            implode(
+                ' ',
+                explode('_', $label)
+            )
+        ));
     }
 
     /**

@@ -5,13 +5,14 @@ declare(strict_types=1);
 namespace Gubee\Integration\Model\Catalog\Product\Attribute\Source;
 
 use Gubee\SDK\Enum\Catalog\Product\Attribute\Dimension\UnitTimeEnum;
+use Magento\Eav\Model\Entity\Attribute\Source\AbstractSource;
 use Magento\Eav\Model\Entity\Attribute\Source\SourceInterface;
 use ReflectionClass;
 
 use function strtolower;
 use function ucfirst;
 
-class HandlingTime implements SourceInterface
+class HandlingTime extends AbstractSource implements SourceInterface
 {
     /**
      * Retrieve All options
