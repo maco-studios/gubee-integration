@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace Gubee\Integration\Command;
 
-abstract class AbstractCommand
+use Gubee\Integration\Api\CommandInterface;
+
+abstract class AbstractCommand implements CommandInterface
 {
 }
