@@ -2,13 +2,13 @@
 <schema xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:Setup/Declaration/Schema/etc/schema.xsd">
     <table name="gubee_integration_queue_message">
         <column name="message_id" xsi:type="int" padding="10" unsigned="true" nullable="false" identity="true" comment="ID"/>
-        <column name="command" xsi:type="varchar" padding="255" nullable="false" comment="Command"/>
+        <column name="command" xsi:type="varchar" length="255" nullable="false" comment="Command"/>
         <column name="status" xsi:type="int" padding="10" unsigned="true" nullable="false" comment="Status" default="0"/>
         <column name="payload" xsi:type="text" nullable="true" comment="Payload"/>
         <column name="attempts" xsi:type="int" padding="10" unsigned="true" nullable="false" comment="Attempts" default="0"/>
         <column name="message" xsi:type="text" nullable="true" comment="Message"/>
         <column name="created_at" xsi:type="timestamp" nullable="false" default="CURRENT_TIMESTAMP" comment="Created At"/>
-        <column name="updated_at" xsi:type="timestamp" nullable="false" default="CURRENT_TIMESTAMP" onUpdate="CURRENT_TIMESTAMP" comment="Updated At"/>
+        <column name="updated_at" xsi:type="timestamp" nullable="false" default="CURRENT_TIMESTAMP" on_update="true" comment="Updated At"/>
         <constraint xsi:type="primary" referenceId="PRIMARY">
             <column name="message_id"/>
         </constraint>

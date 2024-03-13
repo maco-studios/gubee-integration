@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Gubee\Integration\Model;
 
+use DateTime;
 use DateTimeInterface;
 use Gubee\Integration\Api\Data\MessageInterface;
 use Gubee\Integration\Api\Enum\Message\StatusEnum;
@@ -25,6 +26,33 @@ class Message extends AbstractModel implements MessageInterface
         $this->_init(\Gubee\Integration\Model\ResourceModel\Message::class);
     }
     // phpcs:enable
+
+    /**
+     * Object after load processing. Implemented as public interface for supporting objects after load in collections
+     *
+     * @return $this
+     */
+    public function afterLoad()
+    {
+        if ($this->getData(self::CREATED_AT)) {
+            $this->setData(
+                self::CREATED_AT,
+                new DateTime(
+                    $this->getData(self::CREATED_AT)
+                )
+            );
+        }
+        if ($this->getData(self::UPDATED_AT)) {
+            $this->setData(
+                self::UPDATED_AT,
+                new DateTime(
+                    $this->getData(self::UPDATED_AT)
+                )
+            );
+        }
+
+        return parent::afterLoad();
+    }
 
     /**
      * Get the message ID.
