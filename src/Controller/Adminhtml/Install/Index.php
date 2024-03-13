@@ -32,7 +32,9 @@ class Index implements HttpGetActionInterface
     {
         // change title
         $page = $this->resultPageFactory->create();
-        $page->getConfig()->getTitle()->set(__('Gubee \ Welcome to the Gubee Integration!'));
+        $page->getConfig()->getTitle()->set(
+            __('Gubee \ Welcome to the Gubee Integration!')->__toString()
+        );
         return $page;
     }
 }
