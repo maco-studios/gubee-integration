@@ -6,9 +6,9 @@ namespace Gubee\Integration\Observer\Catalog\Product\Stock\Item\Save;
 
 use Gubee\Integration\Command\Catalog\Product\Stock\SendCommand;
 use Gubee\Integration\Observer\Catalog\Product\AbstractProduct;
-
 use Magento\Catalog\Api\Data\ProductInterface;
 use Magento\Framework\Event\Observer;
+
 use function json_decode;
 use function json_encode;
 
@@ -34,8 +34,7 @@ class After extends AbstractProduct
      */
     public function execute(Observer $observer)
     {
-
-        if (!$observer->getDataObject() instanceof ProductInterface) {
+        if (! $observer->getDataObject() instanceof ProductInterface) {
             $product = $this->productRepository->getById(
                 $observer->getDataObject()->getProductId()
             );
@@ -56,7 +55,7 @@ class After extends AbstractProduct
      */
     protected function isAllowed(): bool
     {
-        $product = $this->getProduct();
+        $product  = $this->getProduct();
         $origJson = json_decode(
             json_encode(
                 $product->getOrigData()

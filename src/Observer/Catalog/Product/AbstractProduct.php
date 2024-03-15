@@ -7,11 +7,11 @@ namespace Gubee\Integration\Observer\Catalog\Product;
 use Gubee\Integration\Helper\Catalog\Attribute;
 use Gubee\Integration\Model\Config;
 use Gubee\Integration\Model\Queue\Management;
-use Magento\Framework\Event\Observer;
-use Magento\ConfigurableProduct\Model\ResourceModel\Product\Type\Configurable;
 use Gubee\Integration\Observer\AbstractObserver;
 use Magento\Catalog\Api\Data\ProductInterface;
 use Magento\Catalog\Api\ProductRepositoryInterface;
+use Magento\ConfigurableProduct\Model\ResourceModel\Product\Type\Configurable;
+use Magento\Framework\Event\Observer;
 use Magento\Framework\ObjectManagerInterface;
 use Psr\Log\LoggerInterface;
 
@@ -29,19 +29,16 @@ abstract class AbstractProduct extends AbstractObserver
         Attribute $attribute,
         ProductRepositoryInterface $productRepository,
         ObjectManagerInterface $objectManager
-    )
-    {
+    ) {
         parent::__construct($config, $logger, $queueManagement);
-        $this->attribute = $attribute;
+        $this->attribute         = $attribute;
         $this->productRepository = $productRepository;
-        $this->objectManager = $objectManager;
+        $this->objectManager     = $objectManager;
     }
-
 
     public function appendForParent(
         ProductInterface $product
-    )
-    {
+    ) {
         $parentIds = $this->objectManager->create(Configurable::class)
             ->getParentIdsByChild($product->getId());
         if (empty($parentIds)) {
@@ -50,7 +47,7 @@ abstract class AbstractProduct extends AbstractObserver
         foreach ($parentIds as $parentId) {
             $parent = $this->productRepository->getById($parentId);
             if (
-                !$this->attribute->getRawAttributeValue(
+                ! $this->attribute->getRawAttributeValue(
                     'gubee',
                     $parent
                 )
@@ -58,7 +55,7 @@ abstract class AbstractProduct extends AbstractObserver
                 continue;
             }
             if (
-                !$this->attribute->getRawAttributeValue(
+                ! $this->attribute->getRawAttributeValue(
                     'gubee_sync',
                     $parent
                 )
@@ -95,18 +92,18 @@ abstract class AbstractProduct extends AbstractObserver
         $product = $this->getProduct();
 
         if (
-            !$this->attribute->getRawAttributeValue(
+            ! $this->attribute->getRawAttributeValue(
                 'gubee_sync',
                 $product
             )
             &&
-            !$product->dataHasChangedFor('gubee')
+            ! $product->dataHasChangedFor('gubee')
         ) {
             return false;
         }
 
         if (
-            !$this->attribute->getRawAttributeValue(
+            ! $this->attribute->getRawAttributeValue(
                 'gubee',
                 $product
             )
@@ -117,18 +114,11 @@ abstract class AbstractProduct extends AbstractObserver
         return parent::isAllowed();
     }
 
-    /**
-     * @return ProductInterface
-     */
     public function getProduct(): ProductInterface
     {
         return $this->product;
     }
 
-    /**
-     * @param ProductInterface $product 
-     * @return self
-     */
     public function setProduct(ProductInterface $product): self
     {
         $this->product = $product;

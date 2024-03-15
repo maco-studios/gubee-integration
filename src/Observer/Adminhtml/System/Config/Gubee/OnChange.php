@@ -78,6 +78,10 @@ class OnChange extends AbstractObserver
             SyncCommand::class,
             []
         );
+        $this->getQueueManagement()->append(
+            \Gubee\Integration\Command\Catalog\Category\SyncCommand::class,
+            []
+        );
     }
 
     protected function generateToken(): void

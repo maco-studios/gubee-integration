@@ -15,7 +15,7 @@ use Symfony\Component\Console\Input\InputArgument;
 use function __;
 use function sprintf;
 
-class SendCommand extends AbstractCommand
+class DesativateCommand extends AbstractCommand
 {
     protected ProductRepositoryInterface $productRepository;
     protected ObjectManagerInterface $objectManager;
@@ -26,18 +26,18 @@ class SendCommand extends AbstractCommand
         ProductRepositoryInterface $productRepository,
         ObjectManagerInterface $objectManager
     ) {
-        parent::__construct($eventDispatcher, $logger, "catalog:product:send");
+        parent::__construct($eventDispatcher, $logger, "catalog:product:desativate");
         $this->productRepository = $productRepository;
         $this->objectManager     = $objectManager;
     }
 
     protected function configure()
     {
-        $this->setDescription("Send the product to Gubee");
+        $this->setDescription("Desativate a product by its SKU on Gubee");
         $this->addArgument(
             'sku',
             InputArgument::REQUIRED,
-            'The product SKU to be inserted'
+            'The product SKU to be desativated'
         );
     }
 
@@ -64,13 +64,7 @@ class SendCommand extends AbstractCommand
             ]
         );
 
-        $this->eventDispatcher->dispatch(
-            'gubee_catalog_product_send',
-            [
-                'product' => $product,
-            ]
-        );
-        $product->save();
+        $product->desativate();
         return 0;
     }
 }

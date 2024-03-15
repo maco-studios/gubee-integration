@@ -17,7 +17,6 @@ use Gubee\SDK\Model\Catalog\Product\Attribute\AttributeValue;
 use Gubee\SDK\Model\Catalog\Product\Attribute\Brand;
 use Gubee\SDK\Resource\Catalog\Product\ValidateResource;
 use Gubee\SDK\Resource\Catalog\ProductResource;
-use InvalidArgumentException;
 use Magento\Catalog\Api\Data\ProductAttributeSearchResultsInterface;
 use Magento\Catalog\Api\Data\ProductInterface;
 use Magento\Catalog\Model\ResourceModel\Category\CollectionFactory;
@@ -57,35 +56,34 @@ class Product
         CollectionFactory $categoryCollectionFactory,
         AttributeCollectionFactory $attributeCollectionFactory,
         StockRegistryInterface $stockRegistry
-    )
-    {
-        $this->validateResource = $validateResource;
-        $this->attributeCollection = $attributeCollectionFactory->create();
+    ) {
+        $this->validateResource          = $validateResource;
+        $this->attributeCollection       = $attributeCollectionFactory->create();
         $this->categoryCollectionFactory = $categoryCollectionFactory;
-        $this->stockItem = $stockRegistry->getStockItem($product->getId());
+        $this->stockItem                 = $stockRegistry->getStockItem($product->getId());
         $this->categoryCollectionFactory = $categoryCollectionFactory;
-        $this->objectManager = $objectManager;
-        $this->attribute = $attribute;
-        $this->config = $config;
-        $this->product = $product;
-        $this->productResource = $productResource;
-        $this->gubeeProduct = $objectManager->create(
-                \Gubee\SDK\Model\Catalog\Product::class,
+        $this->objectManager             = $objectManager;
+        $this->attribute                 = $attribute;
+        $this->config                    = $config;
+        $this->product                   = $product;
+        $this->productResource           = $productResource;
+        $this->gubeeProduct              = $objectManager->create(
+            \Gubee\SDK\Model\Catalog\Product::class,
             array_filter(
                 [
-                    'id' => $this->buildId(),
-                    'mainCategory' => $this->buildMainCategory(),
-                    'mainSku' => $this->buildMainSku(),
-                    'origin' => $this->buildOrigin(),
-                    'status' => $this->buildStatus(),
-                    'type' => $this->buildType(),
-                    'name' => $this->buildName(),
-                    'nbm' => $this->buildNbm(),
-                    'categories' => $this->buildCategories(),
-                    'specifications' => $this->buildSpecifications(),
+                    'id'                => $this->buildId(),
+                    'mainCategory'      => $this->buildMainCategory(),
+                    'mainSku'           => $this->buildMainSku(),
+                    'origin'            => $this->buildOrigin(),
+                    'status'            => $this->buildStatus(),
+                    'type'              => $this->buildType(),
+                    'name'              => $this->buildName(),
+                    'nbm'               => $this->buildNbm(),
+                    'categories'        => $this->buildCategories(),
+                    'specifications'    => $this->buildSpecifications(),
                     'variantAttributes' => $this->buildVariantAttributes(),
-                    'brand' => $this->buildBrand(),
-                    'variations' => $this->buildVariations(),
+                    'brand'             => $this->buildBrand(),
+                    'variations'        => $this->buildVariations(),
                 ]
             )
         );
@@ -96,25 +94,50 @@ class Product
         return $this->validateResource->create($this->gubeeProduct);
     }
 
-    public function load(string $id, string $field = 'externalId'): self
-    {
-        switch ($field) {
-            case 'externalId':
-                $this->gubeeProduct = $this->productResource->getByExternalId($id);
-                break;
-            case 'id':
-                $this->gubeeProduct = $this->productResource->getById($id);
-                break;
-            default:
-                throw new InvalidArgumentException('Invalid field');
-        }
-
-        return $this;
-    }
-
     public function save()
     {
-        $this->productResource->save($this->gubeeProduct);
+        $this->getGubeeProduct()->save();
+    }
+
+    public function desativate()
+    {
+        $this->getGubeeProduct()->setStatus(
+            StatusEnum::INACTIVE()
+        );
+        $this->getGubeeProduct()->save();
+        foreach ($this->getGubeeProduct()->getVariations() as $variation) {
+            foreach ($variation->getStocks() as $stock) {
+                $stock->setQty(0);
+                $stock->save(
+                    $this->getGubeeProduct()->getId(),
+                    $variation->getSkuId()
+                );
+            }
+        }
+    }
+
+    public function saveStock()
+    {
+        foreach ($this->getGubeeProduct()->getVariations() as $variation) {
+            foreach ($variation->getStocks() as $stock) {
+                $stock->save(
+                    $this->getGubeeProduct()->getId(),
+                    $variation->getSkuId()
+                );
+            }
+        }
+    }
+
+    public function savePrice()
+    {
+        foreach ($this->getGubeeProduct()->getVariations() as $variation) {
+            foreach ($variation->getPrices() as $price) {
+                $price->save(
+                    $this->getGubeeProduct()->getId(),
+                    $variation->getSkuId()
+                );
+            }
+        }
     }
 
     private function buildBrand()
@@ -123,7 +146,7 @@ class Product
             $this->config->getBrandAttribute(),
             $this->product
         );
-        if (!$brand) {
+        if (! $brand) {
             return null;
         }
 
@@ -156,7 +179,7 @@ class Product
             : 'ASC'
         );
         $category = $collection->getFirstItem();
-        if (!$category->getId()) {
+        if (! $category->getId()) {
             // get root category
             $category = $this->categoryCollectionFactory->create()
                 ->addAttributeToFilter('level', 2)
@@ -166,7 +189,7 @@ class Product
         return $this->getObjectManager()->create(
             Category::class,
             [
-                'id' => $category->getId(),
+                'id'   => $category->getId(),
                 'name' => $category->getName(),
             ]
         );
@@ -188,10 +211,10 @@ class Product
     private function buildStatus()
     {
         $status = StatusEnum::ACTIVE();
-        if (!$this->product->isSalable()) {
+        if (! $this->product->isSalable()) {
             $status = StatusEnum::INACTIVE();
         }
-        if (!$this->stockItem->getIsInStock()) {
+        if (! $this->stockItem->getIsInStock()) {
             $status = StatusEnum::INACTIVE();
         }
         return $status;
@@ -232,7 +255,7 @@ class Product
         $collection = $this->categoryCollectionFactory->create()
             ->addAttributeToFilter('entity_id', ['in' => $categories])
             ->addAttributeToSelect('*');
-        if (!$collection->count()) {
+        if (! $collection->count()) {
             $category = $this->categoryCollectionFactory->create()
                 ->addAttributeToFilter('level', 2)
                 ->addAttributeToSelect('*')
@@ -241,10 +264,10 @@ class Product
                 $this->getObjectManager()->create(
                     Category::class,
                     [
-                        'id' => $category->getId(),
+                        'id'   => $category->getId(),
                         'name' => $category->getName(),
                     ]
-                )
+                ),
             ];
         }
         $categories = [];
@@ -253,7 +276,7 @@ class Product
             $categories[$key] = $this->getObjectManager()->create(
                 Category::class,
                 [
-                    'id' => $category->getId(),
+                    'id'   => $category->getId(),
                     'name' => $category->getName(),
                 ]
             );
@@ -264,8 +287,8 @@ class Product
 
     private function buildSpecifications()
     {
-        $specs = [];
-        $attributes = $this->attributeCollection->getItems();
+        $specs          = [];
+        $attributes     = $this->attributeCollection->getItems();
         $attributeCodes = array_map(
             function ($attribute) {
                 return $attribute->getAttributeCode();
@@ -273,25 +296,25 @@ class Product
             $attributes
         );
         foreach ($this->product->getAttributes() as $attribute) {
-            if (!$attribute->getIsUserDefined()) {
+            if (! $attribute->getIsUserDefined()) {
                 continue;
             }
 
-            if (!in_array($attribute->getAttributeCode(), $attributeCodes)) {
+            if (! in_array($attribute->getAttributeCode(), $attributeCodes)) {
                 continue;
             }
 
             $value = $this->product->getData(
                 $attribute->getAttributeCode()
             );
-            if (!$value) {
+            if (! $value) {
                 continue;
             }
             $specs[] = $this->objectManager->create(
                 AttributeValue::class,
                 [
                     'attribute' => $attribute->getAttributeCode(),
-                    'values' => is_array($value) ? $value : [$value],
+                    'values'    => is_array($value) ? $value : [$value],
                 ]
             );
         }
@@ -301,8 +324,8 @@ class Product
 
     private function buildVariantAttributes()
     {
-        $specs = [];
-        $attributes = $this->attributeCollection->getItems();
+        $specs          = [];
+        $attributes     = $this->attributeCollection->getItems();
         $attributeCodes = array_map(
             function ($attribute) {
                 return $attribute->getAttributeCode();
@@ -310,11 +333,11 @@ class Product
             $attributes
         );
         foreach ($this->product->getAttributes() as $attribute) {
-            if (!$attribute->getIsUserDefined()) {
+            if (! $attribute->getIsUserDefined()) {
                 continue;
             }
 
-            if (!in_array($attribute->getAttributeCode(), $attributeCodes)) {
+            if (! in_array($attribute->getAttributeCode(), $attributeCodes)) {
                 continue;
             }
 
@@ -322,7 +345,7 @@ class Product
                 $attribute->getAttributeCode(),
                 $this->product
             );
-            if (!$value) {
+            if (! $value) {
                 continue;
             }
 
@@ -365,7 +388,7 @@ class Product
         }
 
         $variations = [];
-        $children = $this->product
+        $children   = $this->product
             ->getTypeInstance()
             ->getUsedProducts($this->product);
         foreach ($children as $child) {
@@ -373,7 +396,7 @@ class Product
                 Variation::class,
                 [
                     'product' => $child,
-                    'parent' => $this->product,
+                    'parent'  => $this->product,
                 ]
             )->getVariation();
         }

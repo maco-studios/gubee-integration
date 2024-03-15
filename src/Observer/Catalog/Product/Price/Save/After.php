@@ -25,7 +25,7 @@ class After extends AbstractProduct
     protected function isAllowed(): bool
     {
         if (
-            !$this->getProduct()
+            ! $this->getProduct()
                 ->dataHasChangedFor(
                     $this->config->getPriceAttribute()
                 )

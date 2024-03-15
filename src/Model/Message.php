@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Gubee\Integration\Model;
 
-use DateTime;
 use DateTimeInterface;
 use Gubee\Integration\Api\Data\MessageInterface;
 use Gubee\Integration\Api\Enum\Message\StatusEnum;
@@ -16,6 +15,9 @@ use function __;
 use function is_subclass_of;
 use function json_decode;
 use function json_encode;
+use function json_last_error;
+
+use const JSON_ERROR_NONE;
 
 class Message extends AbstractModel implements MessageInterface
 {
@@ -41,49 +43,20 @@ class Message extends AbstractModel implements MessageInterface
         if ($this->getData(self::PAYLOAD) !== null) {
             parent::setData(
                 self::PAYLOAD,
-                json_encode(
+                ! $this->isJson(
                     $this->getData(self::PAYLOAD)
-                )
+                ) ? json_encode(
+                    $this->getData(self::PAYLOAD)
+                ) : $this->getData(self::PAYLOAD)
             );
         }
         return parent::beforeSave();
     }
 
-    /**
-     * Object after load processing. Implemented as public interface for supporting objects after load in collections
-     *
-     * @return $this
-     */
-    public function afterLoad()
+    protected function isJson(string $content): bool
     {
-        if ($this->getData(self::PAYLOAD)) {
-            $this->setData(
-                self::PAYLOAD,
-                json_decode(
-                    $this->getData(self::PAYLOAD),
-                    true
-                )
-            );
-        }
-
-        if ($this->getData(self::CREATED_AT)) {
-            $this->setData(
-                self::CREATED_AT,
-                new DateTime(
-                    $this->getData(self::CREATED_AT)
-                )
-            );
-        }
-        if ($this->getData(self::UPDATED_AT)) {
-            $this->setData(
-                self::UPDATED_AT,
-                new DateTime(
-                    $this->getData(self::UPDATED_AT)
-                )
-            );
-        }
-
-        return parent::afterLoad();
+        json_decode($content);
+        return json_last_error() === JSON_ERROR_NONE;
     }
 
     /**
@@ -162,7 +135,10 @@ class Message extends AbstractModel implements MessageInterface
      */
     public function getPayload(): array
     {
-        return (array) $this->getData(self::PAYLOAD);
+        return $this->isJson($this->getData(self::PAYLOAD)) ? json_decode(
+            $this->getData(self::PAYLOAD),
+            true
+        ) : $this->getData(self::PAYLOAD);
     }
 
     /**

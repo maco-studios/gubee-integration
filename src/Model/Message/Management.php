@@ -8,7 +8,6 @@ use Gubee\Integration\Api\Data\MessageInterface;
 use Gubee\Integration\Api\Enum\Message\StatusEnum;
 use Gubee\Integration\Api\Message\ManagementInterface;
 use Gubee\Integration\Api\MessageRepositoryInterface;
-use Gubee\SDK\Library\HttpClient\Exception\ErrorException;
 use Magento\Framework\Api\SearchCriteriaBuilder;
 use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\Filesystem\Driver\File as FileDriver;
@@ -17,9 +16,6 @@ use Magento\Framework\Stdlib\DateTime\DateTime;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\Console\Input\ArrayInput;
 use Symfony\Component\Console\Output\BufferedOutput;
-use Throwable;
-
-use function __;
 
 class Management implements ManagementInterface
 {
@@ -50,53 +46,53 @@ class Management implements ManagementInterface
     public function process(MessageInterface $message): void
     {
         $status = StatusEnum::ERROR();
-        try {
-            $message->setAttempts(
-                $message->getAttempts() + 1
-            );
-            $this->updateMessageStatus(
-                $message,
-                StatusEnum::RUNNING()
-            );
-            $this->execute($message);
-            $status = StatusEnum::DONE();
-        } catch (ErrorException $e) {
-            $result = __(
-                "EXCEPTION: '%1', check the %s for more details.",
-                'var/log/exception.log',
-                (string) $e->getResponse()->getBody()
-            );
-            $status = StatusEnum::ERROR();
+        // try {
+        $message->setAttempts(
+            $message->getAttempts() + 1
+        );
+        $this->updateMessageStatus(
+            $message,
+            StatusEnum::RUNNING()
+        );
+        $this->execute($message);
+        $status = StatusEnum::DONE();
+        // } catch (ErrorException $e) {
+        //     $result = __(
+        //         "EXCEPTION: '%1', check the %s for more details.",
+        //         'var/log/exception.log',
+        //         (string) $e->getResponse()->getBody()
+        //     );
+        //     $status = StatusEnum::ERROR();
 
-            $this->logger->error(
-                $result,
-                [
-                    'exception' => $e,
-                ]
-            );
-            $message->setMessage(
-                (string) $result
-            );
-        } catch (Throwable $e) {
-            $result = __(
-                "EXCEPTION: '%1', check the %s for more details.",
-                'var/log/exception.log',
-                $e->getMessage()
-            );
-            $status = StatusEnum::ERROR();
+        //     $this->logger->error(
+        //         $result,
+        //         [
+        //             'exception' => $e,
+        //         ]
+        //     );
+        //     $message->setMessage(
+        //         (string) $result
+        //     );
+        // } catch (Throwable $e) {
+        //     $result = __(
+        //         "EXCEPTION: '%1', check the %s for more details.",
+        //         'var/log/exception.log',
+        //         $e->getMessage()
+        //     );
+        //     $status = StatusEnum::ERROR();
 
-            $this->logger->error(
-                $result,
-                [
-                    'exception' => $e,
-                ]
-            );
-            $message->setMessage(
-                (string) $result
-            );
-        } finally {
-            $this->updateMessageStatus($message, $status);
-        }
+        //     $this->logger->error(
+        //         $result,
+        //         [
+        //             'exception' => $e,
+        //         ]
+        //     );
+        //     $message->setMessage(
+        //         (string) $result
+        //     );
+        // } finally {
+        //     $this->updateMessageStatus($message, $status);
+        // }
     }
 
     protected function execute(MessageInterface $message): void

@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Gubee\Integration\Command\Catalog\Product;
+namespace Gubee\Integration\Command\Catalog\Product\Price;
 
 use Gubee\Integration\Command\AbstractCommand;
 use Gubee\Integration\Service\Model\Catalog\Product;
@@ -26,18 +26,18 @@ class SendCommand extends AbstractCommand
         ProductRepositoryInterface $productRepository,
         ObjectManagerInterface $objectManager
     ) {
-        parent::__construct($eventDispatcher, $logger, "catalog:product:send");
+        parent::__construct($eventDispatcher, $logger, "catalog:product:price:send");
         $this->productRepository = $productRepository;
         $this->objectManager     = $objectManager;
     }
 
     protected function configure()
     {
-        $this->setDescription("Send the product to Gubee");
+        $this->setDescription("Send the price of a product to Gubee");
         $this->addArgument(
             'sku',
             InputArgument::REQUIRED,
-            'The product SKU to be inserted'
+            'The product SKU to send the price to Gubee'
         );
     }
 
@@ -64,13 +64,7 @@ class SendCommand extends AbstractCommand
             ]
         );
 
-        $this->eventDispatcher->dispatch(
-            'gubee_catalog_product_send',
-            [
-                'product' => $product,
-            ]
-        );
-        $product->save();
+        $product->savePrice();
         return 0;
     }
 }
