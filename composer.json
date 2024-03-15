@@ -10,6 +10,7 @@
     ],
     "require": {
         "gubee/sdk": "@dev",
+        "laminas/laminas-hydrator": "^2",
         "magento/framework": "^103",
         "magento/module-catalog": "^104",
         "magento/module-configurable-product": "^100",

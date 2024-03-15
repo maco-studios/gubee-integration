@@ -9,6 +9,7 @@ use Exception;
 use Gubee\Integration\Command\AbstractCommand;
 use Gubee\Integration\Model\Config;
 use Gubee\Integration\Service\Gubee\ServiceProvider;
+use Gubee\SDK\Api\ServiceProviderInterface;
 use Gubee\SDK\Client;
 use Magento\Framework\Event\ManagerInterface;
 use Psr\Log\LoggerInterface;
@@ -22,9 +23,10 @@ class RenewCommand extends AbstractCommand
     public function __construct(
         ManagerInterface $eventDispatcher,
         LoggerInterface $logger,
-        ServiceProvider $serviceProvider,
+        ServiceProviderInterface $serviceProvider,
         Config $config
-    ) {
+    )
+    {
         $this->client = new Client(
             $serviceProvider,
             $logger

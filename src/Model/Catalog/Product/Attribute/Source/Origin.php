@@ -23,9 +23,9 @@ class Origin extends AbstractSource implements SourceInterface
      */
     public function getAllOptions()
     {
-        $options   = new ReflectionClass(OriginEnum::class);
+        $options = new ReflectionClass(OriginEnum::class);
         $constants = $options->getConstants();
-        $result    = [];
+        $result = [];
         foreach ($constants as $key => $value) {
             $result[] = [
                 'label' => $this->fixLabel($value),
@@ -38,12 +38,14 @@ class Origin extends AbstractSource implements SourceInterface
 
     private function fixLabel(string $label): string
     {
-        return ucfirst(strtolower(
-            implode(
-                ' ',
-                explode('_', $label)
+        return ucfirst(
+            strtolower(
+                implode(
+                    ' ',
+                    explode('_', $label)
+                )
             )
-        ));
+        );
     }
 
     /**
@@ -54,8 +56,11 @@ class Origin extends AbstractSource implements SourceInterface
      */
     public function getOptionText($value)
     {
-        $options   = new ReflectionClass(OriginEnum::class);
+        $options = new ReflectionClass(OriginEnum::class);
         $constants = $options->getConstants();
-        return $constants[$value];
+        if (isset($constants[$value])) {
+            return $this->fixLabel($constants[$value]);
+        }
+        return false;
     }
 }

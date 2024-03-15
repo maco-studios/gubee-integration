@@ -3,6 +3,8 @@
     <preference for="Gubee\Integration\Api\MessageRepositoryInterface" type="Gubee\Integration\Model\MessageRepository"/>
     <preference for="Gubee\Integration\Api\Data\MessageInterface" type="Gubee\Integration\Model\Message"/>
     <preference for="Gubee\Integration\Api\Data\MessageSearchResultsInterface" type="Magento\Framework\Api\SearchResults"/>
+    <preference for="Gubee\SDK\Api\ServiceProviderInterface" type="Gubee\Integration\Service\Gubee\ServiceProvider"/>
+    <preference for="Gubee\SDK\Client" type="Gubee\Integration\Service\Gubee\Client"/>
 
     <virtualType name="Gubee\Integration\Model\ResourceModel\Message\Grid\Collection" type="Magento\Framework\View\Element\UiComponent\DataProvider\SearchResult">
         <arguments>
@@ -10,6 +12,14 @@
             <argument name="resourceModel" xsi:type="string">Gubee\Integration\Model\ResourceModel\Message\Collection</argument>
         </arguments>
     </virtualType>
+
+    <type name="Gubee\Integration\Service\Model\Catalog\Product">
+        <arguments>
+            <argument name="strategies" xsi:type="array">
+                <item name="id" xsi:type="object">Gubee\Integration\Service\Hydrator\Strategy\Product\Id</item>
+            </argument>
+        </arguments>
+    </type>
 
     <type name="Magento\Framework\View\Element\UiComponent\DataProvider\CollectionFactory">
         <arguments>

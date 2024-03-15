@@ -4,9 +4,11 @@ declare(strict_types=1);
 
 namespace Gubee\Integration\Api\Enum;
 
+use Gubee\SDK\Enum\AbstractEnum;
+
 class MainCategoryEnum extends AbstractEnum
 {
-    private const DEEPER  = 'DEEPER';
+    private const DEEPER = 'DEEPER';
     private const SHALLOW = 'SHALLOW';
 
     /**
@@ -28,10 +30,10 @@ class MainCategoryEnum extends AbstractEnum
     /**
      * Creates an instance of the enum class based on the given value.
      *
-     * @param string $value The value to create the enum instance from.
+     * @param mixed $value The value to create the enum instance from.
      * @return self The enum instance.
      */
-    public static function fromValue(string $value): self
+    public static function fromValue($value): self
     {
         return new self($value);
     }

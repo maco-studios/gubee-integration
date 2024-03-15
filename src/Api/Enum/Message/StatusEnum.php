@@ -4,16 +4,17 @@ declare(strict_types=1);
 
 namespace Gubee\Integration\Api\Enum\Message;
 
-use Gubee\Integration\Api\Enum\AbstractEnum;
+use Gubee\SDK\Enum\AbstractEnum;
+
 
 class StatusEnum extends AbstractEnum
 {
-    private const PENDING  = "0";
-    private const RUNNING  = "1";
-    private const DONE     = "2";
-    private const ERROR    = "3";
+    private const PENDING = "0";
+    private const RUNNING = "1";
+    private const DONE = "2";
+    private const ERROR = "3";
     private const FINISHED = "4";
-    private const FAILED   = "5";
+    private const FAILED = "5";
 
     public static function PENDING(): self
     {
@@ -49,10 +50,10 @@ class StatusEnum extends AbstractEnum
      * Creates an instance of the enum class based on the given value.
      * w
      *
-     * @param string $value The value to create the enum instance from.
+     * @param mixed $value The value to create the enum instance from.
      * @return self The enum instance.
      */
-    public static function fromValue(string $value): self
+    public static function fromValue($value): self
     {
         return new self($value);
     }
