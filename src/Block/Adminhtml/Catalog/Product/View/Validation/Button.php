@@ -6,9 +6,10 @@ namespace Gubee\Integration\Block\Adminhtml\Catalog\Product\View\Validation;
 
 use Gubee\Integration\Command\Catalog\Product\ValidateCommand;
 use Gubee\Integration\Service\Model\Catalog\Product;
+use Gubee\SDK\Library\HttpClient\Exception\ErrorException;
+use Magento\Backend\Block\Widget\Button\Item;
 use Magento\Backend\Block\Widget\Container;
 use Magento\Backend\Block\Widget\Context;
-use Magento\Framework\App\ObjectManager;
 use Magento\Framework\ObjectManagerInterface;
 use Magento\Framework\Registry;
 use Magento\Store\Model\App\Emulation;
@@ -16,10 +17,12 @@ use Symfony\Component\Console\Input\ArrayInput;
 use Symfony\Component\Console\Output\BufferedOutput;
 use Throwable;
 
-use function implode;
+use function json_decode;
 use function json_encode;
-use function sizeof;
 use function sprintf;
+
+use const JSON_UNESCAPED_SLASHES;
+use const JSON_UNESCAPED_UNICODE;
 
 class Button extends Container
 {
@@ -48,13 +51,12 @@ class Button extends Container
         Emulation $emulation,
         ObjectManagerInterface $objectManager,
         array $data = []
-    )
-    {
+    ) {
         $this->objectManager = $objectManager;
         $this->_coreRegistry = $registry;
-        $this->_product = $product;
-        $this->_request = $context->getRequest();
-        $this->_emulation = $emulation;
+        $this->_product      = $product;
+        $this->_request      = $context->getRequest();
+        $this->_emulation    = $emulation;
         parent::__construct($context, $data);
     }
 
@@ -77,7 +79,8 @@ class Button extends Container
     {
         return parent::_toHtml();
     }
-    public function canRender(\Magento\Backend\Block\Widget\Button\Item $item)
+
+    public function canRender(Item $item)
     {
         $product = $this->_coreRegistry->registry('current_product');
         return $product && $product->getGubee() && parent::canRender($item);
@@ -91,12 +94,12 @@ class Button extends Container
         $problems = $this->validate() ?: [];
 
         return [
-            'label' => json_encode([
-                'errors' => $problems,
+            'label'      => json_encode([
+                'errors'  => $problems,
                 'product' => $this->getGubeeProduct(),
             ], JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE),
             'sort_order' => 800,
-            'class' => 'relative action-secondary',
+            'class'      => 'relative action-secondary',
         ];
     }
 
@@ -107,7 +110,7 @@ class Button extends Container
         $validateCommand = $this->objectManager->create(
             Product::class,
             [
-                'product' => $product
+                'product' => $product,
             ]
         );
         return $validateCommand->getGubeeProduct();
@@ -129,29 +132,29 @@ class Button extends Container
     public function validate()
     {
         $problems = [];
-        $product = $this->_coreRegistry->registry('current_product');
-        if (!$product) {
+        $product  = $this->_coreRegistry->registry('current_product');
+        if (! $product) {
             return $problems;
         }
         try {
-            $input = $this->objectManager->create(
+            $input           = $this->objectManager->create(
                 ArrayInput::class,
                 [
                     'parameters' => [
-                        'sku' => $product->getSku()
-                    ]
+                        'sku' => $product->getSku(),
+                    ],
                 ]
             );
-            $output = $this->objectManager->create(
+            $output          = $this->objectManager->create(
                 BufferedOutput::class
             );
             $validateCommand = $this->objectManager->create(
                 ValidateCommand::class
             );
             $validateCommand->run($input, $output);
-        } catch (\Gubee\SDK\Library\HttpClient\Exception\ErrorException $e) {
+        } catch (ErrorException $e) {
             $response = $e->getResponse();
-            $content = json_decode((string) $response->getBody(), true);
+            $content  = json_decode((string) $response->getBody(), true);
             if (isset($content['fieldErrors'])) {
                 foreach ($content['fieldErrors'] as $error) {
                     $problems[] = sprintf(

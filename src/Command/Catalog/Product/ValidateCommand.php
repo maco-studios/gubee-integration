@@ -4,12 +4,16 @@ declare(strict_types=1);
 
 namespace Gubee\Integration\Command\Catalog\Product;
 
+use Gubee\Integration\Command\AbstractCommand;
+use Gubee\Integration\Service\Model\Catalog\Product;
 use Magento\Catalog\Api\ProductRepositoryInterface;
 use Magento\Framework\Event\ManagerInterface;
-use Gubee\Integration\Command\AbstractCommand;
 use Magento\Framework\ObjectManagerInterface;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\Console\Input\InputArgument;
+
+use function __;
+use function sprintf;
 
 class ValidateCommand extends AbstractCommand
 {
@@ -21,11 +25,10 @@ class ValidateCommand extends AbstractCommand
         LoggerInterface $log,
         ProductRepositoryInterface $productRepository,
         ObjectManagerInterface $objectManager
-    )
-    {
+    ) {
         parent::__construct($eventDispatcher, $log, "catalog:product:validate");
         $this->productRepository = $productRepository;
-        $this->objectManager = $objectManager;
+        $this->objectManager     = $objectManager;
     }
 
     protected function configure()
@@ -42,30 +45,30 @@ class ValidateCommand extends AbstractCommand
     protected function doExecute(): int
     {
         $product = $this->productRepository->get($this->input->getArgument('sku'));
-        if (!$product->getId()) {
+        if (! $product->getId()) {
             $this->log->error(
                 sprintf(
                     "<error>%s</error>",
-                        __(
-                            "The product with the SKU '%1' does not exist",
+                    __(
+                        "The product with the SKU '%1' does not exist",
                         $this->input->getArgument('sku')
-                        )->__toString()
+                    )->__toString()
                 )
             );
             return 1;
         }
 
         $product = $this->objectManager->create(
-                \Gubee\Integration\Service\Model\Catalog\Product::class,
+            Product::class,
             [
-                'product' => $product
+                'product' => $product,
             ]
         );
 
         $this->eventDispatcher->dispatch(
             'gubee_catalog_product_validate',
             [
-                'product' => $product
+                'product' => $product,
             ]
         );
         $result = $product->validate();

@@ -6,26 +6,33 @@ namespace Gubee\Integration\Service\Model\Catalog\Product;
 
 use Gubee\Integration\Helper\Catalog\Attribute;
 use Gubee\Integration\Model\Config;
-use Gubee\SDK\Enum\Catalog\Product\Attribute\Dimension\Measure\TypeEnum;
-use Gubee\SDK\Enum\Catalog\Product\StatusEnum;
-use Gubee\SDK\Model\Catalog\Product\Attribute\AttributeValue;
-use Gubee\SDK\Model\Catalog\Product\Variation\Price;
-use Gubee\SDK\Model\Catalog\Product\Attribute\Dimension\Measure;
-use Gubee\SDK\Model\Catalog\Product\Variation\Stock;
-use Gubee\SDK\Model\Catalog\Product\Attribute\Dimension\UnitTime;
 use Gubee\Integration\Model\ResourceModel\Catalog\Product\Attribute\CollectionFactory as AttributeCollectionFactory;
-use Gubee\SDK\Enum\Catalog\Product\Variation\Price\TypeEnum as PriceTypeEnum;
-use Gubee\SDK\Model\Catalog\Product\Attribute\Dimension\Weight;
-use Gubee\SDK\Model\Catalog\Product\Attribute\Dimension;
-use Gubee\SDK\Model\Catalog\Product\Variation\Media\Image;
+use Gubee\SDK\Enum\Catalog\Product\Attribute\Dimension\Measure\TypeEnum;
 use Gubee\SDK\Enum\Catalog\Product\Attribute\Dimension\UnitTime\TypeEnum as UnitTimeTypeEnum;
+use Gubee\SDK\Enum\Catalog\Product\StatusEnum;
+use Gubee\SDK\Enum\Catalog\Product\Variation\Price\TypeEnum as PriceTypeEnum;
+use Gubee\SDK\Model\Catalog\Product\Attribute\AttributeValue;
+use Gubee\SDK\Model\Catalog\Product\Attribute\Dimension;
+use Gubee\SDK\Model\Catalog\Product\Attribute\Dimension\Measure;
+use Gubee\SDK\Model\Catalog\Product\Attribute\Dimension\UnitTime;
+use Gubee\SDK\Model\Catalog\Product\Attribute\Dimension\Weight;
+use Gubee\SDK\Model\Catalog\Product\Variation\Media\Image;
+use Gubee\SDK\Model\Catalog\Product\Variation\Price;
+use Gubee\SDK\Model\Catalog\Product\Variation\Stock;
 use Magento\Catalog\Api\Data\ProductInterface;
 use Magento\Catalog\Model\Product\Gallery\ReadHandler;
 use Magento\CatalogInventory\Api\Data\StockItemInterface;
 use Magento\CatalogInventory\Api\StockRegistryInterface;
 use Magento\Framework\ObjectManagerInterface;
 
+use function array_map;
+use function in_array;
+use function is_array;
+use function pathinfo;
+use function preg_replace;
 use function sprintf;
+
+use const PATHINFO_FILENAME;
 
 class Variation
 {
@@ -50,35 +57,34 @@ class Variation
         StockRegistryInterface $stockRegistry,
         ReadHandler $galleryReadHandler,
         ?ProductInterface $parent = null
-    )
-    {
+    ) {
         if ($parent) {
             $this->parent = $parent;
         }
         $this->attributeCollection = $attributeCollectionFactory->create();
         $galleryReadHandler->execute($product);
-        $this->product = $product;
-        $this->attribute = $attribute;
-        $this->config = $config;
+        $this->product       = $product;
+        $this->attribute     = $attribute;
+        $this->config        = $config;
         $this->objectManager = $objectManager;
-        $this->stockItem = $stockRegistry->getStockItem($product->getId());
-        $this->variation = $this->objectManager->create(
-                \Gubee\SDK\Model\Catalog\Product\Variation::class,
+        $this->stockItem     = $stockRegistry->getStockItem($product->getId());
+        $this->variation     = $this->objectManager->create(
+            \Gubee\SDK\Model\Catalog\Product\Variation::class,
             [
-                'skuId' => $this->buildSkuId(),
-                'images' => $this->buildImages(),
-                'dimension' => $this->buildDimension(),
-                'handlingTime' => $this->buildHandlingTime(),
-                'name' => $this->buildName(),
-                'sku' => $this->buildSku(),
-                'warrantyTime' => $this->buildWarrantyTime(),
-                'cost' => $this->buildCost(),
-                'description' => $this->buildDescription(),
-                'ean' => $this->buildEan(),
-                'main' => $this->buildMain(),
-                'prices' => $this->buildPrices(),
-                'status' => $this->buildStatus(),
-                'stocks' => $this->buildStocks(),
+                'skuId'                => $this->buildSkuId(),
+                'images'               => $this->buildImages(),
+                'dimension'            => $this->buildDimension(),
+                'handlingTime'         => $this->buildHandlingTime(),
+                'name'                 => $this->buildName(),
+                'sku'                  => $this->buildSku(),
+                'warrantyTime'         => $this->buildWarrantyTime(),
+                'cost'                 => $this->buildCost(),
+                'description'          => $this->buildDescription(),
+                'ean'                  => $this->buildEan(),
+                'main'                 => $this->buildMain(),
+                'prices'               => $this->buildPrices(),
+                'status'               => $this->buildStatus(),
+                'stocks'               => $this->buildStocks(),
                 'variantSpecification' => $this->buildVariantSpecification(),
             ]
         );
@@ -107,15 +113,15 @@ class Variation
             $images[] = $this->objectManager->create(
                 Image::class,
                 [
-                    'url' => // remove protocol from image url
-                    preg_replace('/^https?:/', '', $image->getUrl()),
+                    // remove protocol from image url
+                    'url'   => preg_replace('/^https?:/', '', $image->getUrl()),
                     'order' => $image->getPosition() ?: $key,
-                    'name' => $image->getLabel() ?: pathinfo($image->getFile(), PATHINFO_FILENAME),
-                    'id' => $image->getId(),
-                    'main' => $main,
+                    'name'  => $image->getLabel() ?: pathinfo($image->getFile(), PATHINFO_FILENAME),
+                    'id'    => $image->getId(),
+                    'main'  => $main,
                 ]
             );
-            $main = false;
+            $main     = false;
         }
         return $images;
     }
@@ -125,12 +131,11 @@ class Variation
         return $this->objectManager->create(
             Image::class,
             [
-                'url' => '#',
+                'url'   => '#',
                 'order' => 0,
-                'name' => 'Placeholder',
-                'id' => 0,
-                'main' => true
-
+                'name'  => 'Placeholder',
+                'id'    => 0,
+                'main'  => true,
             ]
         );
     }
@@ -144,27 +149,27 @@ class Variation
                     $this->config->getHeightAttribute(),
                     $this->product
                 ),
-                'type' => TypeEnum::fromValue($this->config->getMeasureUnitAttribute())
+                'type'  => TypeEnum::fromValue($this->config->getMeasureUnitAttribute()),
             ]
         );
-        $width = $this->objectManager->create(
+        $width  = $this->objectManager->create(
             Measure::class,
             [
                 'value' => (float) $this->attribute->getRawAttributeValue(
                     $this->config->getWidthAttribute(),
                     $this->product
                 ),
-                'type' => TypeEnum::fromValue($this->config->getMeasureUnitAttribute())
+                'type'  => TypeEnum::fromValue($this->config->getMeasureUnitAttribute()),
             ]
         );
-        $depth = $this->objectManager->create(
+        $depth  = $this->objectManager->create(
             Measure::class,
             [
                 'value' => (float) $this->attribute->getRawAttributeValue(
                     $this->config->getDepthAttribute(),
                     $this->product
                 ),
-                'type' => TypeEnum::fromValue($this->config->getMeasureUnitAttribute())
+                'type'  => TypeEnum::fromValue($this->config->getMeasureUnitAttribute()),
             ]
         );
         $weight = $this->objectManager->create(
@@ -174,7 +179,7 @@ class Variation
                     'weight',
                     $this->product
                 ),
-                'type' => $this->config->getWeightUnit(),
+                'type'  => $this->config->getWeightUnit(),
             ]
         );
 
@@ -182,8 +187,8 @@ class Variation
             Dimension::class,
             [
                 'height' => $height,
-                'width' => $width,
-                'depth' => $depth,
+                'width'  => $width,
+                'depth'  => $depth,
                 'weight' => $weight,
             ]
         );
@@ -209,7 +214,7 @@ class Variation
                     'gubee_handling_time',
                     $this->product
                 ),
-                'type' => $type
+                'type'  => $type,
             ]
         );
     }
@@ -244,7 +249,7 @@ class Variation
                     'gubee_warranty_time',
                     $this->product
                 ),
-                'type' => $type
+                'type'  => $type,
             ]
         );
     }
@@ -275,10 +280,10 @@ class Variation
     protected function buildPrices()
     {
         $prices = [];
-        $price = $this->objectManager->create(
+        $price  = $this->objectManager->create(
             Price::class,
             [
-                'type' => PriceTypeEnum::DEFAULT (),
+                'type'  => PriceTypeEnum::DEFAULT(),
                 'value' => (float) $this->attribute->getRawAttributeValue(
                     $this->config->getPriceAttribute(),
                     $this->product
@@ -294,10 +299,10 @@ class Variation
     private function buildStatus()
     {
         $status = StatusEnum::ACTIVE();
-        if (!$this->product->isSalable()) {
+        if (! $this->product->isSalable()) {
             $status = StatusEnum::INACTIVE();
         }
-        if (!$this->stockItem->getIsInStock()) {
+        if (! $this->stockItem->getIsInStock()) {
             $status = StatusEnum::INACTIVE();
         }
         return $status;
@@ -306,7 +311,7 @@ class Variation
     protected function buildStocks()
     {
         $stocks = [];
-        $type = $this->attribute->getRawAttributeValue(
+        $type   = $this->attribute->getRawAttributeValue(
             'gubee_cross_docking_time_unit',
             $this->product
         );
@@ -316,7 +321,6 @@ class Variation
             $type = UnitTimeTypeEnum::fromValue($type);
         }
 
-
         $crossDockingTime = $this->objectManager->create(
             UnitTime::class,
             [
@@ -324,13 +328,13 @@ class Variation
                     'gubee_cross_docking_time',
                     $this->product
                 ) ?: -1,
-                'type' => $type
+                'type'  => $type,
             ]
         );
-        $stock = $this->objectManager->create(
+        $stock            = $this->objectManager->create(
             Stock::class,
             [
-                'qty' => (int) $this->stockItem->getQty() ?: 0,
+                'qty'              => (int) $this->stockItem->getQty() ?: 0,
                 'crossDockingTime' => $crossDockingTime,
             ]
         );
@@ -342,8 +346,8 @@ class Variation
 
     protected function buildVariantSpecification()
     {
-        $specs = [];
-        $attributes = $this->attributeCollection->getItems();
+        $specs          = [];
+        $attributes     = $this->attributeCollection->getItems();
         $attributeCodes = array_map(
             function ($attribute) {
                 return $attribute->getAttributeCode();
@@ -351,25 +355,25 @@ class Variation
             $attributes
         );
         foreach ($this->product->getAttributes() as $attribute) {
-            if (!$attribute->getIsUserDefined()) {
+            if (! $attribute->getIsUserDefined()) {
                 continue;
             }
 
-            if (!in_array($attribute->getAttributeCode(), $attributeCodes)) {
+            if (! in_array($attribute->getAttributeCode(), $attributeCodes)) {
                 continue;
             }
 
             $value = $this->product->getData(
                 $attribute->getAttributeCode()
             );
-            if (!$value) {
+            if (! $value) {
                 continue;
             }
             $specs[] = $this->objectManager->create(
                 AttributeValue::class,
                 [
                     'attribute' => $attribute->getAttributeCode(),
-                    'values' => is_array($value) ? $value : [$value]
+                    'values'    => is_array($value) ? $value : [$value],
                 ]
             );
         }
@@ -377,12 +381,8 @@ class Variation
         return $specs;
     }
 
-    /**
-     * @return \Gubee\SDK\Model\Catalog\Product\Variation
-     */
     public function getVariation(): \Gubee\SDK\Model\Catalog\Product\Variation
     {
         return $this->variation;
     }
-
 }
