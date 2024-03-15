@@ -7,7 +7,6 @@ namespace Gubee\Integration\Model;
 use Exception;
 use Gubee\Integration\Api\Data\MessageInterface;
 use Gubee\Integration\Api\Data\MessageInterfaceFactory;
-use Gubee\Integration\Api\Data\MessageSearchResultsInterface;
 use Gubee\Integration\Api\Data\MessageSearchResultsInterfaceFactory;
 use Gubee\Integration\Api\MessageRepositoryInterface;
 use Gubee\Integration\Model\ResourceModel\Message as ResourceMessage;
@@ -51,10 +50,12 @@ class MessageRepository implements MessageRepositoryInterface
         try {
             $this->resource->save($message); /* @phpstan-ignore-line */
         } catch (Exception $exception) {
-            throw new CouldNotSaveException(__(
-                'Could not save the message: %1',
-                $exception->getMessage()
-            ));
+            throw new CouldNotSaveException(
+                __(
+                    'Could not save the message: %1',
+                    $exception->getMessage()
+                )
+            );
         }
         return $message;
     }
@@ -77,7 +78,7 @@ class MessageRepository implements MessageRepositoryInterface
      */
     public function getList(
         SearchCriteriaInterface $searchCriteria
-    ): MessageSearchResultsInterface {
+    ) {
         $collection = $this->messageCollectionFactory->create(); /* @phpstan-ignore-line */
 
         $this->collectionProcessor->process($searchCriteria, $collection);
@@ -106,10 +107,12 @@ class MessageRepository implements MessageRepositoryInterface
             $this->resource->load($messageModel, $message->getMessageId());
             $this->resource->delete($messageModel);
         } catch (Exception $exception) {
-            throw new CouldNotDeleteException(__(
-                'Could not delete the Message: %1',
-                $exception->getMessage()
-            ));
+            throw new CouldNotDeleteException(
+                __(
+                    'Could not delete the Message: %1',
+                    $exception->getMessage()
+                )
+            );
         }
         return true;
     }

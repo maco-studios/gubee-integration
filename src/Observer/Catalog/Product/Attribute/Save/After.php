@@ -38,7 +38,8 @@ class After extends AbstractObserver
         $this->getQueueManagement()->append(
             SendCommand::class,
             [
-                "attribute" => $this->getObserver()->getObject()->getAttributeCode(), /** @phpstan-ignore-line */
+                "attribute" => $this->getObserver()->getObject()->getAttributeCode(),
+                /** @phpstan-ignore-line */
             ]
         );
     }
@@ -63,6 +64,6 @@ class After extends AbstractObserver
         }
 
         return parent::isAllowed() &&
-        $this->getObserver()->getObject() instanceof ProductAttributeInterface; /** @phpstan-ignore-line */
+            $this->getObserver()->getObject() instanceof ProductAttributeInterface; /** @phpstan-ignore-line */
     }
 }

@@ -49,10 +49,12 @@ class SendCommand extends AbstractCommand
 
         $attribute = $this->input->getArgument("attribute");
         $attribute = $this->productAttributeRepository->get($attribute);
-        $attribute = $this->objectManager->get(
-            Attribute::class
-        )->fromEavAttribute($attribute);
-
+        $attribute = $this->objectManager->create(
+            Attribute::class,
+            [
+                'attribute' => $attribute,
+            ]
+        )->getGubeeAttribute();
         return 0;
     }
 

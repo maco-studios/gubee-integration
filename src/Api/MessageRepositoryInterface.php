@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace Gubee\Integration\Api;
 
 use Gubee\Integration\Api\Data\MessageInterface;
-use Gubee\Integration\Api\Data\MessageSearchResultsInterface;
 use Magento\Framework\Api\SearchCriteriaInterface;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Exception\NoSuchEntityException;
@@ -36,7 +35,7 @@ interface MessageRepositoryInterface
      */
     public function getList(
         SearchCriteriaInterface $searchCriteria
-    ): MessageSearchResultsInterface;
+    );
 
     /**
      * Delete Message

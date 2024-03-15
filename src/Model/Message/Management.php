@@ -8,8 +8,8 @@ use Gubee\Integration\Api\Data\MessageInterface;
 use Gubee\Integration\Api\Enum\Message\StatusEnum;
 use Gubee\Integration\Api\Message\ManagementInterface;
 use Gubee\Integration\Api\MessageRepositoryInterface;
+use Gubee\SDK\Library\HttpClient\Exception\ErrorException;
 use Magento\Framework\Api\SearchCriteriaBuilder;
-use Magento\Framework\Api\SearchResultsInterface;
 use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\Filesystem\Driver\File as FileDriver;
 use Magento\Framework\ObjectManagerInterface;
@@ -60,16 +60,36 @@ class Management implements ManagementInterface
             );
             $this->execute($message);
             $status = StatusEnum::DONE();
-        } catch (Throwable $exception) {
+        } catch (ErrorException $e) {
             $result = __(
                 "EXCEPTION: '%1', check the %s for more details.",
                 'var/log/exception.log',
-                $exception->getMessage()
+                (string) $e->getResponse()->getBody()
             );
             $status = StatusEnum::ERROR();
 
             $this->logger->error(
-                "Queue: {$exception->getMessage()}"
+                $result,
+                [
+                    'exception' => $e,
+                ]
+            );
+            $message->setMessage(
+                (string) $result
+            );
+        } catch (Throwable $e) {
+            $result = __(
+                "EXCEPTION: '%1', check the %s for more details.",
+                'var/log/exception.log',
+                $e->getMessage()
+            );
+            $status = StatusEnum::ERROR();
+
+            $this->logger->error(
+                $result,
+                [
+                    'exception' => $e,
+                ]
             );
             $message->setMessage(
                 (string) $result
@@ -105,10 +125,13 @@ class Management implements ManagementInterface
         $this->messageRepository->save($message);
     }
 
-    public function getPending(): SearchResultsInterface
+    public function getPending()
     {
         $searchCriteria = $this->searchCriteriaBuilder
-            ->addFilter(MessageInterface::STATUS, StatusEnum::PENDING())
+            ->addFilter(
+                MessageInterface::STATUS,
+                (int) StatusEnum::PENDING()->__toString()
+            )
             ->create();
 
         return $this->messageRepository->getList(
@@ -124,7 +147,7 @@ class Management implements ManagementInterface
         }
 
         $searchCriteria = $this->searchCriteriaBuilder
-            ->addFilter(MessageInterface::STATUS, StatusEnum::ERROR())
+            ->addFilter(MessageInterface::STATUS, (int) StatusEnum::ERROR()->__toString())
             ->addFilter(MessageInterface::ATTEMPTS, $retryAmount, 'lt')
             ->create();
 

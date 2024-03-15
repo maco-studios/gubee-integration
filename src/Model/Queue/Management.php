@@ -12,6 +12,8 @@ use Gubee\Integration\Model\ResourceModel\Message\CollectionFactory as MessageCo
 use Psr\Log\LoggerInterface;
 use Throwable;
 
+use function json_encode;
+
 class Management
 {
     protected LoggerInterface $logger;
@@ -67,10 +69,13 @@ class Management
     public function alreadyQueued(MessageInterface $message): bool
     {
         /* @phpstan-ignore-next-line */
-        return $this->messageCollectionFactory->create()
-            ->addFieldToFilter(MessageInterface::COMMAND, $message->getCommand())
-            ->addFieldToFilter(MessageInterface::PAYLOAD, $message->getPayload())
-            ->addFieldToFilter(MessageInterface::STATUS, StatusEnum::PENDING())
+        $queued = $this->messageCollectionFactory->create()
+            ->addFieldToFilter(MessageInterface::COMMAND, $message->getCommand());
+        if ($message->getPayload()) {
+            $queued->addFieldToFilter(MessageInterface::PAYLOAD, json_encode($message->getPayload()));
+        }
+
+        return $queued->addFieldToFilter(MessageInterface::STATUS, StatusEnum::PENDING())
             ->getSize() > 0;
     }
 }

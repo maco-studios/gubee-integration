@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace Gubee\Integration\Api\Message;
 
 use Gubee\Integration\Api\Data\MessageInterface;
-use Magento\Framework\Api\SearchResultsInterface;
 
 interface ManagementInterface
 {
@@ -24,7 +23,7 @@ interface ManagementInterface
     /**
      * Get messages waiting to be processed
      */
-    public function getPending(): SearchResultsInterface;
+    public function getPending();
 
     /**
      * Get failed messages waiting to be retried

@@ -31,8 +31,15 @@ class Message extends AbstractModel implements MessageInterface
 
     public function beforeSave(): self
     {
-        if ($this->getData(self::PAYLOAD)) {
+        if ($this->getData(self::STATUS) instanceof StatusEnum) {
             $this->setData(
+                self::STATUS,
+                (int) $this->getData(self::STATUS)->__toString()
+            );
+        }
+
+        if ($this->getData(self::PAYLOAD) !== null) {
+            parent::setData(
                 self::PAYLOAD,
                 json_encode(
                     $this->getData(self::PAYLOAD)
@@ -165,6 +172,9 @@ class Message extends AbstractModel implements MessageInterface
      */
     public function setPayload(array $payload): self
     {
+        if ($payload === []) {
+            $payload = null;
+        }
         return $this->setData(self::PAYLOAD, $payload);
     }
 

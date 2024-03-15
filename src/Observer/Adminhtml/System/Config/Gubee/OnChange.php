@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Gubee\Integration\Observer\Adminhtml\System\Config\Gubee;
 
+use Gubee\Integration\Command\Catalog\Product\Attribute\SyncCommand;
 use Gubee\Integration\Command\Gubee\Token\RenewCommand;
 use Gubee\Integration\Model\Config;
 use Gubee\Integration\Model\Queue\Management;
@@ -72,6 +73,11 @@ class OnChange extends AbstractObserver
             );
             $this->generateToken();
         }
+
+        $this->getQueueManagement()->append(
+            SyncCommand::class,
+            []
+        );
     }
 
     protected function generateToken(): void

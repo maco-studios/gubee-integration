@@ -9,48 +9,29 @@ use Gubee\SDK\Model\Catalog\Product\Attribute as ProductAttribute;
 use Gubee\SDK\Resource\Catalog\Product\AttributeResource;
 use Magento\Catalog\Api\Data\ProductAttributeInterface;
 use Magento\ConfigurableProduct\Model\Product\Type\Configurable;
-use Magento\Framework\App\ObjectManager;
+use Magento\Framework\ObjectManagerInterface;
 
 use function in_array;
 use function trim;
 
-class Attribute extends ProductAttribute
+class Attribute
 {
     protected AttributeResource $attributeResource;
+    protected ProductAttribute $gubeeAttribute;
+    protected ProductAttributeInterface $attribute;
 
     /**
      * @param array<string>|null $options
      */
     public function __construct(
+        ProductAttributeInterface $attribute,
         AttributeResource $attributeResource,
-        string $name,
-        ?TypeEnum $attrType = null,
-        ?string $hubeeId = null,
-        ?string $id = null,
-        ?string $label = null,
-        ?array $options = null,
-        ?bool $required = null,
-        ?bool $variant = null
+        ObjectManagerInterface $objectManager
     ) {
+        $this->attribute         = $attribute;
         $this->attributeResource = $attributeResource;
-        parent::__construct(
-            $name,
-            $attrType,
-            $hubeeId,
-            $id,
-            $label,
-            $options,
-            $required,
-            $variant
-        );
-    }
-
-    public static function fromEavAttribute(
-        ProductAttributeInterface $attribute
-    ): self {
-        $objManager = ObjectManager::getInstance();
-        $instance   = $objManager->create(
-            self::class,
+        $this->gubeeAttribute    = $objectManager->create(
+            ProductAttribute::class,
             [
                 'name'     => $attribute->getAttributeCode(),
                 'id'       => $attribute->getAttributeCode(),
@@ -60,18 +41,18 @@ class Attribute extends ProductAttribute
         );
         switch ($attribute->getFrontendInput()) {
             case 'textarea':
-                $instance->setAttrType(TypeEnum::TEXTAREA());
+                $this->gubeeAttribute->setAttrType(TypeEnum::TEXTAREA());
                 break;
             case 'multiselect':
-                $instance->setAttrType(TypeEnum::MULTISELECT());
+                $this->gubeeAttribute->setAttrType(TypeEnum::MULTISELECT());
                 break;
             case 'select':
-                $instance->setAttrType(TypeEnum::SELECT());
+                $this->gubeeAttribute->setAttrType(TypeEnum::SELECT());
                 break;
             case 'text':
             case 'price':
             default:
-                $instance->setAttrType(TypeEnum::TEXT());
+                $this->gubeeAttribute->setAttrType(TypeEnum::TEXT());
                 break;
         }
 
@@ -92,7 +73,7 @@ class Attribute extends ProductAttribute
                 $isVariant = true;
             }
         }
-        $instance->setVariant($isVariant);
+        $this->gubeeAttribute->setVariant($isVariant);
         $options = [];
         foreach ($attribute->getOptions() ?: [] as $option) {
             $label = (string) $option->getLabel();
@@ -103,8 +84,17 @@ class Attribute extends ProductAttribute
             $options[] = $label;
         }
 
-        $instance->setOptions($options);
+        $this->gubeeAttribute->setOptions($options);
+    }
 
-        return $instance;
+    public function getGubeeAttribute(): ProductAttribute
+    {
+        return $this->gubeeAttribute;
+    }
+
+    public function setGubeeAttribute(ProductAttribute $gubeeAttribute): self
+    {
+        $this->gubeeAttribute = $gubeeAttribute;
+        return $this;
     }
 }

@@ -28,4 +28,12 @@
             </argument>
         </arguments>
     </type>
+
+    <type name="Magento\Framework\Console\CommandListInterface">
+        <arguments>
+            <argument name="commands" xsi:type="array">
+                <item name="Gubee\Integration\Command\Gubee\Queue\ConsumeCommand" xsi:type="object">Gubee\Integration\Command\Gubee\Queue\ConsumeCommand</item>
+            </argument>
+        </arguments>
+    </type>
 </config>
