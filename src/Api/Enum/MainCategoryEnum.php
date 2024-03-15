@@ -8,7 +8,7 @@ use Gubee\SDK\Enum\AbstractEnum;
 
 class MainCategoryEnum extends AbstractEnum
 {
-    private const DEEPER = 'DEEPER';
+    private const DEEPER  = 'DEEPER';
     private const SHALLOW = 'SHALLOW';
 
     /**

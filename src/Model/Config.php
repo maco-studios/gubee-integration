@@ -6,10 +6,10 @@ namespace Gubee\Integration\Model;
 
 use DateTime;
 use DateTimeInterface;
-use Gubee\SDK\Enum\Catalog\Product\Attribute\Dimension\Weight\TypeEnum;
 use Gubee\Integration\Api\Data\ConfigInterface;
 use Gubee\Integration\Api\Enum\MainCategoryEnum;
 use Gubee\Integration\Command\Gubee\Token\RenewCommand;
+use Gubee\SDK\Enum\Catalog\Product\Attribute\Dimension\Weight\TypeEnum;
 use LogicException;
 use Magento\Framework\App\Config\ReinitableConfigInterface;
 use Magento\Framework\App\Config\Storage\WriterInterface;
@@ -246,7 +246,7 @@ class Config extends AbstractHelper implements ConfigInterface
     /**
      * Get the 'price' attribute.
      */
-    public function getPrice(): string
+    public function getPriceAttribute(): string
     {
         return (string) $this->scopeConfig->getValue(ConfigInterface::CONFIG_PATH_PRICE);
     }
@@ -471,15 +471,15 @@ class Config extends AbstractHelper implements ConfigInterface
         return array_map('trim', $value);
     }
 
-    public function getWeightUnit(): string
+    public function getWeightUnit(): TypeEnum
     {
         switch ($this->scopeConfig->getValue('general/locale/weight_unit')) {
             case 'lbs':
-                return TypeEnum::POUND()->__toString();
+                return TypeEnum::POUND();
             case 'kg':
-                return TypeEnum::KILOGRAM()->__toString();
+                return TypeEnum::KILOGRAM();
         }
-        return TypeEnum::KILOGRAM()->__toString();
+        return TypeEnum::KILOGRAM();
     }
 
     /**

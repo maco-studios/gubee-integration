@@ -263,7 +263,7 @@ interface ConfigInterface
     /**
      * Get the 'price' attribute.
      */
-    public function getPrice(): string;
+    public function getPriceAttribute(): string;
 
     /**
      * Set the 'nbm' attribute.

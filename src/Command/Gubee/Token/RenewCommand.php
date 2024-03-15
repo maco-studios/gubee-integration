@@ -8,7 +8,6 @@ use DateTimeInterface;
 use Exception;
 use Gubee\Integration\Command\AbstractCommand;
 use Gubee\Integration\Model\Config;
-use Gubee\Integration\Service\Gubee\ServiceProvider;
 use Gubee\SDK\Api\ServiceProviderInterface;
 use Gubee\SDK\Client;
 use Magento\Framework\Event\ManagerInterface;
@@ -25,8 +24,7 @@ class RenewCommand extends AbstractCommand
         LoggerInterface $logger,
         ServiceProviderInterface $serviceProvider,
         Config $config
-    )
-    {
+    ) {
         $this->client = new Client(
             $serviceProvider,
             $logger

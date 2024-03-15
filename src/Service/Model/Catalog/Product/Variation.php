@@ -4,23 +4,28 @@ declare(strict_types=1);
 
 namespace Gubee\Integration\Service\Model\Catalog\Product;
 
-use Magento\Catalog\Api\Data\ProductInterface;
-use Gubee\Integration\Api\Enum\MainCategoryEnum;
 use Gubee\Integration\Helper\Catalog\Attribute;
-use Magento\Catalog\Model\Product\Gallery\ReadHandler;
 use Gubee\Integration\Model\Config;
-use Gubee\Integration\Service\Hydrator\HydrationTrait;
-use Gubee\SDK\Enum\Catalog\Product\Attribute\OriginEnum;
+use Gubee\SDK\Enum\Catalog\Product\Attribute\Dimension\Measure\TypeEnum;
 use Gubee\SDK\Enum\Catalog\Product\StatusEnum;
-use Gubee\SDK\Enum\Catalog\Product\TypeEnum;
-use Gubee\SDK\Model\Catalog\Product\Attribute\Brand;
-use Magento\Catalog\Model\ResourceModel\Category\CollectionFactory;
-use Gubee\SDK\Resource\Catalog\ProductResource;
+use Gubee\SDK\Model\Catalog\Product\Attribute\AttributeValue;
+use Gubee\SDK\Model\Catalog\Product\Variation\Price;
+use Gubee\SDK\Model\Catalog\Product\Attribute\Dimension\Measure;
+use Gubee\SDK\Model\Catalog\Product\Variation\Stock;
+use Gubee\SDK\Model\Catalog\Product\Attribute\Dimension\UnitTime;
+use Gubee\Integration\Model\ResourceModel\Catalog\Product\Attribute\CollectionFactory as AttributeCollectionFactory;
+use Gubee\SDK\Enum\Catalog\Product\Variation\Price\TypeEnum as PriceTypeEnum;
+use Gubee\SDK\Model\Catalog\Product\Attribute\Dimension\Weight;
+use Gubee\SDK\Model\Catalog\Product\Attribute\Dimension;
+use Gubee\SDK\Model\Catalog\Product\Variation\Media\Image;
+use Gubee\SDK\Enum\Catalog\Product\Attribute\Dimension\UnitTime\TypeEnum as UnitTimeTypeEnum;
+use Magento\Catalog\Api\Data\ProductInterface;
+use Magento\Catalog\Model\Product\Gallery\ReadHandler;
 use Magento\CatalogInventory\Api\Data\StockItemInterface;
 use Magento\CatalogInventory\Api\StockRegistryInterface;
-use Magento\Framework\DataObject;
-use Magento\ConfigurableProduct\Model\Product\Type\Configurable;
 use Magento\Framework\ObjectManagerInterface;
+
+use function sprintf;
 
 class Variation
 {
@@ -31,6 +36,8 @@ class Variation
     protected \Gubee\SDK\Model\Catalog\Product\Variation $variation;
     protected Attribute $attribute;
     protected Config $config;
+    /** @var AttributeSearchResultsInterface|ProductAttributeSearchResultsInterface */
+    protected $attributeCollection;
     protected ObjectManagerInterface $objectManager;
     protected StockItemInterface $stockItem;
 
@@ -39,14 +46,16 @@ class Variation
         Attribute $attribute,
         Config $config,
         ObjectManagerInterface $objectManager,
+        AttributeCollectionFactory $attributeCollectionFactory,
         StockRegistryInterface $stockRegistry,
         ReadHandler $galleryReadHandler,
-        ProductInterface $parent = null
+        ?ProductInterface $parent = null
     )
     {
         if ($parent) {
             $this->parent = $parent;
         }
+        $this->attributeCollection = $attributeCollectionFactory->create();
         $galleryReadHandler->execute($product);
         $this->product = $product;
         $this->attribute = $attribute;
@@ -56,21 +65,21 @@ class Variation
         $this->variation = $this->objectManager->create(
                 \Gubee\SDK\Model\Catalog\Product\Variation::class,
             [
-                $this->buildSkuId(),
-                $this->buildImages(),
-                $this->buildDimension(),
-                $this->buildHandlingTime(),
-                $this->buildName(),
-                $this->buildSku(),
-                $this->buildWarrantyTime(),
-                $this->buildCost(),
-                $this->buildDescription(),
-                $this->buildEan(),
-                $this->buildMain(),
-                $this->buildPrices(),
-                $this->buildStatus(),
-                $this->buildStocks(),
-                $this->buildVariantSpecification()
+                'skuId' => $this->buildSkuId(),
+                'images' => $this->buildImages(),
+                'dimension' => $this->buildDimension(),
+                'handlingTime' => $this->buildHandlingTime(),
+                'name' => $this->buildName(),
+                'sku' => $this->buildSku(),
+                'warrantyTime' => $this->buildWarrantyTime(),
+                'cost' => $this->buildCost(),
+                'description' => $this->buildDescription(),
+                'ean' => $this->buildEan(),
+                'main' => $this->buildMain(),
+                'prices' => $this->buildPrices(),
+                'status' => $this->buildStatus(),
+                'stocks' => $this->buildStocks(),
+                'variantSpecification' => $this->buildVariantSpecification(),
             ]
         );
     }
@@ -84,24 +93,29 @@ class Variation
             $this->product->getSku()
         ) : $this->product->getSku();
     }
+
     protected function buildImages()
     {
         $images = [];
         if (empty($this->product->getMediaGalleryImages())) {
             return [
-                $this->createPlaceholder()
+                $this->createPlaceholder(),
             ];
         }
+        $main = true;
         foreach ($this->product->getMediaGalleryImages() as $key => $image) {
             $images[] = $this->objectManager->create(
-                    \Gubee\SDK\Model\Catalog\Product\Variation\Media\Image::class,
+                Image::class,
                 [
-                    'url' => $image->getUrl(),
-                    'order' => $image->getPosition(),
-                    'name' => $image->getLabel(),
-                    'id' => $image->getId()
+                    'url' => // remove protocol from image url
+                    preg_replace('/^https?:/', '', $image->getUrl()),
+                    'order' => $image->getPosition() ?: $key,
+                    'name' => $image->getLabel() ?: pathinfo($image->getFile(), PATHINFO_FILENAME),
+                    'id' => $image->getId(),
+                    'main' => $main,
                 ]
             );
+            $main = false;
         }
         return $images;
     }
@@ -109,12 +123,14 @@ class Variation
     private function createPlaceholder()
     {
         return $this->objectManager->create(
-                \Gubee\SDK\Model\Catalog\Product\Variation\Media\Image::class,
+            Image::class,
             [
                 'url' => '#',
                 'order' => 0,
                 'name' => 'Placeholder',
-                'id' => 0
+                'id' => 0,
+                'main' => true
+
             ]
         );
     }
@@ -124,46 +140,37 @@ class Variation
         $height = $this->objectManager->create(
             Measure::class,
             [
-                'value' => $this->attribute->getRawAttributeValue(
+                'value' => (float) $this->attribute->getRawAttributeValue(
                     $this->config->getHeightAttribute(),
                     $this->product
                 ),
-                'type' => $this->attribute->getRawAttributeValue(
-                    $this->config->getMeasureUnitAttribute(),
-                    $this->product
-                )
+                'type' => TypeEnum::fromValue($this->config->getMeasureUnitAttribute())
             ]
         );
         $width = $this->objectManager->create(
             Measure::class,
             [
-                'value' => $this->attribute->getRawAttributeValue(
+                'value' => (float) $this->attribute->getRawAttributeValue(
                     $this->config->getWidthAttribute(),
                     $this->product
                 ),
-                'type' => $this->attribute->getRawAttributeValue(
-                    $this->config->getMeasureUnitAttribute(),
-                    $this->product
-                )
+                'type' => TypeEnum::fromValue($this->config->getMeasureUnitAttribute())
             ]
         );
         $depth = $this->objectManager->create(
             Measure::class,
             [
-                'value' => $this->attribute->getRawAttributeValue(
+                'value' => (float) $this->attribute->getRawAttributeValue(
                     $this->config->getDepthAttribute(),
                     $this->product
                 ),
-                'type' => $this->attribute->getRawAttributeValue(
-                    $this->config->getMeasureUnitAttribute(),
-                    $this->product
-                )
+                'type' => TypeEnum::fromValue($this->config->getMeasureUnitAttribute())
             ]
         );
         $weight = $this->objectManager->create(
             Weight::class,
             [
-                'value' => $this->attribute->getRawAttributeValue(
+                'value' => (float) $this->attribute->getRawAttributeValue(
                     'weight',
                     $this->product
                 ),
@@ -172,62 +179,210 @@ class Variation
         );
 
         return $this->objectManager->create(
-                \Gubee\SDK\Model\Catalog\Product\Variation\Dimension::class,
+            Dimension::class,
             [
                 'height' => $height,
                 'width' => $width,
-                'length' => $length,
-                'weight' => $weight
+                'depth' => $depth,
+                'weight' => $weight,
             ]
         );
     }
+
     protected function buildHandlingTime()
     {
+        $type =
+            $this->attribute->getRawAttributeValue(
+                'gubee_handling_time_unit',
+                $this->product
+            );
+        if (empty($type) || is_array($type)) {
+            $type = UnitTimeTypeEnum::DAYS();
+        } else {
+            $type = UnitTimeTypeEnum::fromValue($type);
+        }
 
+        return $this->objectManager->create(
+            UnitTime::class,
+            [
+                'value' => (float) $this->attribute->getRawAttributeValue(
+                    'gubee_handling_time',
+                    $this->product
+                ),
+                'type' => $type
+            ]
+        );
     }
+
     protected function buildName()
     {
-
+        return $this->product->getName();
     }
+
     protected function buildSku()
     {
-
+        return $this->product->getSku();
     }
+
     protected function buildWarrantyTime()
     {
+        $type =
+            $this->attribute->getRawAttributeValue(
+                'gubee_warranty_time_unit',
+                $this->product
+            );
+        if (empty($type) || is_array($type)) {
+            $type = UnitTimeTypeEnum::DAYS();
+        } else {
+            $type = UnitTimeTypeEnum::fromValue($type);
+        }
 
+        return $this->objectManager->create(
+            UnitTime::class,
+            [
+                'value' => (float) $this->attribute->getRawAttributeValue(
+                    'gubee_warranty_time',
+                    $this->product
+                ),
+                'type' => $type
+            ]
+        );
     }
+
     protected function buildCost()
     {
-
+        return $this->product->getCost();
     }
+
     protected function buildDescription()
     {
-
+        return $this->product->getDescription();
     }
+
     protected function buildEan()
     {
-
+        return $this->attribute->getRawAttributeValue(
+            $this->config->getEanAttribute(),
+            $this->product
+        ) ?: null;
     }
+
     protected function buildMain()
     {
-
+        return $this->parent ? false : true;
     }
+
     protected function buildPrices()
     {
+        $prices = [];
+        $price = $this->objectManager->create(
+            Price::class,
+            [
+                'type' => PriceTypeEnum::DEFAULT (),
+                'value' => (float) $this->attribute->getRawAttributeValue(
+                    $this->config->getPriceAttribute(),
+                    $this->product
+                ),
+            ]
+        );
 
+        $prices[] = $price;
+
+        return $prices;
     }
-    protected function buildStatus()
+
+    private function buildStatus()
     {
-
+        $status = StatusEnum::ACTIVE();
+        if (!$this->product->isSalable()) {
+            $status = StatusEnum::INACTIVE();
+        }
+        if (!$this->stockItem->getIsInStock()) {
+            $status = StatusEnum::INACTIVE();
+        }
+        return $status;
     }
+
     protected function buildStocks()
     {
+        $stocks = [];
+        $type = $this->attribute->getRawAttributeValue(
+            'gubee_cross_docking_time_unit',
+            $this->product
+        );
+        if (empty($type) || is_array($type)) {
+            $type = UnitTimeTypeEnum::DAYS();
+        } else {
+            $type = UnitTimeTypeEnum::fromValue($type);
+        }
 
+
+        $crossDockingTime = $this->objectManager->create(
+            UnitTime::class,
+            [
+                'value' => (int) $this->attribute->getRawAttributeValue(
+                    'gubee_cross_docking_time',
+                    $this->product
+                ) ?: -1,
+                'type' => $type
+            ]
+        );
+        $stock = $this->objectManager->create(
+            Stock::class,
+            [
+                'qty' => (int) $this->stockItem->getQty() ?: 0,
+                'crossDockingTime' => $crossDockingTime,
+            ]
+        );
+
+        $stocks[] = $stock;
+
+        return $stocks;
     }
+
     protected function buildVariantSpecification()
     {
+        $specs = [];
+        $attributes = $this->attributeCollection->getItems();
+        $attributeCodes = array_map(
+            function ($attribute) {
+                return $attribute->getAttributeCode();
+            },
+            $attributes
+        );
+        foreach ($this->product->getAttributes() as $attribute) {
+            if (!$attribute->getIsUserDefined()) {
+                continue;
+            }
 
+            if (!in_array($attribute->getAttributeCode(), $attributeCodes)) {
+                continue;
+            }
+
+            $value = $this->product->getData(
+                $attribute->getAttributeCode()
+            );
+            if (!$value) {
+                continue;
+            }
+            $specs[] = $this->objectManager->create(
+                AttributeValue::class,
+                [
+                    'attribute' => $attribute->getAttributeCode(),
+                    'values' => is_array($value) ? $value : [$value]
+                ]
+            );
+        }
+
+        return $specs;
+    }
+
+    /**
+     * @return \Gubee\SDK\Model\Catalog\Product\Variation
+     */
+    public function getVariation(): \Gubee\SDK\Model\Catalog\Product\Variation
+    {
+        return $this->variation;
     }
 
 }

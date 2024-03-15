@@ -6,15 +6,14 @@ namespace Gubee\Integration\Api\Enum\Message;
 
 use Gubee\SDK\Enum\AbstractEnum;
 
-
 class StatusEnum extends AbstractEnum
 {
-    private const PENDING = "0";
-    private const RUNNING = "1";
-    private const DONE = "2";
-    private const ERROR = "3";
+    private const PENDING  = "0";
+    private const RUNNING  = "1";
+    private const DONE     = "2";
+    private const ERROR    = "3";
     private const FINISHED = "4";
-    private const FAILED = "5";
+    private const FAILED   = "5";
 
     public static function PENDING(): self
     {

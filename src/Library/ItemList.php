@@ -15,7 +15,6 @@ class ItemList implements ArrayAccess
         $this->itens = $items;
     }
 
-
     /**
      * @return array
      */
@@ -25,8 +24,7 @@ class ItemList implements ArrayAccess
     }
 
     /**
-     * @param array $itens 
-     * @return self
+     * @param array $itens
      */
     public function setItens(array $itens): self
     {
@@ -63,7 +61,6 @@ class ItemList implements ArrayAccess
      *
      * @param TKey $offset The offset to assign the value to.
      * @param TValue $value The value to set.
-     * @return void
      */
     public function offsetSet($offset, $value): void
     {
@@ -74,7 +71,6 @@ class ItemList implements ArrayAccess
      * Unsets an offset.
      *
      * @param TKey $offset The offset to unset.
-     * @return void
      */
     public function offsetUnset($offset): void
     {

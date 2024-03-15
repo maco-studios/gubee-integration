@@ -4,21 +4,19 @@ declare(strict_types=1);
 
 namespace Gubee\Integration\Helper\Catalog;
 
+use Magento\Catalog\Api\Data\ProductInterface;
+use Magento\ConfigurableProduct\Model\Product\Type\Configurable;
 use Magento\Eav\Model\Entity\Attribute\Frontend\AbstractFrontend;
 
-use Magento\ConfigurableProduct\Model\Product\Type\Configurable;
-
-use Magento\Catalog\Api\Data\ProductInterface;
+use function array_filter;
+use function array_map;
+use function explode;
 
 class Attribute
 {
-
-
     /**
      * Get the raw attribute value for a given attribute code and product.
      *
-     * @param string $attributeCode
-     * @param ProductInterface $product
      * @return mixed|null
      */
     public function getRawAttributeValue(string $attributeCode, ProductInterface $product)
@@ -53,8 +51,6 @@ class Attribute
     /**
      * Get the attribute value label for a given attribute code and product.
      *
-     * @param string $attributeCode
-     * @param ProductInterface $product
      * @return mixed|null
      */
     public function getAttributeValueLabel(string $attributeCode, ProductInterface $product)
@@ -84,8 +80,6 @@ class Attribute
     /**
      * Get the attribute object for a given attribute code and product.
      *
-     * @param string $attributeCode
-     * @param ProductInterface $product
      * @return \Magento\Eav\Model\Entity\Attribute|false
      */
     private function getAttribute(string $attributeCode, ProductInterface $product)
@@ -97,8 +91,6 @@ class Attribute
     /**
      * Get the multiselect value for a given attribute code and product.
      *
-     * @param string $attributeCode
-     * @param ProductInterface $product
      * @return array|null
      */
     private function getMultiselectValue(string $attributeCode, ProductInterface $product)
@@ -121,7 +113,6 @@ class Attribute
      * Get the option labels for a given value array and frontend model.
      *
      * @param array $value
-     * @param \Magento\Eav\Model\Entity\Attribute\Frontend\AbstractFrontend $frontend
      * @return array
      */
     private function getOptionLabels(array $value, AbstractFrontend $frontend)

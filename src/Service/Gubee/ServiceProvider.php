@@ -21,6 +21,6 @@ class ServiceProvider extends ObjectManager implements ServiceProviderInterface
      */
     public function has(string $id)
     {
-        return $this->get($id);
+        return parent::get($id);
     }
 }

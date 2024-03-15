@@ -6,20 +6,30 @@ namespace Gubee\Integration\Service\Model\Catalog;
 
 use Gubee\Integration\Api\Enum\MainCategoryEnum;
 use Gubee\Integration\Helper\Catalog\Attribute;
+use Gubee\SDK\Resource\Catalog\Product\ValidateResource;
 use Gubee\Integration\Model\Config;
-use Gubee\Integration\Service\Hydrator\HydrationTrait;
+use Magento\Catalog\Api\Data\ProductAttributeSearchResultsInterface;
+use Magento\Catalog\Api\ProductAttributeRepositoryInterface;
+use Magento\Eav\Api\Data\AttributeSearchResultsInterface;
+use Gubee\Integration\Service\Model\Catalog\Product\Variation;
+use Gubee\Integration\Model\ResourceModel\Catalog\Product\Attribute\CollectionFactory as AttributeCollectionFactory;
 use Gubee\SDK\Enum\Catalog\Product\Attribute\OriginEnum;
 use Gubee\SDK\Enum\Catalog\Product\StatusEnum;
 use Gubee\SDK\Enum\Catalog\Product\TypeEnum;
+use Gubee\SDK\Model\Catalog\Category;
+use Gubee\SDK\Model\Catalog\Product\Attribute\AttributeValue;
 use Gubee\SDK\Model\Catalog\Product\Attribute\Brand;
+use Gubee\SDK\Resource\Catalog\ProductResource;
+use InvalidArgumentException;
 use Magento\Catalog\Api\Data\ProductInterface;
 use Magento\Catalog\Model\ResourceModel\Category\CollectionFactory;
-use Gubee\SDK\Resource\Catalog\ProductResource;
 use Magento\CatalogInventory\Api\Data\StockItemInterface;
 use Magento\CatalogInventory\Api\StockRegistryInterface;
-use Magento\Framework\DataObject;
 use Magento\ConfigurableProduct\Model\Product\Type\Configurable;
 use Magento\Framework\ObjectManagerInterface;
+
+use function array_filter;
+use function count;
 
 class Product
 {
@@ -29,19 +39,27 @@ class Product
     protected Attribute $attribute;
     protected Config $config;
     protected ObjectManagerInterface $objectManager;
+    /** @var AttributeSearchResultsInterface|ProductAttributeSearchResultsInterface */
+    protected $attributeCollection;
     protected CollectionFactory $categoryCollectionFactory;
     protected StockItemInterface $stockItem;
+    protected ValidateResource $validateResource;
 
     public function __construct(
         ProductInterface $product,
         Attribute $attribute,
         Config $config,
         ProductResource $productResource,
+        ValidateResource $validateResource,
         ObjectManagerInterface $objectManager,
         CollectionFactory $categoryCollectionFactory,
+        AttributeCollectionFactory $attributeCollectionFactory,
         StockRegistryInterface $stockRegistry
     )
     {
+        $this->validateResource = $validateResource;
+        $this->attributeCollection = $attributeCollectionFactory->create();
+        $this->categoryCollectionFactory = $categoryCollectionFactory;
         $this->stockItem = $stockRegistry->getStockItem($product->getId());
         $this->categoryCollectionFactory = $categoryCollectionFactory;
         $this->objectManager = $objectManager;
@@ -65,10 +83,36 @@ class Product
                     'specifications' => $this->buildSpecifications(),
                     'variantAttributes' => $this->buildVariantAttributes(),
                     'brand' => $this->buildBrand(),
-                    'variations' => $this->buildVariations()
+                    'variations' => $this->buildVariations(),
                 ]
             )
         );
+    }
+
+    public function validate()
+    {
+        return $this->validateResource->create($this->gubeeProduct);
+    }
+
+    public function load(string $id, string $field = 'externalId'): self
+    {
+        switch ($field) {
+            case 'externalId':
+                $this->gubeeProduct = $this->productResource->getByExternalId($id);
+                break;
+            case 'id':
+                $this->gubeeProduct = $this->productResource->getById($id);
+                break;
+            default:
+                throw new InvalidArgumentException('Invalid field');
+        }
+
+        return $this;
+    }
+
+    public function save()
+    {
+        $this->productResource->save($this->gubeeProduct);
     }
 
     private function buildBrand()
@@ -84,14 +128,16 @@ class Product
         return $this->getObjectManager()->create(
             Brand::class,
             [
-                'name' => $brand
+                'name' => $brand,
             ]
         );
     }
+
     private function buildId()
     {
         return $this->product->getId();
     }
+
     private function buildMainCategory()
     {
         $categories = $this->product->getCategoryIds();
@@ -113,24 +159,27 @@ class Product
             return null;
         }
         return $this->getObjectManager()->create(
-                \Gubee\SDK\Model\Catalog\Category::class,
+            Category::class,
             [
                 'id' => $category->getId(),
-                'name' => $category->getName()
+                'name' => $category->getName(),
             ]
         );
     }
+
     private function buildMainSku()
     {
         return $this->product->getSku();
     }
+
     private function buildOrigin()
     {
-        return $this->attribute->getAttributeValueLabel(
+        return $this->attribute->getRawAttributeValue(
             'gubee_origin',
             $this->product
         ) ?: OriginEnum::NATIONAL();
     }
+
     private function buildStatus()
     {
         $status = StatusEnum::ACTIVE();
@@ -142,6 +191,7 @@ class Product
         }
         return $status;
     }
+
     private function buildType()
     {
         if ($this->product->getTypeId() == Configurable::TYPE_CODE) {
@@ -157,10 +207,12 @@ class Product
         }
         return TypeEnum::SIMPLE();
     }
+
     private function buildName()
     {
         return $this->product->getName();
     }
+
     private function buildNbm()
     {
         return $this->attribute->getAttributeValueLabel(
@@ -168,6 +220,7 @@ class Product
             $this->product
         );
     }
+
     private function buildCategories()
     {
         $categories = $this->product->getCategoryIds();
@@ -180,47 +233,70 @@ class Product
         $categories = [];
         foreach ($collection as $key => $category) {
             $categories[$key] = $this->getObjectManager()->create(
-                    \Gubee\SDK\Model\Catalog\Category::class,
+                Category::class,
                 [
                     'id' => $category->getId(),
-                    'name' => $category->getName()
+                    'name' => $category->getName(),
                 ]
             );
         }
 
         return $categories;
     }
+
     private function buildSpecifications()
     {
         $specs = [];
+        $attributes = $this->attributeCollection->getItems();
+        $attributeCodes = array_map(
+            function ($attribute) {
+                return $attribute->getAttributeCode();
+            },
+            $attributes
+        );
         foreach ($this->product->getAttributes() as $attribute) {
             if (!$attribute->getIsUserDefined()) {
                 continue;
             }
 
-            $value = $this->attribute->getRawAttributeValue(
-                $attribute->getAttributeCode(),
-                $this->product
+            if (!in_array($attribute->getAttributeCode(), $attributeCodes)) {
+                continue;
+            }
+
+            $value = $this->product->getData(
+                $attribute->getAttributeCode()
             );
             if (!$value) {
                 continue;
             }
-
             $specs[] = $this->objectManager->create(
-                    \Gubee\SDK\Model\Catalog\Product\Attribute\AttributeValue::class,
+                AttributeValue::class,
                 [
-                    'attribute' => $attribute->getAttributeCode()
+                    'attribute' => $attribute->getAttributeCode(),
+                    'values' => is_array($value) ? $value : [$value]
                 ]
             );
         }
 
         return $specs;
     }
+
     private function buildVariantAttributes()
     {
         $specs = [];
+        $attributes = $this->attributeCollection->getItems();
+        $attributeCodes = array_map(
+            function ($attribute) {
+                return $attribute->getAttributeCode();
+            },
+            $attributes
+        );
         foreach ($this->product->getAttributes() as $attribute) {
             if (!$attribute->getIsUserDefined()) {
+                continue;
+            }
+
+            if (!in_array($attribute->getAttributeCode(), $attributeCodes)) {
                 continue;
             }
 
@@ -239,33 +315,34 @@ class Product
                 )
             ) {
                 $specs[] = $this->objectManager->create(
-                        \Gubee\SDK\Model\Catalog\Product\Attribute\AttributeValue::class,
+                    AttributeValue::class,
                     [
-                        'attribute' => $attribute->getAttributeCode()
+                        'attribute' => $attribute->getAttributeCode(),
                     ]
                 );
             }
 
             $specs[] = $this->objectManager->create(
-                    \Gubee\SDK\Model\Catalog\Product\Attribute\AttributeValue::class,
+                AttributeValue::class,
                 [
-                    'attribute' => $attribute->getAttributeCode()
+                    'attribute' => $attribute->getAttributeCode(),
                 ]
             );
         }
 
         return $specs;
     }
+
     private function buildVariations()
     {
         if ($this->product->getTypeId() != Configurable::TYPE_CODE) {
             return [
                 $this->objectManager->create(
-                        \Gubee\Integration\Service\Model\Catalog\Product\Variation::class,
+                    Variation::class,
                     [
-                        'product' => $this->product
+                        'product' => $this->product,
                     ]
-                )
+                )->getVariation(),
             ];
         }
 
@@ -275,53 +352,27 @@ class Product
             ->getUsedProducts($this->product);
         foreach ($children as $child) {
             $variations[] = $this->objectManager->create(
-                    \Gubee\Integration\Service\Model\Catalog\Product\Variation::class,
+                Variation::class,
                 [
-                    'product' => $child
+                    'product' => $child,
+                    'parent' => $this->product,
                 ]
-            );
+            )->getVariation();
+
         }
+
 
         return $variations;
     }
 
 
-    public function load(string $id, string $field = 'externalId'): self
-    {
-        switch ($field) {
-            case 'externalId':
-                $this->gubeeProduct = $this->productResource->getByExternalId($id);
-                break;
-            case 'id':
-                $this->gubeeProduct = $this->productResource->getById($id);
-                break;
-            default:
-                throw new \InvalidArgumentException('Invalid field');
-        }
-
-        return $this;
-    }
-
-    public function save()
-    {
-        $this->productResource->save($this->gubeeProduct);
-    }
-
-    /**
-     * @return ObjectManagerInterface
-     */
     public function getObjectManager(): ObjectManagerInterface
     {
         return $this->objectManager;
     }
 
-
-    /**
-     * @return \Gubee\SDK\Model\Catalog\Product
-     */
     public function getGubeeProduct(): \Gubee\SDK\Model\Catalog\Product
     {
         return $this->gubeeProduct;
     }
-
 }

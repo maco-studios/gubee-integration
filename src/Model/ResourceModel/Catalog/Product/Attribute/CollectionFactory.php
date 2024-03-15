@@ -25,11 +25,12 @@ class CollectionFactory
         SearchCriteriaBuilder $searchCriteriaBuilder,
         FilterBuilder $filterBuilder,
         Config $config
-    ) {
-        $this->config                     = $config;
-        $this->filterBuilder              = $filterBuilder;
+    )
+    {
+        $this->config = $config;
+        $this->filterBuilder = $filterBuilder;
         $this->productAttributeRepository = $productAttributeRepository;
-        $this->searchCriteriaBuilder      = $searchCriteriaBuilder;
+        $this->searchCriteriaBuilder = $searchCriteriaBuilder;
         $this->searchCriteriaBuilder
             ->addFilter(
                 $this->filterBuilder->setField('attribute_code')
@@ -66,6 +67,15 @@ class CollectionFactory
                     ->setValue("1")
                     ->setConditionType('eq')
                     ->create()
+            )
+            ->addFilter(
+                $this->filterBuilder->setField('attribute_code')
+                    ->setValue(
+                        $this->config->getBlacklistAttribute()
+                    )
+                    ->setConditionType('nin')
+                    ->create()
+
             );
     }
 
@@ -91,7 +101,8 @@ class CollectionFactory
         $value,
         string $field,
         $conditionType = 'eq'
-    ): self {
+    ): self
+    {
         $this->searchCriteriaBuilder->addFilter(
             $this->filterBuilder->setField($field)
                 ->setValue($value)
