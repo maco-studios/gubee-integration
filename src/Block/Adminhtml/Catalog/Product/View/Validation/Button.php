@@ -91,6 +91,10 @@ class Button extends Container
      */
     public function getButtonData()
     {
+        $product = $this->_coreRegistry->registry('current_product');
+        if (! $product->getGubee()) {
+            return [];
+        }
         $problems = $this->validate() ?: [];
 
         return [

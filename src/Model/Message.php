@@ -12,12 +12,15 @@ use InvalidArgumentException;
 use Magento\Framework\Model\AbstractModel;
 
 use function __;
+use function is_string;
 use function is_subclass_of;
 use function json_decode;
 use function json_encode;
 use function json_last_error;
 
 use const JSON_ERROR_NONE;
+use const JSON_UNESCAPED_SLASHES;
+use const JSON_UNESCAPED_UNICODE;
 
 class Message extends AbstractModel implements MessageInterface
 {
@@ -41,14 +44,15 @@ class Message extends AbstractModel implements MessageInterface
         }
 
         if ($this->getData(self::PAYLOAD) !== null) {
-            parent::setData(
-                self::PAYLOAD,
-                ! $this->isJson(
-                    $this->getData(self::PAYLOAD)
-                ) ? json_encode(
-                    $this->getData(self::PAYLOAD)
-                ) : $this->getData(self::PAYLOAD)
-            );
+            $payload = $this->getData(self::PAYLOAD);
+            if (is_string($payload)) {
+                if (! $this->isJson($payload)) {
+                    $payload = json_decode($payload, true);
+                }
+            } else {
+                $payload = json_encode($payload, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES);
+            }
+            parent::setData(self::PAYLOAD, $payload);
         }
         return parent::beforeSave();
     }
@@ -135,10 +139,11 @@ class Message extends AbstractModel implements MessageInterface
      */
     public function getPayload(): array
     {
-        return $this->isJson($this->getData(self::PAYLOAD)) ? json_decode(
-            $this->getData(self::PAYLOAD),
-            true
-        ) : $this->getData(self::PAYLOAD);
+        $payload = $this->getData(self::PAYLOAD);
+        if (is_string($payload)) {
+            return $this->isJson($payload) ? json_decode($payload, true) : $payload;
+        }
+        return $payload;
     }
 
     /**
