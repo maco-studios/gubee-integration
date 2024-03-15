@@ -3,4 +3,19 @@
     <event name="model_save_after">
         <observer name="Gubee\Integration\Observer\Catalog\Product\Attribute\Save\After" instance="Gubee\Integration\Observer\Catalog\Product\Attribute\Save\After" />
     </event>
+    <event name="cataloginventory_stock_item_save_commit_after">
+        <observer name="Gubee\Integration\Observer\Catalog\Product\Stock\Item\Save\After" instance="Gubee\Integration\Observer\Catalog\Product\Stock\Item\Save\After" />
+    </event>
+    <event name="catalog_product_save_after">
+        <observer name="Gubee\Integration\Observer\Catalog\Product\Save\After" instance="Gubee\Integration\Observer\Catalog\Product\Save\After" />
+        <observer name="Gubee\Integration\Observer\Catalog\Product\Save\Desativate" instance="Gubee\Integration\Observer\Catalog\Product\Save\Desativate" />
+        <observer name="Gubee\Integration\Observer\Catalog\Product\Price\Save\After" instance="Gubee\Integration\Observer\Catalog\Product\Price\Save\After" />
+        <observer name="Gubee\Integration\Observer\Catalog\Product\Stock\Item\Save\After" instance="Gubee\Integration\Observer\Catalog\Product\Stock\Item\Save\After" />
+    </event>
+    <event name="catalog_product_delete_after_done">
+        <observer name="Gubee\Integration\Observer\Catalog\Product\Delete\After" instance="Gubee\Integration\Observer\Catalog\Product\Delete\After" />
+    </event>
+    <event name="catalog_category_save_after">
+        <observer name="Gubee\Integration\Observer\Catalog\Category\Save\After" instance="Gubee\Integration\Observer\Catalog\Category\Save\After" />
+    </event>
 </config>
