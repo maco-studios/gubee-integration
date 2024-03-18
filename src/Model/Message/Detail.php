@@ -1,16 +1,24 @@
 <?php
 
-
 declare(strict_types=1);
 
 namespace Gubee\Integration\Model\Message;
 
+use DateTimeInterface;
 use Gubee\Integration\Api\Data\Message\DetailInterface;
 use Magento\Framework\Model\AbstractModel;
 
+use function is_string;
+use function json_decode;
+use function json_encode;
+use function json_last_error;
+
+use const JSON_ERROR_NONE;
+use const JSON_UNESCAPED_SLASHES;
+use const JSON_UNESCAPED_UNICODE;
+
 class Detail extends AbstractModel implements DetailInterface
 {
-
     /**
      * @inheritDoc
      */
@@ -24,7 +32,7 @@ class Detail extends AbstractModel implements DetailInterface
         if ($this->getData(self::CONTEXT) !== null) {
             $context = $this->getData(self::CONTEXT);
             if (is_string($context)) {
-                if (!$this->isJson($context)) {
+                if (! $this->isJson($context)) {
                     $context = json_decode($context, true);
                 }
             } else {
@@ -49,7 +57,6 @@ class Detail extends AbstractModel implements DetailInterface
      * Set the detail ID.
      *
      * @param int $detailId The detail ID.
-     * @return self
      */
     public function setDetailId($detailId): self
     {
@@ -70,7 +77,6 @@ class Detail extends AbstractModel implements DetailInterface
      * Set the level.
      *
      * @param int $level The level.
-     * @return self
      */
     public function setLevel(int $level): self
     {
@@ -91,7 +97,6 @@ class Detail extends AbstractModel implements DetailInterface
      * Set the message ID.
      *
      * @param int $messageId The message ID.
-     * @return self
      */
     public function setMessageId(int $messageId): self
     {
@@ -112,7 +117,6 @@ class Detail extends AbstractModel implements DetailInterface
      * Set the message.
      *
      * @param string $message The message.
-     * @return self
      */
     public function setMessage(string $message): self
     {
@@ -137,7 +141,6 @@ class Detail extends AbstractModel implements DetailInterface
      * Set the context.
      *
      * @param array<int|string, mixed> $context The context.
-     * @return self
      */
     public function setContext(array $context): self
     {
@@ -147,9 +150,9 @@ class Detail extends AbstractModel implements DetailInterface
     /**
      * Get the creation date and time.
      *
-     * @return \DateTimeInterface The creation date and time.
+     * @return DateTimeInterface The creation date and time.
      */
-    public function getCreatedAt(): \DateTimeInterface
+    public function getCreatedAt(): DateTimeInterface
     {
         return $this->getData(self::CREATED_AT);
     }
@@ -157,10 +160,9 @@ class Detail extends AbstractModel implements DetailInterface
     /**
      * Set the creation date and time.
      *
-     * @param \DateTimeInterface $createdAt The creation date and time.
-     * @return self
+     * @param DateTimeInterface $createdAt The creation date and time.
      */
-    public function setCreatedAt(\DateTimeInterface $createdAt): self
+    public function setCreatedAt(DateTimeInterface $createdAt): self
     {
         return $this->setData(self::CREATED_AT, $createdAt);
     }
@@ -170,6 +172,4 @@ class Detail extends AbstractModel implements DetailInterface
         json_decode($content);
         return json_last_error() === JSON_ERROR_NONE;
     }
-
-
 }

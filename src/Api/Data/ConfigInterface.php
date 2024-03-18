@@ -165,7 +165,7 @@ interface ConfigInterface
 
     /**
      * Path to 'queue_page_size' system config.
-     * 
+     *
      * @var string
      */
     public const CONFIG_PATH_QUEUE_PAGE_SIZE = 'gubee/general/queue_page_size';
@@ -418,8 +418,6 @@ interface ConfigInterface
 
     /**
      * Get the 'queue_page_size' system config.
-     * 
-     * @return int
      */
     public function getQueuePageSize(): int;
 }

@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Gubee\Integration\Command\Catalog\Product;
 
+use Exception;
 use Gubee\Integration\Command\AbstractCommand;
 use Gubee\Integration\Service\Model\Catalog\Product;
 use Magento\Catalog\Api\ProductRepositoryInterface;
@@ -43,7 +44,7 @@ class SendCommand extends AbstractCommand
 
     protected function doExecute(): int
     {
-        $product = $this->productRepository->get($this->input->getArgument('sku'));
+        $mageProduct = $this->productRepository->get($this->input->getArgument('sku'));
         if (! $product->getId()) {
             $this->log->error(
                 sprintf(
@@ -60,17 +61,28 @@ class SendCommand extends AbstractCommand
         $product = $this->objectManager->create(
             Product::class,
             [
-                'product' => $product,
+                'product' => $mageProduct,
             ]
         );
-
-        $this->eventDispatcher->dispatch(
-            'gubee_catalog_product_send',
-            [
-                'product' => $product,
-            ]
-        );
-        $product->save();
+        try {
+            $product->save();
+            $mageProduct->setData(
+                'gubee_integration_status',
+                1
+            );
+            $this->productRepository->save($mageProduct);
+        } catch (Exception $e) {
+            $this->log->error(
+                sprintf(
+                    "<error>%s</error>",
+                    __(
+                        "An error occurred while sending the product with the SKU '%1'",
+                        $this->input->getArgument('sku')
+                    )->__toString()
+                )
+            );
+            return 1;
+        }
         return 0;
     }
 }

@@ -1,6 +1,5 @@
 <?php
 
-
 declare(strict_types=1);
 
 namespace Gubee\Integration\Model\ResourceModel\Message;
@@ -10,7 +9,6 @@ use Magento\Framework\Model\ResourceModel\Db\AbstractDb;
 
 class Detail extends AbstractDb
 {
-
     /**
      * @inheritDoc
      */

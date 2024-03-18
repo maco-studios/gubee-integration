@@ -15,6 +15,7 @@ interface MessageInterface
     public const STATUS     = 'status';
     public const PAYLOAD    = 'payload';
     public const ATTEMPTS   = 'attempts';
+    public const PRODUCT_ID = 'product_id';
     public const MESSAGE    = 'message';
     public const CREATED_AT = 'created_at';
     public const UPDATED_AT = 'updated_at';
@@ -81,6 +82,20 @@ interface MessageInterface
      * @return int The number of attempts.
      */
     public function getAttempts(): int;
+
+    /**
+     * Set the product ID.
+     *
+     * @param int $productId The product ID.
+     */
+    public function setProductId(int $productId): self;
+
+    /**
+     * Get the product ID.
+     *
+     * @return int The product ID.
+     */
+    public function getProductId(): ?int;
 
     /**
      * Set the number of attempts.

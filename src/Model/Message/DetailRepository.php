@@ -1,10 +1,10 @@
 <?php
 
-
 declare(strict_types=1);
 
 namespace Gubee\Integration\Model\Message;
 
+use Exception;
 use Gubee\Integration\Api\Data\Message\DetailInterface;
 use Gubee\Integration\Api\Data\Message\DetailInterfaceFactory;
 use Gubee\Integration\Api\Data\Message\DetailSearchResultsInterfaceFactory;
@@ -12,59 +12,42 @@ use Gubee\Integration\Api\Message\DetailRepositoryInterface;
 use Gubee\Integration\Model\ResourceModel\Message\Detail as ResourceDetail;
 use Gubee\Integration\Model\ResourceModel\Message\Detail\CollectionFactory as DetailCollectionFactory;
 use Magento\Framework\Api\SearchCriteria\CollectionProcessorInterface;
+use Magento\Framework\Api\SearchCriteriaInterface;
 use Magento\Framework\Exception\CouldNotDeleteException;
 use Magento\Framework\Exception\CouldNotSaveException;
 use Magento\Framework\Exception\NoSuchEntityException;
 
+use function __;
+
 class DetailRepository implements DetailRepositoryInterface
 {
-
-    /**
-     * @var ResourceDetail
-     */
+    /** @var ResourceDetail */
     protected $resource;
 
-    /**
-     * @var DetailInterfaceFactory
-     */
+    /** @var DetailInterfaceFactory */
     protected $detailFactory;
 
-    /**
-     * @var DetailCollectionFactory
-     */
+    /** @var DetailCollectionFactory */
     protected $detailCollectionFactory;
 
-    /**
-     * @var Detail
-     */
+    /** @var Detail */
     protected $searchResultsFactory;
 
-    /**
-     * @var CollectionProcessorInterface
-     */
+    /** @var CollectionProcessorInterface */
     protected $collectionProcessor;
 
-
-    /**
-     * @param ResourceDetail $resource
-     * @param DetailInterfaceFactory $detailFactory
-     * @param DetailCollectionFactory $detailCollectionFactory
-     * @param DetailSearchResultsInterfaceFactory $searchResultsFactory
-     * @param CollectionProcessorInterface $collectionProcessor
-     */
     public function __construct(
         ResourceDetail $resource,
         DetailInterfaceFactory $detailFactory,
         DetailCollectionFactory $detailCollectionFactory,
         DetailSearchResultsInterfaceFactory $searchResultsFactory,
         CollectionProcessorInterface $collectionProcessor
-    )
-    {
-        $this->resource = $resource;
-        $this->detailFactory = $detailFactory;
+    ) {
+        $this->resource                = $resource;
+        $this->detailFactory           = $detailFactory;
         $this->detailCollectionFactory = $detailCollectionFactory;
-        $this->searchResultsFactory = $searchResultsFactory;
-        $this->collectionProcessor = $collectionProcessor;
+        $this->searchResultsFactory    = $searchResultsFactory;
+        $this->collectionProcessor     = $collectionProcessor;
     }
 
     /**
@@ -74,7 +57,7 @@ class DetailRepository implements DetailRepositoryInterface
     {
         try {
             $this->resource->save($detail);
-        } catch (\Exception $exception) {
+        } catch (Exception $exception) {
             throw new CouldNotSaveException(
                 __(
                     'Could not save the detail: %1',
@@ -92,7 +75,7 @@ class DetailRepository implements DetailRepositoryInterface
     {
         $detail = $this->detailFactory->create();
         $this->resource->load($detail, $detailId);
-        if (!$detail->getId()) {
+        if (! $detail->getId()) {
             throw new NoSuchEntityException(__('Detail with id "%1" does not exist.', $detailId));
         }
         return $detail;
@@ -102,9 +85,8 @@ class DetailRepository implements DetailRepositoryInterface
      * @inheritDoc
      */
     public function getList(
-        \Magento\Framework\Api\SearchCriteriaInterface $criteria
-    )
-    {
+        SearchCriteriaInterface $criteria
+    ) {
         $collection = $this->detailCollectionFactory->create();
 
         $this->collectionProcessor->process($criteria, $collection);
@@ -131,7 +113,7 @@ class DetailRepository implements DetailRepositoryInterface
             $detailModel = $this->detailFactory->create();
             $this->resource->load($detailModel, $detail->getDetailId());
             $this->resource->delete($detailModel);
-        } catch (\Exception $exception) {
+        } catch (Exception $exception) {
             throw new CouldNotDeleteException(
                 __(
                     'Could not delete the Detail: %1',

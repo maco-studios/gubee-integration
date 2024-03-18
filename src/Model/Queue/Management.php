@@ -8,25 +8,38 @@ use Gubee\Integration\Api\Data\MessageInterface;
 use Gubee\Integration\Api\Data\MessageInterfaceFactory;
 use Gubee\Integration\Api\Enum\Message\StatusEnum;
 use Gubee\Integration\Api\MessageRepositoryInterface;
+use Gubee\Integration\Api\Queue\ManagementInterface;
+use Gubee\Integration\Helper\Catalog\Attribute;
 use Gubee\Integration\Model\ResourceModel\Message\CollectionFactory as MessageCollectionFactory;
+use InvalidArgumentException;
+use Magento\Catalog\Api\ProductRepositoryInterface;
+use Magento\Framework\Exception\NoSuchEntityException;
 use Psr\Log\LoggerInterface;
 use Throwable;
 
+use function __;
 use function json_encode;
+use function sprintf;
 
-class Management
+class Management implements ManagementInterface
 {
     protected LoggerInterface $logger;
     protected MessageCollectionFactory $messageCollectionFactory; /* @phpstan-ignore-line */
     protected MessageInterfaceFactory $messageFactory; /* @phpstan-ignore-line */
     protected MessageRepositoryInterface $messageRepository;
+    protected ProductRepositoryInterface $productRepository;
+    protected Attribute $attribute;
 
     public function __construct(
         LoggerInterface $logger,
         MessageCollectionFactory $messageCollectionFactory, /* @phpstan-ignore-line */
         MessageInterfaceFactory $messageFactory, /* @phpstan-ignore-line */
-        MessageRepositoryInterface $messageRepository
+        MessageRepositoryInterface $messageRepository,
+        ProductRepositoryInterface $productRepository,
+        Attribute $attribute
     ) {
+        $this->attribute                = $attribute;
+        $this->productRepository        = $productRepository;
         $this->logger                   = $logger;
         $this->messageCollectionFactory = $messageCollectionFactory;
         $this->messageFactory           = $messageFactory;
@@ -38,13 +51,39 @@ class Management
      *
      * @param array<int|string, mixed> $params
      */
-    public function append(string $command, array $params = []): self
+    public function append(string $command, array $params = [], ?int $productId = null): self
     {
         try {
+            if ($command !== SendCommand::class) {
+                if ($productId) {
+                    $product = $this->productRepository->getById($productId);
+                    if (! $product->getId()) {
+                        throw new NoSuchEntityException(
+                            __(
+                                "Product with ID '%s' not found",
+                                $productId
+                            )
+                        );
+                    }
+
+                    if ($this->attribute->getRawAttributeValue('gubee_integration_status', $product) === 0) {
+                        throw new InvalidArgumentException(
+                            sprintf(
+                                "Product with ID '%s' is not integrated with Gubee yet",
+                                $productId
+                            )
+                        );
+                    }
+                }
+            }
             /* @phpstan-ignore-next-line */
             $message = $this->messageFactory->create();
             $message->setCommand($command);
             $message->setPayload($params);
+
+            if ($productId) {
+                $message->setProductId($productId);
+            }
 
             if (! $this->alreadyQueued($message)) {
                 $this->messageRepository->save($message);

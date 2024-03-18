@@ -37,6 +37,8 @@ class Process
         $output  = $this->objectManager->create(BufferedOutput::class);
         $command = $this->objectManager->create(ConsumeCommand::class);
         $command->run($input, $output);
+        $command = $this->objectManager->create(QueueConsumerCommand::class);
+        $command->run($input, $output);
         $this->logger->info("Queue processed");
         return 0;
     }

@@ -29,7 +29,8 @@ class Before extends AbstractObserver
             $product = $this->productRepository->getById($productId);
             $this->queueManagement->append(
                 SendCommand::class,
-                ['sku' => $product->getSku()]
+                ['sku' => $product->getSku()],
+                $product->getId()
             );
         }
     }

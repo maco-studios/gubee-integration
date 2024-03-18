@@ -7,11 +7,14 @@ namespace Gubee\Integration\Model;
 use DateTimeInterface;
 use Gubee\Integration\Api\Data\MessageInterface;
 use Gubee\Integration\Api\Enum\Message\StatusEnum;
-use Gubee\Integration\Api\Message\DetailRepositoryInterface;
 use Gubee\Integration\Command\AbstractCommand;
 use Gubee\Integration\Model\ResourceModel\Message\Detail\CollectionFactory;
 use InvalidArgumentException;
+use Magento\Framework\Data\Collection\AbstractDb;
 use Magento\Framework\Model\AbstractModel;
+use Magento\Framework\Model\Context;
+use Magento\Framework\Model\ResourceModel\AbstractResource;
+use Magento\Framework\Registry;
 
 use function __;
 use function is_string;
@@ -29,14 +32,13 @@ class Message extends AbstractModel implements MessageInterface
     protected CollectionFactory $detailCollectionFactory;
 
     public function __construct(
-        \Magento\Framework\Model\Context $context,
-        \Magento\Framework\Registry $registry,
-        \Gubee\Integration\Model\ResourceModel\Message\Detail\CollectionFactory $detailCollectionFactory,
-        \Magento\Framework\Model\ResourceModel\AbstractResource $resource = null,
-        \Magento\Framework\Data\Collection\AbstractDb $resourceCollection = null,
+        Context $context,
+        Registry $registry,
+        CollectionFactory $detailCollectionFactory,
+        ?AbstractResource $resource = null,
+        ?AbstractDb $resourceCollection = null,
         array $data = []
-    )
-    {
+    ) {
         parent::__construct($context, $registry, $resource, $resourceCollection, $data);
         $this->detailCollectionFactory = $detailCollectionFactory;
     }
@@ -63,7 +65,7 @@ class Message extends AbstractModel implements MessageInterface
         if ($this->getData(self::PAYLOAD) !== null) {
             $payload = $this->getData(self::PAYLOAD);
             if (is_string($payload)) {
-                if (!$this->isJson($payload)) {
+                if (! $this->isJson($payload)) {
                     $payload = json_decode($payload, true);
                 }
             } else {
@@ -117,12 +119,12 @@ class Message extends AbstractModel implements MessageInterface
      */
     public function setCommand(string $command): self
     {
-        if (!is_subclass_of($command, AbstractCommand::class)) {
+        if (! is_subclass_of($command, AbstractCommand::class)) {
             throw new InvalidArgumentException(
-                    __(
-                        "The command must be an instance of '%1'.",
-                        AbstractCommand::class
-                    )->__toString()
+                __(
+                    "The command must be an instance of '%1'.",
+                    AbstractCommand::class
+                )->__toString()
             );
         }
 
@@ -141,9 +143,8 @@ class Message extends AbstractModel implements MessageInterface
 
     /**
      * Set the product ID.
-     * 
+     *
      * @param int $productId The product ID.
-     * @return self
      */
     public function setProductId(int $productId): self
     {
@@ -152,7 +153,7 @@ class Message extends AbstractModel implements MessageInterface
 
     /**
      * Get the product ID.
-     * 
+     *
      * @return int|null The product ID.
      */
     public function getProductId(): ?int

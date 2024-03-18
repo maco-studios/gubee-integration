@@ -7,21 +7,26 @@ namespace Gubee\Integration\Model\Message;
 use Gubee\Integration\Api\Data\MessageInterface;
 use Gubee\Integration\Api\Enum\Message\StatusEnum;
 use Gubee\Integration\Api\Message\ManagementInterface;
-use Gubee\Integration\Command\Catalog\Product\SendCommand;
-use Magento\Catalog\Api\ProductRepositoryInterface;
-use Gubee\Integration\Helper\Catalog\Attribute;
 use Gubee\Integration\Api\MessageRepositoryInterface;
+use Gubee\Integration\Command\Catalog\Product\SendCommand;
+use Gubee\Integration\Helper\Catalog\Attribute;
+use Gubee\Integration\Model\Config;
 use Gubee\SDK\Library\HttpClient\Exception\ErrorException;
+use InvalidArgumentException;
+use Magento\Catalog\Api\ProductRepositoryInterface;
 use Magento\Framework\Api\SearchCriteriaBuilder;
-use Magento\Framework\Exception\NoSuchEntityException;
-use Magento\Framework\Registry;
 use Magento\Framework\App\Config\ScopeConfigInterface;
+use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\Filesystem\Driver\File as FileDriver;
 use Magento\Framework\ObjectManagerInterface;
+use Magento\Framework\Registry;
 use Magento\Framework\Stdlib\DateTime\DateTime;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\Console\Input\ArrayInput;
 use Symfony\Component\Console\Output\BufferedOutput;
+
+use function __;
+use function sprintf;
 
 class Management implements ManagementInterface
 {
@@ -35,12 +40,12 @@ class Management implements ManagementInterface
     protected Registry $registry;
     protected Attribute $attribute;
     protected ProductRepositoryInterface $productRepository;
-    protected \Gubee\Integration\Model\Config $config;
+    protected Config $config;
 
     public function __construct(
         DateTime $date,
         LoggerInterface $logger,
-        \Gubee\Integration\Model\Config $config,
+        Config $config,
         ProductRepositoryInterface $productRepository,
         MessageRepositoryInterface $messageRepository,
         ObjectManagerInterface $objectManager,
@@ -48,18 +53,17 @@ class Management implements ManagementInterface
         SearchCriteriaBuilder $searchCriteriaBuilder,
         Registry $registry,
         Attribute $attribute
-    )
-    {
-        $this->config = $config;
-        $this->productRepository = $productRepository;
-        $this->attribute = $attribute;
-        $this->date = $date;
-        $this->logger = $logger;
-        $this->messageRepository = $messageRepository;
-        $this->objectManager = $objectManager;
-        $this->scopeConfig = $scopeConfig;
+    ) {
+        $this->config                = $config;
+        $this->productRepository     = $productRepository;
+        $this->attribute             = $attribute;
+        $this->date                  = $date;
+        $this->logger                = $logger;
+        $this->messageRepository     = $messageRepository;
+        $this->objectManager         = $objectManager;
+        $this->scopeConfig           = $scopeConfig;
         $this->searchCriteriaBuilder = $searchCriteriaBuilder;
-        $this->registry = $registry;
+        $this->registry              = $registry;
     }
 
     public function process(MessageInterface $message): void
@@ -81,7 +85,7 @@ class Management implements ManagementInterface
             if ($message->getCommand() !== SendCommand::class) {
                 if ($message->getProductId()) {
                     $product = $this->productRepository->getById($message->getProductId());
-                    if (!$product->getId()) {
+                    if (! $product->getId()) {
                         throw new NoSuchEntityException(
                             __(
                                 "Product with ID '%s' not found",
@@ -91,7 +95,7 @@ class Management implements ManagementInterface
                     }
 
                     if ($this->attribute->getRawAttributeValue('gubee_integration_status', $product) === 0) {
-                        throw new \InvalidArgumentException(
+                        throw new InvalidArgumentException(
                             sprintf(
                                 "Product with ID '%s' is not integrated with Gubee yet",
                                 $message->getProductId()
@@ -133,7 +137,7 @@ class Management implements ManagementInterface
             $message->setMessage(
                 (string) $result
             );
-        } catch (\InvalidArgumentException $e) {
+        } catch (InvalidArgumentException $e) {
             $this->logger->warning(
                 $e->getMessage()
             );
@@ -175,13 +179,13 @@ class Management implements ManagementInterface
         $command = $this->objectManager->create(
             $message->getCommand()
         );
-        $input = $this->objectManager->create(
+        $input   = $this->objectManager->create(
             ArrayInput::class,
             [
                 'parameters' => $message->getPayload(),
             ]
         );
-        $output = $this->objectManager->create(
+        $output  = $this->objectManager->create(
             BufferedOutput::class
         );
         $command->run($input, $output);
@@ -217,7 +221,7 @@ class Management implements ManagementInterface
     public function getToBeRetried(): array
     {
         $retryAmount = $this->scopeConfig->getValue('queue/general/auto_retry_amount');
-        if (!$retryAmount) {
+        if (! $retryAmount) {
             return [];
         }
 

@@ -24,8 +24,6 @@ class CatalogProductAttribute extends AbstractMigration
         'gubee'                         => [
             'type'                    => 'int',
             'label'                   => 'Send product to Gubee',
-            'user_defined'            => false,
-            'is_visible'              => 0,
             'input'                   => 'boolean',
             'source'                  => Boolean::class,
             'used_in_product_listing' => true,
@@ -106,6 +104,15 @@ class CatalogProductAttribute extends AbstractMigration
             'default' => 'DAYS',
             'note'    => 'Time to prepare the product to be shipped after the'
             . ' order is placed, if none is set days will be used by default.',
+        ],
+        'gubee_integration_status'      => [
+            'type'         => 'int',
+            'label'        => 'Integration Status',
+            'user_defined' => false,
+            'visible'      => false,
+            'input'        => 'select',
+            'default'      => 0,
+            'note'         => 'Status of the product integration with Gubee.',
         ],
     ];
 

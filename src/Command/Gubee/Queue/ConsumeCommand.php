@@ -31,7 +31,6 @@ class ConsumeCommand extends AbstractCommand
     {
         $this->logger->info("Processing queue");
         foreach ($this->queueManagement->getPending()->getItems() as $message) {
-            echo "Processing message {$message->getId()}\n";
             $this->queueManagement->process($message);
         }
 

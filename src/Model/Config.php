@@ -38,13 +38,12 @@ class Config extends AbstractHelper implements ConfigInterface
         ReinitableConfigInterface $reinitableConfig,
         ObjectManagerInterface $objectManager,
         LoggerInterface $logger
-    )
-    {
+    ) {
         parent::__construct($context);
         $this->reinitableConfig = $reinitableConfig;
-        $this->objectManager = $objectManager;
-        $this->configWriter = $configWriter;
-        $this->logger = $logger;
+        $this->objectManager    = $objectManager;
+        $this->configWriter     = $configWriter;
+        $this->logger           = $logger;
     }
 
     /**
@@ -96,20 +95,20 @@ class Config extends AbstractHelper implements ConfigInterface
      */
     public function getApiToken(): string
     {
-        if (!$this->getApiKey()) {
+        if (! $this->getApiKey()) {
             throw new LogicException(
                 __("The API Key is not set")->__toString()
             );
         }
-        if (!$this->isTokenValid()) {
+        if (! $this->isTokenValid()) {
             $this->getLogger()->debug(
-                    __("The API Token is not valid. Renewing it.")
+                __("The API Token is not valid. Renewing it.")
                     ->__toString()
             );
             $command = $this->objectManager->create(
                 RenewCommand::class
             );
-            $input = $this->objectManager->create(
+            $input   = $this->objectManager->create(
                 ArrayInput::class,
                 [
                     'parameters' => [
@@ -117,7 +116,7 @@ class Config extends AbstractHelper implements ConfigInterface
                     ],
                 ]
             );
-            $output = $this->objectManager->create(
+            $output  = $this->objectManager->create(
                 BufferedOutput::class
             );
             $command->run($input, $output);
@@ -131,7 +130,7 @@ class Config extends AbstractHelper implements ConfigInterface
     protected function isTokenValid(): bool
     {
         $tokenTimeout = $this->getApiTimeout();
-        if (!$tokenTimeout) {
+        if (! $tokenTimeout) {
             return false;
         }
 
@@ -154,7 +153,7 @@ class Config extends AbstractHelper implements ConfigInterface
      */
     public function getApiTimeout(): ?DateTimeInterface
     {
-        if (!$value = $this->scopeConfig->getValue(ConfigInterface::CONFIG_PATH_API_TIMEOUT)) {
+        if (! $value = $this->scopeConfig->getValue(ConfigInterface::CONFIG_PATH_API_TIMEOUT)) {
             return null;
         }
         return DateTime::createFromFormat(

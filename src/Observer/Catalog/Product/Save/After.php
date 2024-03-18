@@ -15,7 +15,8 @@ class After extends AbstractProduct
             SendCommand::class,
             [
                 'sku' => $this->getProduct()->getSku(),
-            ]
+            ],
+            (int) $this->getProduct()->getId()
         );
     }
 }

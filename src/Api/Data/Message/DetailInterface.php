@@ -1,6 +1,5 @@
 <?php
 
-
 declare(strict_types=1);
 
 namespace Gubee\Integration\Api\Data\Message;
@@ -9,12 +8,12 @@ use DateTimeInterface;
 
 interface DetailInterface
 {
-    public const TABLE = 'gubee_integration_queue_message_detail';
-    public const DETAIL_ID = 'detail_id';
-    public const LEVEL = 'level';
+    public const TABLE      = 'gubee_integration_queue_message_detail';
+    public const DETAIL_ID  = 'detail_id';
+    public const LEVEL      = 'level';
     public const MESSAGE_ID = 'message_id';
-    public const MESSAGE = 'message';
-    public const CONTEXT = 'context';
+    public const MESSAGE    = 'message';
+    public const CONTEXT    = 'context';
     public const CREATED_AT = 'created_at';
 
     /**
@@ -28,7 +27,6 @@ interface DetailInterface
      * Set the detail ID.
      *
      * @param int $detailId The detail ID.
-     * @return self
      */
     public function setDetailId($detailId): self;
 
@@ -43,7 +41,6 @@ interface DetailInterface
      * Set the level.
      *
      * @param int $level The level.
-     * @return self
      */
     public function setLevel(int $level): self;
 
@@ -58,7 +55,6 @@ interface DetailInterface
      * Set the message ID.
      *
      * @param int $messageId The message ID.
-     * @return self
      */
     public function setMessageId(int $messageId): self;
 
@@ -73,7 +69,6 @@ interface DetailInterface
      * Set the message.
      *
      * @param string $message The message.
-     * @return self
      */
     public function setMessage(string $message): self;
 
@@ -88,7 +83,6 @@ interface DetailInterface
      * Set the context.
      *
      * @param array $context The context.
-     * @return self
      */
     public function setContext(array $context): self;
 
@@ -103,9 +97,6 @@ interface DetailInterface
      * Set the creation date and time.
      *
      * @param DateTimeInterface $createdAt The creation date and time.
-     * @return self
      */
     public function setCreatedAt(DateTimeInterface $createdAt): self;
-
-
 }
