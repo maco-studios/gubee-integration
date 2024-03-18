@@ -27,7 +27,17 @@
         <field id="api_timeout" type="text" sortOrder="10" showInWebsite="1" showInStore="1" showInDefault="1" translate="label">
             <label>API Timeout</label>
             <frontend_model>Gubee\Integration\Block\Adminhtml\System\Config\Form\Field\Disabled</frontend_model>
-            <comment>|                                                <![CDATA[API Timeout indicate the valid time of the token.]]></comment>
+            <comment>|                                                                                                <![CDATA[API Timeout indicate the valid time of the token.]]></comment>
+            <depends>
+                <field id="active">1</field>
+            </depends>
+        </field>
+        <field id="queue_page_size" type="text" sortOrder="10" showInWebsite="1" showInStore="1" showInDefault="1" translate="label">
+            <label>Queue Page Size</label>
+            <validate>required-entry validate-digits</validate>
+            <comment>
+                <![CDATA[Queue Page Size is the number of records that will be processed in each queue process, by <b>default it is 100.</b>]]>
+            </comment>
             <depends>
                 <field id="active">1</field>
             </depends>

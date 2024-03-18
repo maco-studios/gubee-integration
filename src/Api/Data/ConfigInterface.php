@@ -164,6 +164,13 @@ interface ConfigInterface
     public const CONFIG_PATH_BLACKLIST = "gubee/attributes/blacklist";
 
     /**
+     * Path to 'queue_page_size' system config.
+     * 
+     * @var string
+     */
+    public const CONFIG_PATH_QUEUE_PAGE_SIZE = 'gubee/general/queue_page_size';
+
+    /**
      * Set the 'active' system config.
      */
     public function setActive(bool $active): self;
@@ -408,4 +415,11 @@ interface ConfigInterface
      * @return array<string, mixed>
      */
     public function getBlacklistAttribute(): array;
+
+    /**
+     * Get the 'queue_page_size' system config.
+     * 
+     * @return int
+     */
+    public function getQueuePageSize(): int;
 }

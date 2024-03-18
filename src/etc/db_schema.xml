@@ -8,10 +8,44 @@
         <column name="priority" xsi:type="int" padding="10" unsigned="true" nullable="false" comment="Priority" default="0"/>
         <column name="attempts" xsi:type="int" padding="10" unsigned="true" nullable="false" comment="Attempts" default="0"/>
         <column name="message" xsi:type="text" nullable="true" comment="Message"/>
+        <column name="product_id" xsi:type="int" padding="10" unsigned="true" nullable="true" comment="Product ID"/>
         <column name="created_at" xsi:type="timestamp" nullable="false" default="CURRENT_TIMESTAMP" comment="Created At"/>
         <column name="updated_at" xsi:type="timestamp" nullable="false" default="CURRENT_TIMESTAMP" on_update="true" comment="Updated At"/>
         <constraint xsi:type="primary" referenceId="PRIMARY">
             <column name="message_id"/>
+        </constraint>
+        <index referenceId="GUBEE_INTEGRATION_QUEUE_MESSAGE_COMMAND" indexType="btree">
+            <column name="command"/>
+        </index>
+        <index referenceId="GUBEE_INTEGRATION_QUEUE_MESSAGE_STATUS" indexType="btree">
+            <column name="status"/>
+        </index>
+        <index referenceId="GUBEE_INTEGRATION_QUEUE_MESSAGE_PRIORITY" indexType="btree">
+            <column name="priority"/>
+        </index>
+        <index referenceId="GUBEE_INTEGRATION_QUEUE_MESSAGE_PRODUCT_ID" indexType="btree">
+            <column name="product_id"/>
+        </index>
+        <constraint xsi:type="foreign" referenceId="GUBEE_INTEGRATION_QUEUE_MESSAGE_PRODUCT_ID_CATALOG_PRODUCT_ENTITY_ENTITY_ID" table="gubee_integration_queue_message" column="product_id" referenceTable="catalog_product_entity" referenceColumn="entity_id" onDelete="SET NULL"/>
+    </table>
+
+    <table name="gubee_integration_queue_message_detail">
+        <column name="detail_id" xsi:type="int" padding="10" unsigned="true" nullable="false" identity="true" comment="ID"/>
+        <column name="level" xsi:type="int" padding="10" unsigned="true" nullable="false" comment="Level" default="0"/>
+        <column name="message_id" xsi:type="int" padding="10" unsigned="true" nullable="true" comment="Message ID"/>
+        <column name="message" xsi:type="text" nullable="true" comment="Message"/>
+        <column name="context" xsi:type="text" nullable="true" comment="Context"/>
+        <column name="created_at" xsi:type="timestamp" nullable="false" default="CURRENT_TIMESTAMP" comment="Created At"/>
+        <constraint xsi:type="foreign" referenceId="GUBEE_INTEGRATION_QUEUE_MESSAGE_DETAIL_MESSAGE_ID_GUBEE_INTEGRATION_QUEUE_MESSAGE_MESSAGE_ID" table="gubee_integration_queue_message_detail" column="message_id" referenceTable="gubee_integration_queue_message" referenceColumn="message_id" onDelete="SET NULL"/>
+        <index referenceId="GUBEE_INTEGRATION_QUEUE_MESSAGE_DETAIL_MESSAGE_ID" indexType="btree">
+            <column name="message_id"/>
+        </index>
+        <index referenceId="GUBEE_INTEGRATION_QUEUE_MESSAGE_DETAIL_LEVEL" indexType="btree">
+            <column name="level"/>
+        </index>
+        <!-- primary key -->
+        <constraint xsi:type="primary" referenceId="PRIMARY">
+            <column name="detail_id"/>
         </constraint>
     </table>
 

@@ -7,8 +7,14 @@ namespace Gubee\Integration\Model\Message;
 use Gubee\Integration\Api\Data\MessageInterface;
 use Gubee\Integration\Api\Enum\Message\StatusEnum;
 use Gubee\Integration\Api\Message\ManagementInterface;
+use Gubee\Integration\Command\Catalog\Product\SendCommand;
+use Magento\Catalog\Api\ProductRepositoryInterface;
+use Gubee\Integration\Helper\Catalog\Attribute;
 use Gubee\Integration\Api\MessageRepositoryInterface;
+use Gubee\SDK\Library\HttpClient\Exception\ErrorException;
 use Magento\Framework\Api\SearchCriteriaBuilder;
+use Magento\Framework\Exception\NoSuchEntityException;
+use Magento\Framework\Registry;
 use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\Filesystem\Driver\File as FileDriver;
 use Magento\Framework\ObjectManagerInterface;
@@ -26,73 +32,142 @@ class Management implements ManagementInterface
     protected ObjectManagerInterface $objectManager;
     protected ScopeConfigInterface $scopeConfig;
     protected SearchCriteriaBuilder $searchCriteriaBuilder;
+    protected Registry $registry;
+    protected Attribute $attribute;
+    protected ProductRepositoryInterface $productRepository;
+    protected \Gubee\Integration\Model\Config $config;
 
     public function __construct(
         DateTime $date,
         LoggerInterface $logger,
+        \Gubee\Integration\Model\Config $config,
+        ProductRepositoryInterface $productRepository,
         MessageRepositoryInterface $messageRepository,
         ObjectManagerInterface $objectManager,
         ScopeConfigInterface $scopeConfig,
-        SearchCriteriaBuilder $searchCriteriaBuilder
-    ) {
-        $this->date                  = $date;
-        $this->logger                = $logger;
-        $this->messageRepository     = $messageRepository;
-        $this->objectManager         = $objectManager;
-        $this->scopeConfig           = $scopeConfig;
+        SearchCriteriaBuilder $searchCriteriaBuilder,
+        Registry $registry,
+        Attribute $attribute
+    )
+    {
+        $this->config = $config;
+        $this->productRepository = $productRepository;
+        $this->attribute = $attribute;
+        $this->date = $date;
+        $this->logger = $logger;
+        $this->messageRepository = $messageRepository;
+        $this->objectManager = $objectManager;
+        $this->scopeConfig = $scopeConfig;
         $this->searchCriteriaBuilder = $searchCriteriaBuilder;
+        $this->registry = $registry;
     }
 
     public function process(MessageInterface $message): void
     {
+        if ($this->registry->registry('gubee_current_message')) {
+            $this->registry->unregister('gubee_current_message');
+        }
+
+        $this->registry->register('gubee_current_message', $message);
+        $this->logger->debug(
+            sprintf(
+                "Processing message '%s' with status '%s'",
+                $message->getId(),
+                $message->getStatus()
+            )
+        );
         $status = StatusEnum::ERROR();
-        // try {
-        $message->setAttempts(
-            $message->getAttempts() + 1
-        );
-        $this->updateMessageStatus(
-            $message,
-            StatusEnum::RUNNING()
-        );
-        $this->execute($message);
-        $status = StatusEnum::DONE();
-        // } catch (ErrorException $e) {
-        //     $result = __(
-        //         "EXCEPTION: '%1', check the %s for more details.",
-        //         'var/log/exception.log',
-        //         (string) $e->getResponse()->getBody()
-        //     );
-        //     $status = StatusEnum::ERROR();
+        try {
+            if ($message->getCommand() !== SendCommand::class) {
+                if ($message->getProductId()) {
+                    $product = $this->productRepository->getById($message->getProductId());
+                    if (!$product->getId()) {
+                        throw new NoSuchEntityException(
+                            __(
+                                "Product with ID '%s' not found",
+                                $message->getProductId()
+                            )
+                        );
+                    }
 
-        //     $this->logger->error(
-        //         $result,
-        //         [
-        //             'exception' => $e,
-        //         ]
-        //     );
-        //     $message->setMessage(
-        //         (string) $result
-        //     );
-        // } catch (Throwable $e) {
-        //     $result = __(
-        //         "EXCEPTION: '%1', check the %s for more details.",
-        //         'var/log/exception.log',
-        //         $e->getMessage()
-        //     );
-        //     $status = StatusEnum::ERROR();
+                    if ($this->attribute->getRawAttributeValue('gubee_integration_status', $product) === 0) {
+                        throw new \InvalidArgumentException(
+                            sprintf(
+                                "Product with ID '%s' is not integrated with Gubee yet",
+                                $message->getProductId()
+                            )
+                        );
+                    }
+                }
+            }
 
-        //     $this->logger->error(
-        //         $result,
-        //         [
-        //             'exception' => $e,
-        //         ]
-        //     );
-        //     $message->setMessage(
-        //         (string) $result
-        //     );
-        // } finally {
-        //     $this->updateMessageStatus($message, $status);
-        // }
+            $message->setAttempts(
+                $message->getAttempts() + 1
+            );
+            $this->updateMessageStatus(
+                $message,
+                StatusEnum::RUNNING()
+            );
+            $this->logger->debug(
+                sprintf(
+                    "Executing message '%s'",
+                    $message->getId()
+                )
+            );
+            $this->execute($message);
+            $status = StatusEnum::DONE();
+        } catch (ErrorException $e) {
+            $result = __(
+                "EXCEPTION: '%1', check the %s for more details.",
+                'var/log/exception.log',
+                (string) $e->getResponse()->getBody()
+            );
+            $status = StatusEnum::ERROR();
+
+            $this->logger->error(
+                $result,
+                [
+                    'exception' => $e,
+                ]
+            );
+            $message->setMessage(
+                (string) $result
+            );
+        } catch (\InvalidArgumentException $e) {
+            $this->logger->warning(
+                $e->getMessage()
+            );
+            $this->updateMessageStatus(
+                $message,
+                StatusEnum::PENDING()
+            );
+        } catch (Throwable $e) {
+            $result = __(
+                "EXCEPTION: '%1', check the %s for more details.",
+                'var/log/exception.log',
+                $e->getMessage()
+            );
+            $status = StatusEnum::ERROR();
+
+            $this->logger->error(
+                $result,
+                [
+                    'exception' => $e,
+                ]
+            );
+            $message->setMessage(
+                (string) $result
+            );
+        } finally {
+            $this->updateMessageStatus($message, $status);
+        }
+        $this->logger->debug(
+            sprintf(
+                "Message '%s' processed with status '%s'",
+                $message->getId(),
+                $message->getStatus()
+            )
+        );
     }
 
     protected function execute(MessageInterface $message): void
@@ -100,13 +175,13 @@ class Management implements ManagementInterface
         $command = $this->objectManager->create(
             $message->getCommand()
         );
-        $input   = $this->objectManager->create(
+        $input = $this->objectManager->create(
             ArrayInput::class,
             [
                 'parameters' => $message->getPayload(),
             ]
         );
-        $output  = $this->objectManager->create(
+        $output = $this->objectManager->create(
             BufferedOutput::class
         );
         $command->run($input, $output);
@@ -127,8 +202,12 @@ class Management implements ManagementInterface
             ->addFilter(
                 MessageInterface::STATUS,
                 (int) StatusEnum::PENDING()->__toString()
-            )
-            ->create();
+            )->setPageSize(
+                $this->config->getQueuePageSize()
+            )->addSortOrder(
+                'priority',
+                'ASC'
+            )->create();
 
         return $this->messageRepository->getList(
             $searchCriteria
@@ -138,7 +217,7 @@ class Management implements ManagementInterface
     public function getToBeRetried(): array
     {
         $retryAmount = $this->scopeConfig->getValue('queue/general/auto_retry_amount');
-        if (! $retryAmount) {
+        if (!$retryAmount) {
             return [];
         }
 
