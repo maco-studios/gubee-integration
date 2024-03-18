@@ -1,11 +1,12 @@
 <?php
 
-declare(strict_types=1);
+declare (strict_types = 1);
 
 namespace Gubee\Integration\Api\Message;
 
 use Gubee\Integration\Api\Data\Message\DetailInterface;
 use Gubee\Integration\Api\Data\Message\DetailSearchResultsInterface;
+use Magento\Framework\Api\SearchCriteriaInterface;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Exception\NoSuchEntityException;
 

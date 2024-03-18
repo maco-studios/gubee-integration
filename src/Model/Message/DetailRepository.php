@@ -1,6 +1,6 @@
 <?php
 
-declare(strict_types=1);
+declare (strict_types = 1);
 
 namespace Gubee\Integration\Model\Message;
 
@@ -11,13 +11,11 @@ use Gubee\Integration\Api\Data\Message\DetailSearchResultsInterfaceFactory;
 use Gubee\Integration\Api\Message\DetailRepositoryInterface;
 use Gubee\Integration\Model\ResourceModel\Message\Detail as ResourceDetail;
 use Gubee\Integration\Model\ResourceModel\Message\Detail\CollectionFactory as DetailCollectionFactory;
-use Magento\Framework\Api\SearchCriteria\CollectionProcessorInterface;
 use Magento\Framework\Api\SearchCriteriaInterface;
+use Magento\Framework\Api\SearchCriteria\CollectionProcessorInterface;
 use Magento\Framework\Exception\CouldNotDeleteException;
 use Magento\Framework\Exception\CouldNotSaveException;
 use Magento\Framework\Exception\NoSuchEntityException;
-
-use function __;
 
 class DetailRepository implements DetailRepositoryInterface
 {
@@ -43,11 +41,11 @@ class DetailRepository implements DetailRepositoryInterface
         DetailSearchResultsInterfaceFactory $searchResultsFactory,
         CollectionProcessorInterface $collectionProcessor
     ) {
-        $this->resource                = $resource;
-        $this->detailFactory           = $detailFactory;
+        $this->resource = $resource;
+        $this->detailFactory = $detailFactory;
         $this->detailCollectionFactory = $detailCollectionFactory;
-        $this->searchResultsFactory    = $searchResultsFactory;
-        $this->collectionProcessor     = $collectionProcessor;
+        $this->searchResultsFactory = $searchResultsFactory;
+        $this->collectionProcessor = $collectionProcessor;
     }
 
     /**
@@ -75,7 +73,7 @@ class DetailRepository implements DetailRepositoryInterface
     {
         $detail = $this->detailFactory->create();
         $this->resource->load($detail, $detailId);
-        if (! $detail->getId()) {
+        if (!$detail->getId()) {
             throw new NoSuchEntityException(__('Detail with id "%1" does not exist.', $detailId));
         }
         return $detail;
