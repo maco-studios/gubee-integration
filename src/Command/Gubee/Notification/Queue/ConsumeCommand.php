@@ -1,6 +1,6 @@
 <?php
 
-declare (strict_types = 1);
+declare(strict_types=1);
 
 namespace Gubee\Integration\Command\Gubee\Notification\Queue;
 
@@ -20,6 +20,8 @@ use Magento\Framework\Event\ManagerInterface;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\Console\Exception\LogicException;
 
+use function print_r;
+
 class ConsumeCommand extends AbstractCommand
 {
     protected ManagementInterface $management;
@@ -37,9 +39,9 @@ class ConsumeCommand extends AbstractCommand
         NotificationResource $notificationResource,
         ResultPager $resultPager
     ) {
-        $this->resultPager = $resultPager;
+        $this->resultPager          = $resultPager;
         $this->notificationResource = $notificationResource;
-        $this->management = $management;
+        $this->management           = $management;
         parent::__construct(
             $eventDispatcher,
             $logger,
@@ -57,37 +59,37 @@ class ConsumeCommand extends AbstractCommand
     {
         foreach (
             [
-                'getCreatedOrders' => [
+                'getCreatedOrders'   => [
                     'processor' => CreatedCommand::class,
-                    'consumer' => 'removeCreatedOrder',
+                    'consumer'  => 'removeCreatedOrder',
                 ],
-                'getCanceledOrders' => [
+                'getCanceledOrders'  => [
                     'processor' => CanceledCommand::class,
-                    'consumer' => 'removeCanceledOrder',
+                    'consumer'  => 'removeCanceledOrder',
                 ],
                 'getDeliveredOrders' => [
                     'processor' => DeliveredCommand::class,
-                    'consumer' => 'removeDeliveredOrder',
+                    'consumer'  => 'removeDeliveredOrder',
                 ],
-                'getInvoicedOrders' => [
+                'getInvoicedOrders'  => [
                     'processor' => InvoicedCommand::class,
-                    'consumer' => 'removeInvoicedOrder',
+                    'consumer'  => 'removeInvoicedOrder',
                 ],
-                'getPaidOrders' => [
+                'getPaidOrders'      => [
                     'processor' => PaidCommand::class,
-                    'consumer' => 'removePaidOrder',
+                    'consumer'  => 'removePaidOrder',
                 ],
-                'getPayedOrders' => [
+                'getPayedOrders'     => [
                     'processor' => PayedCommand::class,
-                    'consumer' => 'removePayedOrder',
+                    'consumer'  => 'removePayedOrder',
                 ],
-                'getRejectedOrders' => [
+                'getRejectedOrders'  => [
                     'processor' => RejectedCommand::class,
-                    'consumer' => 'removeRejectedOrder',
+                    'consumer'  => 'removeRejectedOrder',
                 ],
-                'getShippedOrders' => [
+                'getShippedOrders'   => [
                     'processor' => ShippedCommand::class,
-                    'consumer' => 'removeShippedOrder',
+                    'consumer'  => 'removeShippedOrder',
                 ],
             ] as $type => $command
         ) {
@@ -113,7 +115,7 @@ class ConsumeCommand extends AbstractCommand
     ) {
         $items = $items['_embedded'] ?? $items[0];
         foreach ($items['orders'] ?: [] as $item) {
-            if (!isset($item['orderId']) && !isset($item['id'])) {
+            if (! isset($item['orderId']) && ! isset($item['id'])) {
                 print_r($item);
                 exit;
             }

@@ -1,10 +1,9 @@
 <?php
 
-declare (strict_types = 1);
+declare(strict_types=1);
 
 namespace Gubee\Integration\Command\Sales\Order\Processor;
 
-use Exception;
 use Gubee\Integration\Command\AbstractCommand;
 use Gubee\SDK\Resource\Sales\OrderResource;
 use Magento\Framework\Event\ManagerInterface;
@@ -34,8 +33,8 @@ abstract class AbstractProcessorCommand extends AbstractCommand
         ?string $name = null
     ) {
         $this->orderCollectionFactory = $orderCollectionFactory;
-        $this->orderRepository = $orderRepository;
-        $this->orderResource = $orderResource;
+        $this->orderRepository        = $orderRepository;
+        $this->orderResource          = $orderResource;
         parent::__construct(
             $eventDispatcher,
             $logger,
@@ -54,7 +53,7 @@ abstract class AbstractProcessorCommand extends AbstractCommand
             ->addFieldToFilter('increment_id', $incrementId)
             ->getFirstItem();
 
-        if (!$order->getId()) {
+        if (! $order->getId()) {
             return null;
         }
 

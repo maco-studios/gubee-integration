@@ -1,30 +1,39 @@
 <?php
 
-declare (strict_types = 1);
+declare(strict_types=1);
 
 namespace Gubee\Integration\Command\Sales\Order\Processor;
 
-use Exception;
 use Gubee\Integration\Service\Model\Catalog\Product\Variation;
 use Gubee\SDK\Resource\Sales\OrderResource;
 use Magento\Catalog\Api\Data\ProductInterface;
 use Magento\Catalog\Api\ProductRepositoryInterface;
 use Magento\Catalog\Model\Product;
 use Magento\Customer\Api\CustomerRepositoryInterface;
+use Magento\Customer\Api\Data\CustomerInterface;
 use Magento\Customer\Model\CustomerFactory;
 use Magento\Framework\App\Helper\Context;
 use Magento\Framework\Data\Form\FormKey;
 use Magento\Framework\Event\ManagerInterface;
+use Magento\Quote\Api\Data\CartInterface;
 use Magento\Quote\Model\QuoteFactory;
 use Magento\Quote\Model\QuoteManagement;
+use Magento\Sales\Api\OrderRepositoryInterface;
 use Magento\Sales\Model\ResourceModel\Order\CollectionFactory;
 use Magento\Sales\Model\Service\OrderService;
 use Magento\Store\Model\StoreManagerInterface;
 use Psr\Log\LoggerInterface;
+use Throwable;
+
+use function __;
+use function end;
+use function explode;
+use function hash;
+use function microtime;
+use function strpos;
 
 class CreatedCommand extends AbstractProcessorCommand
 {
-
     protected ProductRepositoryInterface $productRepository;
     protected QuoteManagement $quoteManagement;
     protected Context $context;
@@ -47,7 +56,7 @@ class CreatedCommand extends AbstractProcessorCommand
         StoreManagerInterface $storeManager,
         Product $product,
         FormKey $formkey,
-        \Magento\Sales\Api\OrderRepositoryInterface $orderRepository,
+        OrderRepositoryInterface $orderRepository,
         QuoteFactory $quote,
         CustomerFactory $customerFactory,
         CustomerRepositoryInterface $customerRepository,
@@ -62,23 +71,23 @@ class CreatedCommand extends AbstractProcessorCommand
             "created"
         );
 
-        $this->context = $context;
-        $this->storeManager = $storeManager;
-        $this->product = $product;
-        $this->formkey = $formkey;
-        $this->orderRepository = $orderRepository;
-        $this->quote = $quote;
-        $this->customerFactory = $customerFactory;
+        $this->context            = $context;
+        $this->storeManager       = $storeManager;
+        $this->product            = $product;
+        $this->formkey            = $formkey;
+        $this->orderRepository    = $orderRepository;
+        $this->quote              = $quote;
+        $this->customerFactory    = $customerFactory;
         $this->customerRepository = $customerRepository;
-        $this->orderService = $orderService;
-        $this->productRepository = $productRepository;
-        $this->quoteManagement = $quoteManagement;
+        $this->orderService       = $orderService;
+        $this->productRepository  = $productRepository;
+        $this->quoteManagement    = $quoteManagement;
     }
 
     protected function doExecute(): int
     {
         $orderId = $this->input->getArgument('order_id');
-        $order = $this->getOrder($orderId);
+        $order   = $this->getOrder($orderId);
         if ($order != null) {
             return 0;
         }
@@ -99,24 +108,23 @@ class CreatedCommand extends AbstractProcessorCommand
                 __("Order with increment ID '%1' created", $orderId)
             );
             return 0;
-        } catch (\Throwable $e) {
+        } catch (Throwable $e) {
             $this->logger->error($e->getMessage());
             return 1;
         }
-
     }
 
     public function create(string $incrementId): bool
     {
         $gubeeOrder = $this->orderResource->loadByOrderId($incrementId);
-        $customer = $this->prepareCustomer($gubeeOrder);
-        $quote = $this->prepareQuote($gubeeOrder, $customer);
+        $customer   = $this->prepareCustomer($gubeeOrder);
+        $quote      = $this->prepareQuote($gubeeOrder, $customer);
         return $this->persistOrder($quote, $customer, $gubeeOrder);
     }
 
     protected function persistOrder(
-        \Magento\Quote\Api\Data\CartInterface $quote,
-        \Magento\Customer\Api\Data\CustomerInterface $customer,
+        CartInterface $quote,
+        CustomerInterface $customer,
         array $gubeeOrder
     ) {
         $quote->collectTotals();
@@ -140,13 +148,13 @@ class CreatedCommand extends AbstractProcessorCommand
         return true;
     }
 
-    public function prepareCustomer(array $gubeeOrder): \Magento\Customer\Api\Data\CustomerInterface
+    public function prepareCustomer(array $gubeeOrder): CustomerInterface
     {
         $customer = $this->customerFactory->create();
         $customer->setWebsiteId($this->storeManager->getWebsite()->getId());
         $customer->loadByEmail($gubeeOrder['customer']['email']);
-        if (!$customer->getId()) {
-            list($firstname, $lastname) = explode(' ', $gubeeOrder['customer']['name']);
+        if (! $customer->getId()) {
+            [$firstname, $lastname] = explode(' ', $gubeeOrder['customer']['name']);
             $customer->setEmail($gubeeOrder['customer']['email']);
             $customer->setFirstname($firstname);
             $customer->setLastname($lastname);
@@ -161,23 +169,21 @@ class CreatedCommand extends AbstractProcessorCommand
 
     protected function prepareQuote(
         array $gubeeOrder,
-        \Magento\Customer\Api\Data\CustomerInterface $customer
+        CustomerInterface $customer
     ) {
         $quote = $this->quoteFactory->create();
         $quote->assignCustomer($customer)
             ->setCurrency();
         $this->addItemsToQuote($gubeeOrder, $quote);
         return $quote;
-
     }
 
-    protected function addItemsToQuote(array $gubeeOrder, \Magento\Quote\Api\Data\CartInterface $quote)
+    protected function addItemsToQuote(array $gubeeOrder, CartInterface $quote)
     {
         foreach ($gubeeOrder['items'] as $item) {
             $product = $this->getProductByGubeeSku($item['sku']);
             $quote->addProduct($product, $item['qty']);
         }
-
     }
 
     protected function getProductByGubeeSku(
@@ -189,8 +195,8 @@ class CreatedCommand extends AbstractProcessorCommand
         }
 
         $product = $this->productRepository->get($sku);
-        if (!$product->getId()) {
-            throw new \Exception(
+        if (! $product->getId()) {
+            throw new Exception(
                 __("Product with SKU '%1' not found", $sku)->__toString()
             );
         }
