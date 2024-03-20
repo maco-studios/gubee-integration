@@ -2,24 +2,28 @@
 <listing xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Ui:etc/ui_configuration.xsd">
     <argument name="data" xsi:type="array">
         <item name="js_config" xsi:type="array">
-            <item name="provider" xsi:type="string">gubee_integration_message_listing.gubee_integration_queue_message_listing_data_source</item>
+            <item name="provider" xsi:type="string">gubee_message_order_unsuccessful_index_listing.gubee_message_order_unsuccessful_listing_data_source</item>
         </item>
     </argument>
     <settings>
         <spinner>gubee_integration_message_columns</spinner>
         <deps>
-            <dep>gubee_integration_message_listing.gubee_integration_queue_message_listing_data_source</dep>
+            <dep>gubee_message_order_unsuccessful_index_listing.gubee_message_order_unsuccessful_listing_data_source</dep>
         </deps>
     </settings>
-    <dataSource name="gubee_integration_queue_message_listing_data_source" component="Magento_Ui/js/grid/provider">
+    <dataSource name="gubee_message_order_unsuccessful_listing_data_source" component="Magento_Ui/js/grid/provider">
         <settings>
             <storageConfig>
                 <param name="indexField" xsi:type="string">message_id</param>
             </storageConfig>
             <updateUrl path="mui/index/render"/>
+            <filterUrlParams>
+                <param name="status">3</param>
+                <param name="command">Gubee\Integration\Command\Sales\Order\Processor\CreatedCommand</param>
+            </filterUrlParams>
         </settings>
         <aclResource>Gubee_Integration::Message</aclResource>
-        <dataProvider name="gubee_integration_queue_message_listing_data_source" class="Magento\Framework\View\Element\UiComponent\DataProvider\DataProvider">
+        <dataProvider name="gubee_message_order_unsuccessful_listing_data_source" class="Magento\Framework\View\Element\UiComponent\DataProvider\DataProvider">
             <settings>
                 <requestFieldName>id</requestFieldName>
                 <primaryFieldName>message_id</primaryFieldName>
@@ -103,7 +107,7 @@
 
             </settings>
         </column>
-        <actionsColumn name="actions" class="Gubee\Integration\Ui\Component\Message\Listing\Column\Action">
+        <actionsColumn name="actions" class="Gubee\Integration\Ui\Component\Unsuccessful\Listing\Column\Action">
             <settings>
                 <indexField>message_id</indexField>
             </settings>

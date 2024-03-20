@@ -4,5 +4,6 @@
         <add id="Gubee::top_level" title="Gubee" module="Gubee_Integration" sortOrder="9999" resource="Magento_Backend::content"/>
         <add id="Gubee_Integration::index_index" title="index index" module="Gubee_Integration" sortOrder="9999" resource="Gubee_Integration::index_index" parent="Gubee::top_level" action="gubee/install/index"/>
         <add id="Gubee_Integration::gubee_integration_message" title="Message" module="Gubee_Integration" sortOrder="9999" resource="Magento_Backend::content" parent="Gubee::top_level" action="gubee/message/index"/>
+        <add id="Gubee_Integration::gubee_integration_unsuccessful_order" title="Unsuccessful orders integration" module="Gubee_Integration" sortOrder="9999" resource="Magento_Backend::content" parent="Gubee::top_level" action="gubee/message_order_unsuccessful/index"/>
     </menu>
 </config>

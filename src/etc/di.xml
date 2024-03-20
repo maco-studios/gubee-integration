@@ -22,6 +22,12 @@
             <argument name="resourceModel" xsi:type="string">Gubee\Integration\Model\ResourceModel\Message\Collection</argument>
         </arguments>
     </virtualType>
+    <virtualType name="Gubee\Integration\Model\ResourceModel\Message\Grid\Unsuccessful\Grid\Collection" type="Magento\Framework\View\Element\UiComponent\DataProvider\SearchResult">
+        <arguments>
+            <argument name="mainTable" xsi:type="string">gubee_integration_queue_message</argument>
+            <argument name="resourceModel" xsi:type="string">Gubee\Integration\Model\ResourceModel\Message\Grid\Unsuccessful\Collection</argument>
+        </arguments>
+    </virtualType>
     <type name="Gubee\Integration\Observer\AbstractObserver">
         <arguments>
             <argument name="logger" xsi:type="object">Gubee\Integration\Model\Message\Detail\Logger</argument>
@@ -50,6 +56,13 @@
         <arguments>
             <argument name="collections" xsi:type="array">
                 <item name="gubee_integration_queue_message_listing_data_source" xsi:type="string">Gubee\Integration\Model\ResourceModel\Message\Grid\Collection</item>
+            </argument>
+        </arguments>
+    </type>
+    <type name="Magento\Framework\View\Element\UiComponent\DataProvider\CollectionFactory">
+        <arguments>
+            <argument name="collections" xsi:type="array">
+                <item name="gubee_message_order_unsuccessful_listing_data_source" xsi:type="string">Gubee\Integration\Model\ResourceModel\Message\Grid\Unsuccessful\Grid\Collection</item>
             </argument>
         </arguments>
     </type>
