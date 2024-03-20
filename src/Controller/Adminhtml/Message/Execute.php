@@ -46,7 +46,9 @@ class Execute extends Action
                     $e->getMessage()
                 )->__toString()
             );
+            echo $e->getMessage();
+        } finally {
+            return $this->_redirect('gubee/message/index');
         }
-        return $this->_redirect('gubee/message/index');
     }
 }

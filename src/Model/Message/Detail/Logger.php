@@ -186,10 +186,10 @@ class Logger implements LoggerInterface
             ],
             $context
         );
-
         $detail->setLevel($level)
-            ->setMessage($message)
-            ->setContext($context);
+            ->setMessage(
+                (string) $message
+            )->setContext($context);
         if ($queueMessage = $this->registry->registry('gubee_current_message')) {
             $detail->setMessageId($queueMessage->getMessageId());
         }

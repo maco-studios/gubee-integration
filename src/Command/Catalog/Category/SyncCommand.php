@@ -34,7 +34,10 @@ class SyncCommand extends AbstractCommand
         CollectionFactory $categoryCollectionFactory
     ) {
         parent::__construct($eventDispatcher, $logger, "catalog:category:sync");
-        $this->collection         = $categoryCollectionFactory->create();
+        $this->categoryResource   = $categoryResource;
+        $this->collection         = $categoryCollectionFactory->create()
+            ->addAttributeToSelect('*')
+            ->addAttributeToFilter('entity_id', ['gt' => 0]);
         $this->objectManager      = $objectManager;
         $this->categoryRepository = $categoryRepository;
     }
@@ -52,10 +55,10 @@ class SyncCommand extends AbstractCommand
                 Category::class,
                 [
                     'id'          => $category->getId(),
-                    'name'        => $category->getName(),
-                    'description' => $category->getDescription(),
+                    'name'        => $category->getName() ?: 'Unnamed category',
+                    'description' => $category->getDescription() ?: '',
                     'is_active'   => $category->getIsActive(),
-                    'parent'      => $category->getParentId(),
+                    'parent'      => $category->getParentId() > 0 ? (int) $category->getParentId() : null,
                 ]
             );
         }

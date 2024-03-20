@@ -135,8 +135,8 @@ class Button extends Container
      */
     public function validate()
     {
-        $problems = [];
-        $product  = $this->_coreRegistry->registry('current_product');
+        return [];
+        $product = $this->_coreRegistry->registry('current_product');
         if (! $product) {
             return $problems;
         }

@@ -14,6 +14,7 @@ use Magento\Eav\Model\Entity\Attribute\Group as AttributeGroup;
 use Magento\Eav\Model\Entity\Attribute\Set as AttributeSet;
 use Magento\Eav\Model\Entity\Attribute\Source\Table;
 use Magento\Framework\Exception\NoSuchEntityException;
+use Psr\Log\LoggerInterface;
 
 use function __;
 use function array_merge;
@@ -30,12 +31,13 @@ class ProductAttribute extends AbstractEavAttribute
     protected ProductAction $productAction;
 
     public function __construct(
+        LoggerInterface $logger,
         Context $context,
         AttributeManagement $attributeManagement,
         AttributeSetRepository $attributeSetRepository,
         ProductAction $productAction
     ) {
-        parent::__construct($context);
+        parent::__construct($context, $logger);
         $this->attributeManagement    = $attributeManagement;
         $this->attributeSetRepository = $attributeSetRepository;
         $this->productAction          = $productAction;

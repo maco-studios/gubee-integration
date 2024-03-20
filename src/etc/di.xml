@@ -11,7 +11,7 @@
     <preference for="Gubee\Integration\Api\Queue\ManagementInterface" type="Gubee\Integration\Model\Queue\Management"/>
     <preference for="Gubee\Integration\Api\Message\ManagementInterface" type="Gubee\Integration\Model\Message\Management"/>
 
-    <type name="Gubee\SDK\Client">
+    <type name="Gubee\Integration\Service\Gubee\Client">
         <arguments>
             <argument name="logger" xsi:type="object">Gubee\Integration\Model\Message\Detail\Logger</argument>
         </arguments>
@@ -60,6 +60,16 @@
                 <item name="Gubee\Integration\Command\Gubee\Queue\ConsumeCommand" xsi:type="object">Gubee\Integration\Command\Gubee\Queue\ConsumeCommand</item>
                 <item name="Gubee\Integration\Command\Gubee\Notification\Queue\ConsumeCommand" xsi:type="object">Gubee\Integration\Command\Gubee\Notification\Queue\ConsumeCommand</item>
             </argument>
+        </arguments>
+    </type>
+    <type name="Gubee\Integration\Setup\Migration\Context">
+        <arguments>
+            <argument name="logger" xsi:type="object">Gubee\Integration\Model\Message\Detail\Logger</argument>
+        </arguments>
+    </type>
+    <type name="Gubee\Integration\Setup\Migration\Facade\ProductAttribute">
+        <arguments>
+            <argument name="logger" xsi:type="object">Gubee\Integration\Model\Message\Detail\Logger</argument>
         </arguments>
     </type>
 </config>

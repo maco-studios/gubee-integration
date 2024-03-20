@@ -13,10 +13,11 @@ use Magento\Eav\Model\Entity\Attribute\ScopedAttributeInterface;
 use Magento\Eav\Model\Entity\Attribute\Source\Boolean;
 use Magento\Eav\Model\Entity\Attribute\Source\Table;
 
+use function __;
 use function array_merge;
 use function sprintf;
 
-class CatalogProductAttribute extends AbstractMigration
+class GubeeCatalogProductAttribute extends AbstractMigration
 {
     protected ProductAttribute $productAttribute;
     /** @var array<string,array<string,mixed>> */
@@ -153,17 +154,32 @@ class CatalogProductAttribute extends AbstractMigration
                 ]
             );
             if ($this->productAttribute->exists($attributeCode)) {
+                $this->context->getLogger()->info(
+                    __(
+                        "Updating attribute '%1'",
+                        $attributeCode
+                    )->__toString()
+                );
                 $this->productAttribute->update(
                     $attributeCode,
                     $attrValue
                 );
             } else {
+                $this->context->getLogger()->info(
+                    __(
+                        "Creating attribute '%1'",
+                        $attributeCode
+                    )->__toString()
+                );
                 $this->productAttribute->create(
                     $attributeCode,
                     $attrValue
                 );
             }
         }
+        $this->context->getLogger()->info(
+            "Attributes created/updated"
+        );
     }
 
     public function getAttributeLabel(string $label): string

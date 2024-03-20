@@ -11,7 +11,6 @@ use Gubee\Integration\Api\MessageRepositoryInterface;
 use Gubee\Integration\Command\Catalog\Product\SendCommand;
 use Gubee\Integration\Helper\Catalog\Attribute;
 use Gubee\Integration\Model\Config;
-use Gubee\SDK\Library\HttpClient\Exception\ErrorException;
 use InvalidArgumentException;
 use Magento\Catalog\Api\ProductRepositoryInterface;
 use Magento\Framework\Api\SearchCriteriaBuilder;
@@ -124,8 +123,8 @@ class Management implements ManagementInterface
             $result = __(
                 "EXCEPTION: '%1', check the %s for more details.",
                 'var/log/exception.log',
-                (string) $e->getResponse()->getBody()
-            );
+                (string) $e->getResponse()->getBody() ?: $e->getMessage()
+            )->__toString();
             $status = StatusEnum::ERROR();
 
             $this->logger->error(
@@ -176,22 +175,28 @@ class Management implements ManagementInterface
 
     protected function execute(MessageInterface $message): void
     {
-        $command = $this->objectManager->create(
-            $message->getCommand()
-        );
-        $input   = $this->objectManager->create(
-            ArrayInput::class,
-            [
-                'parameters' => $message->getPayload(),
-            ]
-        );
-        $output  = $this->objectManager->create(
-            BufferedOutput::class
-        );
-        $command->run($input, $output);
-        $message->setMessage(
-            (string) $output->fetch()
-        );
+        try {
+            $command = $this->objectManager->create(
+                $message->getCommand()
+            );
+            $input   = $this->objectManager->create(
+                ArrayInput::class,
+                [
+                    'parameters' => $message->getPayload(),
+                ]
+            );
+            $output  = $this->objectManager->create(
+                BufferedOutput::class
+            );
+            $command->run($input, $output);
+            $message->setMessage(
+                (string) $output->fetch()
+            );
+        } catch (\Throwable $e) {
+            $message->setMessage(
+                (string) $e->getMessage()
+            );
+        }
     }
 
     private function updateMessageStatus(MessageInterface $message, StatusEnum $status): void
@@ -208,9 +213,6 @@ class Management implements ManagementInterface
                 (int) StatusEnum::PENDING()->__toString()
             )->setPageSize(
                 $this->config->getQueuePageSize()
-            )->addSortOrder(
-                'priority',
-                'ASC'
             )->create();
 
         return $this->messageRepository->getList(

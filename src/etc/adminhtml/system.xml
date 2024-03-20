@@ -8,6 +8,8 @@
             <resource>Gubee_Integration::config_gubee_integration</resource>
             <include path="Gubee_Integration::system/01-general.xml"/>
             <include path="Gubee_Integration::system/02-attributes.xml"/>
+            <include path="Gubee_Integration::system/03-payment.xml"/>
+            <include path="Gubee_Integration::system/04-shipping.xml"/>
         </section>
     </system>
 </config>

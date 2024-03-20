@@ -69,6 +69,8 @@ class RenewCommand extends AbstractCommand
                 "Token renewed successfully"
             );
         } catch (Exception $e) {
+            $this->config->setApiToken("");
+            $this->config->setApiTimeout(null);
             $this->getLogger()->error(
                 $e->getMessage()
             );

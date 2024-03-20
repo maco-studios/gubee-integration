@@ -4,12 +4,18 @@ declare(strict_types=1);
 
 namespace Gubee\Integration\Setup\Migration\Common;
 
+use Exception;
 use Magento\Eav\Model\Config;
 use Magento\Eav\Model\Entity\Attribute\ScopedAttributeInterface;
 use Magento\Eav\Setup\EavSetup;
 use Magento\Eav\Setup\EavSetupFactory;
 use Magento\Framework\App\ResourceConnection;
 use Magento\Framework\DB\Adapter\AdapterInterface;
+use Psr\Log\LoggerInterface;
+
+use function is_array;
+use function json_encode;
+use function sprintf;
 
 abstract class AbstractEavAttribute implements ScopedAttributeInterface
 {
@@ -19,10 +25,14 @@ abstract class AbstractEavAttribute implements ScopedAttributeInterface
 
     protected ResourceConnection $resourceConnection;
 
+    protected LoggerInterface $logger;
+
     // phpcs:ignore
     public function __construct(
-        EavAttribute\Context $context
+        EavAttribute\Context $context,
+        LoggerInterface $logger
     ) {
+        $this->logger             = $logger;
         $this->config             = $context->getConfig();
         $this->eavSetupFactory    = $context->getEavSetupFactory();
         $this->resourceConnection = $context->getResourceConnection();
@@ -53,11 +63,47 @@ abstract class AbstractEavAttribute implements ScopedAttributeInterface
      */
     public function update($code, $data)
     {
-        return $this->getEavSetup()->updateAttribute(
-            static::ENTITY_TYPE,
-            $code,
-            $data
-        );
+        foreach ($data as $field => $value) {
+            try {
+                switch ($field) {
+                    case 'source':
+                        $field = 'source_model';
+                        break;
+                }
+                $this->logger->debug(
+                    sprintf(
+                        'Updating attribute %s: %s => %s',
+                        $code,
+                        $field,
+                        is_array($value) ? json_encode($value) : $value
+                    )
+                );
+                $this->getEavSetup()->updateAttribute(
+                    static::ENTITY_TYPE,
+                    $code,
+                    $field,
+                    $value
+                );
+                $this->logger->debug(
+                    sprintf(
+                        'Attribute %s updated: %s => %s',
+                        $code,
+                        $field,
+                        is_array($value) ? json_encode($value) : $value
+                    )
+                );
+            } catch (Exception $e) {
+                $this->logger->error(
+                    sprintf(
+                        "Error updating attribute '%s': %s",
+                        $code,
+                        $e->getMessage()
+                    )
+                );
+            }
+        }
+
+        return $this->getEavSetup();
     }
 
     /**

@@ -17,6 +17,7 @@ use Magento\Framework\Model\ResourceModel\AbstractResource;
 use Magento\Framework\Registry;
 
 use function __;
+use function is_array;
 use function is_string;
 use function is_subclass_of;
 use function json_decode;
@@ -179,10 +180,10 @@ class Message extends AbstractModel implements MessageInterface
     public function getPayload(): array
     {
         $payload = $this->getData(self::PAYLOAD);
-        if (is_string($payload)) {
-            return $this->isJson($payload) ? json_decode($payload, true) : $payload;
+        if (is_string($payload) && $this->isJson($payload)) {
+            return json_decode($payload, true);
         }
-        return $payload;
+        return is_array($payload) ? $payload : [];
     }
 
     /**
