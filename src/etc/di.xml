@@ -11,6 +11,11 @@
     <preference for="Gubee\Integration\Api\Queue\ManagementInterface" type="Gubee\Integration\Model\Queue\Management"/>
     <preference for="Gubee\Integration\Api\Message\ManagementInterface" type="Gubee\Integration\Model\Message\Management"/>
 
+    <preference for="Gubee\Integration\Api\InvoiceRepositoryInterface" type="Gubee\Integration\Model\InvoiceRepository"/>
+    <preference for="Gubee\Integration\Api\Data\InvoiceInterface" type="Gubee\Integration\Model\Invoice"/>
+    <preference for="Gubee\Integration\Api\Data\InvoiceSearchResultsInterface" type="Magento\Framework\Api\SearchResults"/>
+
+
     <type name="Gubee\Integration\Service\Gubee\Client">
         <arguments>
             <argument name="logger" xsi:type="object">Gubee\Integration\Model\Message\Detail\Logger</argument>
