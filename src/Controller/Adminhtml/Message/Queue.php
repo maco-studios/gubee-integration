@@ -1,6 +1,6 @@
 <?php
 
-declare (strict_types = 1);
+declare(strict_types=1);
 
 namespace Gubee\Integration\Controller\Adminhtml\Message;
 
@@ -10,6 +10,8 @@ use Gubee\Integration\Api\MessageRepositoryInterface;
 use Gubee\Integration\Model\Message\Management;
 use Magento\Backend\App\Action;
 use Magento\Backend\App\Action\Context;
+
+use function __;
 
 class Queue extends Action
 {
@@ -21,7 +23,7 @@ class Queue extends Action
         Management $management,
         Context $context
     ) {
-        $this->management = $management;
+        $this->management        = $management;
         $this->messageRepository = $messageRepository;
         parent::__construct($context);
     }
@@ -30,11 +32,11 @@ class Queue extends Action
     {
         $params = $this->getRequest()->getParams();
         try {
-            if (!isset($params['message_id'])) {
+            if (! isset($params['message_id'])) {
                 throw new Exception('Id is required');
             }
             $message = $this->messageRepository->get($params['message_id']);
-            if (!$message->getId()) {
+            if (! $message->getId()) {
                 throw new Exception('Message not found');
             }
 

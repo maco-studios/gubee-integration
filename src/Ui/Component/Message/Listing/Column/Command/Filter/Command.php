@@ -1,15 +1,18 @@
 <?php
 
-declare (strict_types = 1);
+declare(strict_types=1);
 
 namespace Gubee\Integration\Ui\Component\Message\Listing\Column\Command\Filter;
 
+use Gubee\Integration\Model\ResourceModel\Message\CollectionFactory;
 use Magento\Framework\Option\ArrayInterface;
+
+use function __;
 
 class Command implements ArrayInterface
 {
     public function __construct(
-        \Gubee\Integration\Model\ResourceModel\Message\CollectionFactory $collectionFactory
+        CollectionFactory $collectionFactory
     ) {
         $this->collectionFactory = $collectionFactory;
     }
