@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Gubee\Integration\Command\Sales\Order\Processor;
 
 use Exception;
+use Gubee\Integration\Command\Sales\Order\AbstractProcessorCommand;
 use Gubee\Integration\Service\Model\Catalog\Product\Variation;
 use Gubee\SDK\Resource\Sales\OrderResource;
 use Magento\Catalog\Api\Data\ProductInterface;
@@ -15,10 +16,8 @@ use Magento\Customer\Api\Data\CustomerInterface;
 use Magento\Customer\Model\CustomerFactory;
 use Magento\Directory\Model\Country;
 use Magento\Directory\Model\Region;
-use Magento\Framework\App\Area;
 use Magento\Framework\App\Helper\Context;
 use Magento\Framework\App\ObjectManager;
-use Magento\Framework\App\State;
 use Magento\Framework\Data\Form\FormKey;
 use Magento\Framework\DataObject;
 use Magento\Framework\Event\ManagerInterface;
@@ -28,6 +27,7 @@ use Magento\Quote\Api\Data\CartInterface;
 use Magento\Quote\Model\QuoteFactory;
 use Magento\Quote\Model\QuoteManagement;
 use Magento\Sales\Api\OrderRepositoryInterface;
+use Magento\Sales\Model\Order\Status\HistoryFactory;
 use Magento\Sales\Model\ResourceModel\Order\CollectionFactory;
 use Magento\Sales\Model\Service\OrderService;
 use Magento\Store\Model\StoreManagerInterface;
@@ -40,6 +40,7 @@ use function explode;
 use function hash;
 use function implode;
 use function microtime;
+use function print_r;
 use function sizeof;
 use function sprintf;
 use function strpos;
@@ -56,7 +57,6 @@ class CreatedCommand extends AbstractProcessorCommand
     protected CustomerFactory $customerFactory;
     protected CustomerRepositoryInterface $customerRepository;
     protected OrderService $orderService;
-    protected State $state;
 
     public function __construct(
         ManagerInterface $eventDispatcher,
@@ -74,7 +74,7 @@ class CreatedCommand extends AbstractProcessorCommand
         CustomerFactory $customerFactory,
         CustomerRepositoryInterface $customerRepository,
         OrderService $orderService,
-        State $state
+        HistoryFactory $historyFactory
     ) {
         parent::__construct(
             $eventDispatcher,
@@ -82,12 +82,9 @@ class CreatedCommand extends AbstractProcessorCommand
             $orderResource,
             $orderCollectionFactory,
             $orderRepository,
+            $historyFactory,
             "created"
         );
-        $this->state = $state;
-        if (! $this->state->checkAreaCode(Area::AREA_ADMINHTML)) {
-            $this->state->setAreaCode(Area::AREA_ADMINHTML);
-        }
         $this->context            = $context;
         $this->storeManager       = $storeManager;
         $this->product            = $product;
@@ -200,6 +197,10 @@ class CreatedCommand extends AbstractProcessorCommand
         $order->setEmailSent(0);
         $order->setIncrementId($externalId);
         $order->save();
+        $this->addOrderHistory(
+            __("Order created by Gubee Integration")
+        );
+
         return true;
     }
 
@@ -248,6 +249,9 @@ class CreatedCommand extends AbstractProcessorCommand
 
     protected function addItemsToQuote(array $gubeeOrder, CartInterface $quote)
     {
+        echo '<pre>';
+        print_r($gubeeOrder);
+        exit;
         foreach ($gubeeOrder['items'] as $item) {
             try {
                 $product = $this->getProductByGubeeSku(
@@ -294,6 +298,8 @@ class CreatedCommand extends AbstractProcessorCommand
                 $price *= $item['subItems'][0]['percentageOfTotal'] / 100;
             }
         } else {
+            print_r($item);
+            exit;
             $price = $item['salePrice'] / $item['qty'];
         }
         return $price;

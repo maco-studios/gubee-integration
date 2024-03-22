@@ -120,6 +120,8 @@ class Management implements ManagementInterface
             $this->execute($message);
             $status = StatusEnum::DONE();
         } catch (ErrorException $e) {
+            $status = StatusEnum::ERROR();
+
             $result = __(
                 "EXCEPTION: '%1', check the %s for more details.",
                 'var/log/exception.log',
@@ -137,6 +139,8 @@ class Management implements ManagementInterface
                 (string) $result
             );
         } catch (InvalidArgumentException $e) {
+            $status = StatusEnum::ERROR();
+
             $this->logger->warning(
                 $e->getMessage()
             );

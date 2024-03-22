@@ -127,4 +127,18 @@ class InvoiceRepository implements InvoiceRepositoryInterface
     {
         return $this->delete($this->get($invoiceId));
     }
+
+    public function getByOrderId($orderId): InvoiceInterface
+    {
+        $invoice = $this->invoiceFactory->create();
+        $this->resource->load($invoice, $orderId, 'order_id');
+        return $invoice;
+    }
+
+    public function getByKey($key): InvoiceInterface
+    {
+        $invoice = $this->invoiceFactory->create();
+        $this->resource->load($invoice, $key, 'key');
+        return $invoice;
+    }
 }

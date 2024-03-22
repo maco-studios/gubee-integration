@@ -47,7 +47,7 @@ class DesativateCommand extends AbstractCommand
         if (! $product->getId()) {
             $this->log->error(
                 sprintf(
-                    "<error>%s</error>",
+                    "%s",
                     __(
                         "The product with the SKU '%1' does not exist",
                         $this->input->getArgument('sku')

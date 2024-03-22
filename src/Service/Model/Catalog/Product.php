@@ -28,6 +28,7 @@ use Magento\Framework\ObjectManagerInterface;
 
 use function array_filter;
 use function array_map;
+use function array_merge;
 use function count;
 use function in_array;
 use function is_array;
@@ -45,6 +46,7 @@ class Product
     protected CollectionFactory $categoryCollectionFactory;
     protected StockItemInterface $stockItem;
     protected ValidateResource $validateResource;
+    private ?array $variations = null;
 
     public function __construct(
         ProductInterface $product,
@@ -71,22 +73,26 @@ class Product
             \Gubee\SDK\Model\Catalog\Product::class,
             array_filter(
                 [
-                    'id'                => $this->buildId(),
-                    'mainCategory'      => $this->buildMainCategory(),
-                    'mainSku'           => $this->buildMainSku(),
-                    'origin'            => $this->buildOrigin(),
-                    'status'            => $this->buildStatus(),
-                    'type'              => $this->buildType(),
-                    'name'              => $this->buildName(),
-                    'nbm'               => $this->buildNbm(),
-                    'categories'        => $this->buildCategories(),
-                    'specifications'    => $this->buildSpecifications(),
-                    'variantAttributes' => $this->buildVariantAttributes(),
-                    'brand'             => $this->buildBrand(),
-                    'variations'        => $this->buildVariations(),
+                    'id'             => $this->buildId(),
+                    'mainCategory'   => $this->buildMainCategory(),
+                    'mainSku'        => $this->buildMainSku(),
+                    'origin'         => $this->buildOrigin(),
+                    'status'         => $this->buildStatus(),
+                    'type'           => $this->buildType(),
+                    'name'           => $this->buildName(),
+                    'nbm'            => $this->buildNbm(),
+                    'categories'     => $this->buildCategories(),
+                    'specifications' => $this->buildSpecifications(),
+                    'brand'          => $this->buildBrand(),
+                    'variations'     => $this->buildVariations(),
                 ]
             )
         );
+        if ($this->gubeeProduct->getType() == TypeEnum::VARIANT()) {
+            $this->gubeeProduct->setVariantAttributes(
+                $this->buildVariantAttributes()
+            );
+        }
     }
 
     public function validate()
@@ -197,6 +203,12 @@ class Product
 
     private function buildMainSku()
     {
+        foreach ($this->buildVariations() as $variation) {
+            if ($variation->getMain()) {
+                return $variation->getSku();
+            }
+        }
+
         return $this->product->getSku();
     }
 
@@ -304,8 +316,9 @@ class Product
                 continue;
             }
 
-            $value = $this->product->getData(
-                $attribute->getAttributeCode()
+            $value = $this->attribute->getAttributeValueLabel(
+                $attribute->getAttributeCode(),
+                $this->product
             );
             if (! $value) {
                 continue;
@@ -324,83 +337,68 @@ class Product
 
     private function buildVariantAttributes()
     {
-        $specs          = [];
-        $attributes     = $this->attributeCollection->getItems();
-        $attributeCodes = array_map(
-            function ($attribute) {
-                return $attribute->getAttributeCode();
-            },
-            $attributes
-        );
-        foreach ($this->product->getAttributes() as $attribute) {
-            if (! $attribute->getIsUserDefined()) {
-                continue;
+        $variations = $this->buildVariations();
+        $attrs      = [];
+        foreach ($variations as $variation) {
+            foreach ($variation->getVariantSpecification() as $spec) {
+                if (isset($attrs[$spec->getAttribute()])) {
+                    $attrs[$spec->getAttribute()]->setValues(
+                        array_merge(
+                            $attrs[$spec->getAttribute()]->getValues(),
+                            $spec->getValues()
+                        )
+                    );
+                } else {
+                    $attrs[$spec->getAttribute()] = $spec;
+                }
             }
-
-            if (! in_array($attribute->getAttributeCode(), $attributeCodes)) {
-                continue;
-            }
-
-            $value = $this->attribute->getRawAttributeValue(
-                $attribute->getAttributeCode(),
-                $this->product
-            );
-            if (! $value) {
-                continue;
-            }
-
-            if (
-                $this->attribute->isVariantAttribute(
-                    $attribute->getAttributeCode(),
-                    $this->product
-                )
-            ) {
-                $specs[] = $this->objectManager->create(
-                    AttributeValue::class,
-                    [
-                        'attribute' => $attribute->getAttributeCode(),
-                    ]
-                );
-            }
-
-            $specs[] = $this->objectManager->create(
-                AttributeValue::class,
-                [
-                    'attribute' => $attribute->getAttributeCode(),
-                ]
-            );
         }
 
-        return $specs;
+        return $attrs;
     }
 
     private function buildVariations()
     {
+        if ($this->variations) {
+            return $this->variations;
+        }
         if ($this->product->getTypeId() != Configurable::TYPE_CODE) {
-            return [
-                $this->objectManager->create(
-                    Variation::class,
-                    [
-                        'product' => $this->product,
-                    ]
-                )->getVariation(),
+            $variation = $this->objectManager->create(
+                Variation::class,
+                [
+                    'product' => $this->product,
+                ]
+            )->getVariation();
+
+            // remove variantSpecification from simple products
+            $variation->setVariantSpecification([]);
+
+            $variation->setMain(true);
+            $this->variations = [
+                $variation,
             ];
+            return $this->variations;
         }
 
         $variations = [];
+        $main       = true;
         $children   = $this->product
             ->getTypeInstance()
             ->getUsedProducts($this->product);
         foreach ($children as $child) {
-            $variations[] = $this->objectManager->create(
+            $variation = $this->objectManager->create(
                 Variation::class,
                 [
                     'product' => $child,
                     'parent'  => $this->product,
                 ]
             )->getVariation();
+            $variation->setMain($main);
+            $variations[] = $variation;
+            $main         = false;
         }
 
+        $this->variations = $variations;
         return $variations;
     }
 

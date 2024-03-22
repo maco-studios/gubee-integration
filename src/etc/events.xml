@@ -2,6 +2,7 @@
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:Event/etc/events.xsd">
     <event name="model_save_after">
         <observer name="Gubee\Integration\Observer\Catalog\Product\Attribute\Save\After" instance="Gubee\Integration\Observer\Catalog\Product\Attribute\Save\After" />
+        <observer name="Gubee\Integration\Observer\Sales\Invoice\Save\After" instance="Gubee\Integration\Observer\Sales\Invoice\Save\After" />
     </event>
     <event name="cataloginventory_stock_item_save_commit_after">
         <observer name="Gubee\Integration\Observer\Catalog\Product\Stock\Item\Save\After" instance="Gubee\Integration\Observer\Catalog\Product\Stock\Item\Save\After" />
@@ -20,5 +21,8 @@
     </event>
     <event name="catalog_category_save_after">
         <observer name="Gubee\Integration\Observer\Catalog\Category\Save\After" instance="Gubee\Integration\Observer\Catalog\Category\Save\After" />
+    </event>
+    <event name="sales_order_shipment_save_after">
+        <observer name="Gubee\Integration\Observer\Sales\Order\Shipment\Save\After" instance="Gubee\Integration\Observer\Sales\Order\Shipment\Save\After" />
     </event>
 </config>

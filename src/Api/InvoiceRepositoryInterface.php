@@ -6,6 +6,7 @@ namespace Gubee\Integration\Api;
 
 use Gubee\Integration\Api\Data\InvoiceInterface;
 use Gubee\Integration\Api\Data\InvoiceSearchResultsInterface;
+use Magento\Framework\Api\SearchCriteriaInterface;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Exception\NoSuchEntityException;
 
@@ -59,4 +60,18 @@ interface InvoiceRepositoryInterface
      * @throws LocalizedException
      */
     public function deleteById($invoiceId);
+
+    /**
+     * Get invoice by order id
+     *
+     * @param string $orderId
+     */
+    public function getByOrderId($orderId): InvoiceInterface;
+
+    /**
+     * Get invoice by number
+     *
+     * @param string $number
+     */
+    public function getByKey($key): InvoiceInterface;
 }

@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace Gubee\Integration\Model;
 
+use DateTime;
+use DateTimeInterface;
 use Gubee\Integration\Api\Data\InvoiceInterface;
 use Magento\Framework\Model\AbstractModel;
 
@@ -15,6 +17,25 @@ class Invoice extends AbstractModel implements InvoiceInterface
     public function _construct()
     {
         $this->_init(\Gubee\Integration\Model\ResourceModel\Invoice::class);
+    }
+
+    public function beforeSave()
+    {
+        // if (strlen($this->getKey()) !== 44) {
+        //     throw new \InvalidArgumentException(
+        //         __('The NFE key must be 44 characters long')
+        //     );
+        // }
+        if ($this->getIssueDate() && $this->getIssueDate() instanceof DateTimeInterface) {
+            parent::setData(
+                self::ISSUEDATE,
+                $this->getIssueDate()->format(
+                    'Y-m-d\TH:i:s.v'
+                )
+            );
+        }
+
+        return parent::beforeSave();
     }
 
     /**
@@ -68,15 +89,22 @@ class Invoice extends AbstractModel implements InvoiceInterface
     /**
      * @inheritDoc
      */
-    public function getIssueDate()
+    public function getIssueDate(): DateTimeInterface
     {
+        if (! $this->getData(self::ISSUEDATE)) {
+            return new DateTime();
+        }
+
+        if (! $this->getData(self::ISSUEDATE) instanceof DateTimeInterface) {
+            return new DateTime($this->getData(self::ISSUEDATE));
+        }
         return $this->getData(self::ISSUEDATE);
     }
 
     /**
      * @inheritDoc
      */
-    public function setIssueDate($issueDate)
+    public function setIssueDate(DateTimeInterface $issueDate)
     {
         return $this->setData(self::ISSUEDATE, $issueDate);
     }
@@ -143,5 +171,27 @@ class Invoice extends AbstractModel implements InvoiceInterface
     public function setOrderId($orderId)
     {
         return $this->setData(self::ORDER_ID, $orderId);
+    }
+
+    public function getOrigin()
+    {
+        return $this->getData(self::ORIGIN);
+    }
+
+    public function setOrigin($origin)
+    {
+        return $this->setData(self::ORIGIN, $origin);
+    }
+
+    public function jsonSerialize()
+    {
+        return [
+            'danfeLink' => $this->getDanfeLink(),
+            'danfeXml'  => $this->getDanfeXml(),
+            'issueDate' => $this->getIssueDate()->format('Y-m-d\TH:i:s.v'),
+            'key'       => $this->getKey(),
+            'line'      => $this->getLine(),
+            'number'    => $this->getNumber(),
+        ];
     }
 }

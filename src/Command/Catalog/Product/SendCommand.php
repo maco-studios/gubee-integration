@@ -45,10 +45,10 @@ class SendCommand extends AbstractCommand
     protected function doExecute(): int
     {
         $mageProduct = $this->productRepository->get($this->input->getArgument('sku'));
-        if (! $product->getId()) {
+        if (! $mageProduct->getId()) {
             $this->log->error(
                 sprintf(
-                    "<error>%s</error>",
+                    "%s",
                     __(
                         "The product with the SKU '%1' does not exist",
                         $this->input->getArgument('sku')
@@ -72,9 +72,9 @@ class SendCommand extends AbstractCommand
             );
             $this->productRepository->save($mageProduct);
         } catch (Exception $e) {
-            $this->log->error(
+            $this->logger->error(
                 sprintf(
-                    "<error>%s</error>",
+                    "%s",
                     __(
                         "An error occurred while sending the product with the SKU '%1'",
                         $this->input->getArgument('sku')

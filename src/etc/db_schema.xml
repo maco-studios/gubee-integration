@@ -54,9 +54,10 @@
         <column name="danfeLink" nullable="true" xsi:type="text" comment="danfeLink"/>
         <column name="danfeXml" nullable="true" xsi:type="text" comment="danfeXml"/>
         <column name="issueDate" nullable="true" xsi:type="timestamp" comment="issueDate"/>
-        <column name="key" nullable="true" xsi:type="text" comment="key"/>
+        <column name="key" nullable="true" xsi:type="varchar" comment="key" length="44"/>
         <column name="line" nullable="true" xsi:type="text" comment="line"/>
         <column name="number" nullable="true" xsi:type="text" comment="number"/>
+        <column name="origin" nullable="false" xsi:type="int" comment="origin" default="0"/>
         <column name="order_id" nullable="true" xsi:type="int" padding="10" unsigned="true" comment="order_id"/>
         <column name="created_at" xsi:type="timestamp" nullable="false" default="CURRENT_TIMESTAMP" comment="Created At"/>
         <column name="updated_at" xsi:type="timestamp" nullable="false" default="CURRENT_TIMESTAMP" on_update="true" comment="Updated At"/>
@@ -64,6 +65,9 @@
             <column name="invoice_id"/>
         </constraint>
         <constraint xsi:type="foreign" referenceId="GUBEE_INTEGRATION_INVOICE_ORDER_ID_SALES_ORDER_ENTITY_ENTITY_ID" table="gubee_integration_invoice" column="order_id" referenceTable="sales_order" referenceColumn="entity_id" onDelete="SET NULL"/>
+        <index referenceId="GUBEE_INTEGRATION_INVOICE_KEY" indexType="btree">
+            <column name="key"/>
+        </index>
     </table>
 
 

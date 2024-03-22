@@ -170,6 +170,8 @@ interface ConfigInterface
      */
     public const CONFIG_PATH_QUEUE_PAGE_SIZE = 'gubee/general/queue_page_size';
 
+    public const CONFIG_PATH_DEFAULT_DELIVERY_TIME = 'carriers/gubee/default_delivery_time';
+
     /**
      * Set the 'active' system config.
      */
@@ -420,4 +422,16 @@ interface ConfigInterface
      * Get the 'queue_page_size' system config.
      */
     public function getQueuePageSize(): int;
+
+    /**
+     * Get the 'default_delivery_time' system config.
+     */
+    public function getDefaultDeliveryTime(): int;
+
+    /**
+     * Set the 'default_delivery_time' system config.
+     *
+     * @return ConfigInterface
+     */
+    public function setDefaultDeliveryTime(int $defaultDeliveryTime): self;
 }

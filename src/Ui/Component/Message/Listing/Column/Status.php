@@ -37,11 +37,11 @@ class Status extends Column
                 $label = __('Pending');
                 break;
             case StatusEnum::RUNNING()->__toString():
-                $class = 'grid-severity-notice';
+                $class = 'grid-severity-minor';
                 $label = __('Running');
                 break;
             case StatusEnum::DONE()->__toString():
-                $class = 'grid-severity-minor';
+                $class = 'grid-severity-notice';
                 $label = __('Done');
                 break;
             case StatusEnum::ERROR()->__toString():

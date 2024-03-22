@@ -7,6 +7,7 @@
     <update handle="styles"/>
     <body>
         <referenceContainer name="content">
+            <block class="Gubee\Integration\Block\Adminhtml\Message\Status" name="gubee_integration_message_status" template="Gubee_Integration::message/index.phtml"/>
             <uiComponent name="gubee_integration_message_listing"/>
         </referenceContainer>
     </body>

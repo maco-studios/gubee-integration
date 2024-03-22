@@ -36,12 +36,51 @@ class CollectionFactory
                     ->setValue('gubee_%')
                     ->setConditionType('nlike')
                     ->create()
-            )
-            ->addFilter(
+            )->addFilter(
                 $this->filterBuilder->setField('attribute_code')
-                    ->setValue($this->config->getBrandAttribute())
-                    ->setConditionType('neq')
-                    ->create()
+                ->setValue($this->config->getColorAttribute())
+                ->setConditionType('neq')
+                ->create()
+            )->addFilter(
+                $this->filterBuilder->setField('attribute_code')
+                ->setValue($this->config->getEanAttribute())
+                ->setConditionType('neq')
+                ->create()
+            )->addFilter(
+                $this->filterBuilder->setField('attribute_code')
+                ->setValue($this->config->getWidthAttribute())
+                ->setConditionType('neq')
+                ->create()
+            )->addFilter(
+                $this->filterBuilder->setField('attribute_code')
+                ->setValue($this->config->getHeightAttribute())
+                ->setConditionType('neq')
+                ->create()
+            )->addFilter(
+                $this->filterBuilder->setField('attribute_code')
+                ->setValue($this->config->getDepthAttribute())
+                ->setConditionType('neq')
+                ->create()
+            )->addFilter(
+                $this->filterBuilder->setField('attribute_code')
+                ->setValue($this->config->getMeasureUnitAttribute())
+                ->setConditionType('neq')
+                ->create()
+            )->addFilter(
+                $this->filterBuilder->setField('attribute_code')
+                ->setValue($this->config->getCrossDockingTimeAttribute())
+                ->setConditionType('neq')
+                ->create()
+            )->addFilter(
+                $this->filterBuilder->setField('attribute_code')
+                ->setValue($this->config->getNbmAttribute())
+                ->setConditionType('neq')
+                ->create()
+            )->addFilter(
+                $this->filterBuilder->setField('attribute_code')
+                ->setValue($this->config->getBrandAttribute())
+                ->setConditionType('neq')
+                ->create()
             )
             ->addFilter(
                 $this->filterBuilder->setField('frontend_label')

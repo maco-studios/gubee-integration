@@ -197,10 +197,10 @@ class Variation
     protected function buildHandlingTime()
     {
         $type =
-            $this->attribute->getRawAttributeValue(
-                'gubee_handling_time_unit',
-                $this->product
-            );
+        $this->attribute->getRawAttributeValue(
+            'gubee_handling_time_unit',
+            $this->product
+        );
         if (empty($type) || is_array($type)) {
             $type = UnitTimeTypeEnum::DAYS();
         } else {
@@ -232,10 +232,10 @@ class Variation
     protected function buildWarrantyTime()
     {
         $type =
-            $this->attribute->getRawAttributeValue(
-                'gubee_warranty_time_unit',
-                $this->product
-            );
+        $this->attribute->getRawAttributeValue(
+            'gubee_warranty_time_unit',
+            $this->product
+        );
         if (empty($type) || is_array($type)) {
             $type = UnitTimeTypeEnum::DAYS();
         } else {
@@ -363,8 +363,9 @@ class Variation
                 continue;
             }
 
-            $value = $this->product->getData(
-                $attribute->getAttributeCode()
+            $value = $this->attribute->getAttributeValueLabel(
+                $attribute->getAttributeCode(),
+                $this->product
             );
             if (! $value) {
                 continue;

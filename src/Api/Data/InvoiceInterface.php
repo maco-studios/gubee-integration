@@ -4,16 +4,22 @@ declare(strict_types=1);
 
 namespace Gubee\Integration\Api\Data;
 
-interface InvoiceInterface
+use DateTimeInterface;
+use JsonSerializable;
+
+interface InvoiceInterface extends JsonSerializable
 {
-    const INVOICE_ID = 'invoice_id';
-    const NUMBER     = 'number';
-    const DANFEXML   = 'danfeXml';
-    const LINE       = 'line';
-    const KEY        = 'key';
-    const DANFELINK  = 'danfeLink';
-    const ISSUEDATE  = 'issueDate';
-    const ORDER_ID   = 'order_id';
+    public const INVOICE_ID     = 'invoice_id';
+    public const NUMBER         = 'number';
+    public const DANFEXML       = 'danfeXml';
+    public const LINE           = 'line';
+    public const KEY            = 'key';
+    public const DANFELINK      = 'danfeLink';
+    public const ISSUEDATE      = 'issueDate';
+    public const ORDER_ID       = 'order_id';
+    public const ORIGIN         = 'origin';
+    public const ORIGIN_GUBEE   = 1;
+    public const ORIGIN_MAGENTO = 0;
 
     /**
      * Get invoice_id
@@ -70,10 +76,9 @@ interface InvoiceInterface
     /**
      * Set issueDate
      *
-     * @param string $issueDate
      * @return \Gubee\Integration\Invoice\Api\Data\InvoiceInterface
      */
-    public function setIssueDate($issueDate);
+    public function setIssueDate(DateTimeInterface $issueDate);
 
     /**
      * Get key

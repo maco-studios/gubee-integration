@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Gubee\Integration\Block\Adminhtml\Sales\Order\View\Tab\Gubee\Invoice;
 
+use Gubee\Integration\Block\Adminhtml\Sales\Order\View\Tab\Gubee\Invoice\Renderer\Origin;
 use Gubee\Integration\Model\Config;
 use Gubee\Integration\Model\ResourceModel\Invoice\Collection;
 use Magento\Backend\Block\Widget\Grid\Extended;
@@ -32,7 +33,7 @@ class Grid extends Extended implements TabInterface
     protected function _prepareCollection()
     {
         $collection = ObjectManager::getInstance()
-        ->create(Collection::class);
+            ->create(Collection::class);
         $collection->addFieldToFilter('order_id', $this->getOrder()->getId());
         $this->setCollection($collection);
         return parent::_prepareCollection();
@@ -78,6 +79,12 @@ class Grid extends Extended implements TabInterface
                 'header' => __('order_id'),
                 'type'   => 'text',
                 'index'  => 'order_id',
+            ],
+            'origin'    => [
+                'header'   => __('Source Origin'),
+                'type'     => 'text',
+                'index'    => 'origin',
+                'renderer' => Origin::class,
             ],
         ];
         foreach ($columns as $key => $column) {

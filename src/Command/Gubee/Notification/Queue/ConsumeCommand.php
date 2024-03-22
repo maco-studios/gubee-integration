@@ -93,15 +93,20 @@ class ConsumeCommand extends AbstractCommand
                 ],
             ] as $type => $command
         ) {
-            $results = $this->resultPager->fetchPages(
+            $this->resultPager->fetchAllWithCallback(
                 $this->notificationResource,
                 $type,
-                3
-            );
-            $this->queueItems(
-                $results,
-                $command['processor'],
-                $command['consumer']
+                function ($items) use ($command) {
+                    $this->queueItems(
+                        $items,
+                        $command['processor'],
+                        $command['consumer']
+                    );
+                },
+                [
+                    0,
+                    10,
+                ]
             );
         }
 
@@ -113,8 +118,8 @@ class ConsumeCommand extends AbstractCommand
         string $command,
         string $consumer
     ) {
-        $items = $items['_embedded'] ?? $items[0];
-        foreach ($items['orders'] ?: [] as $item) {
+        $items = $items['_embedded'] ?? [];
+        foreach ($items['orders'] ?? [] as $item) {
             if (! isset($item['orderId']) && ! isset($item['id'])) {
                 print_r($item);
                 exit;

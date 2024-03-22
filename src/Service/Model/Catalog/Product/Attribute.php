@@ -58,13 +58,11 @@ class Attribute
 
         $isVariant = false;
         if (
-            $attribute->getIsGlobal() === "1" /** @phpstan-ignore-line */
-            && $attribute->getIsUserDefined() === true
+            $attribute->getIsGlobal() === "1"/** @phpstan-ignore-line */
+            && $attribute->getIsUserDefined() === "1"/** @phpstan-ignore-line */
             && $attribute->getFrontendInput() === "select"
         ) {
             if (
-                ! $attribute->getApplyTo()
-                ||
                 in_array(
                     Configurable::TYPE_CODE,
                     $attribute->getApplyTo()
@@ -72,7 +70,11 @@ class Attribute
             ) {
                 $isVariant = true;
             }
+            if (! $attribute->getApplyTo() || empty($attribute->getApplyTo())) {
+                $isVariant = true;
+            }
         }
+
         $this->gubeeAttribute->setVariant($isVariant);
         $options = [];
         foreach ($attribute->getOptions() ?: [] as $option) {

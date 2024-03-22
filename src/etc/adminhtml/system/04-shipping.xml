@@ -43,5 +43,10 @@
             <label>Displayed Error Message</label>
             <config_path>carriers/gubee/specificerrmsg</config_path>
         </field>
+        <field id="default_delivery_time" type="text" sortOrder="90" showInWebsite="1" showInStore="1" showInDefault="1" translate="label">
+            <label>Default Delivery Time</label>
+            <config_path>carriers/gubee/default_delivery_time</config_path>
+            <validate>required-entry validate-digits</validate>
+        </field>
     </group>
 </include>

@@ -505,4 +505,27 @@ class Config extends AbstractHelper implements ConfigInterface
     {
         return $this->logger;
     }
+
+    /**
+     * Get the 'default_delivery_time' system config.
+     */
+    public function getDefaultDeliveryTime(): int
+    {
+        return (int) $this->scopeConfig->getValue(
+            self::CONFIG_PATH_DEFAULT_DELIVERY_TIME
+        ) ?: 45;
+    }
+
+    /**
+     * Set the 'default_delivery_time' system config.
+     *
+     * @return ConfigInterface
+     */
+    public function setDefaultDeliveryTime(int $defaultDeliveryTime): self
+    {
+        return $this->saveConfig(
+            self::CONFIG_PATH_DEFAULT_DELIVERY_TIME,
+            $defaultDeliveryTime
+        );
+    }
 }

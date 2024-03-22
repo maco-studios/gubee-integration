@@ -52,7 +52,7 @@ class SendCommand extends AbstractCommand
         if (! $product->getId()) {
             $this->logger->error(
                 sprintf(
-                    "<error>%s</error>",
+                    "%s",
                     __(
                         "The product with the SKU '%1' does not exist",
                         $this->input->getArgument('sku')

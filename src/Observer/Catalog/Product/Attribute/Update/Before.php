@@ -30,7 +30,7 @@ class Before extends AbstractObserver
             $this->queueManagement->append(
                 SendCommand::class,
                 ['sku' => $product->getSku()],
-                $product->getId()
+                (int) $product->getId()
             );
         }
     }
@@ -39,7 +39,7 @@ class Before extends AbstractObserver
     {
         $attributeData = $this->getObserver()->getAttributesData();
         return isset($attributeData['gubee'])
-            && $attributeData['gubee'] === 1
-            && parent::isAllowed();
+        && $attributeData['gubee'] === 1
+        && parent::isAllowed();
     }
 }
