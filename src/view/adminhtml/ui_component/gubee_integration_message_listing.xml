@@ -58,7 +58,8 @@
         </column>
         <column name="priority">
             <settings>
-                <filter>text</filter>
+                <filter>range</filter>
+                <dataType>number</dataType>
                 <label translate="true">priority</label>
             </settings>
         </column>
@@ -83,16 +84,21 @@
         </column>
         <column name="message">
             <settings>
+                <filter>text</filter>
                 <label translate="true">Message</label>
             </settings>
         </column>
         <column name="created_at">
             <settings>
+                <filter>dateRange</filter>
+                <dataType>date</dataType>
                 <label translate="true">Created At</label>
             </settings>
         </column>
         <column name="updated_at">
             <settings>
+                <filter>dateRange</filter>
+                <dataType>date</dataType>
                 <label translate="true">Updated At</label>
             </settings>
         </column>
@@ -100,7 +106,6 @@
             <settings>
                 <label translate="true">Details</label>
                 <bodyTmpl>ui/grid/cells/html</bodyTmpl>
-
             </settings>
         </column>
         <actionsColumn name="actions" class="Gubee\Integration\Ui\Component\Message\Listing\Column\Action">

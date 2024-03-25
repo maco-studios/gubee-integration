@@ -1,6 +1,6 @@
 <?php
 
-declare(strict_types=1);
+declare (strict_types = 1);
 
 namespace Gubee\Integration\Command\Gubee\Notification\Queue;
 
@@ -20,10 +20,7 @@ use Magento\Framework\Event\ManagerInterface;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\Console\Exception\LogicException;
 
-use function print_r;
-
-class ConsumeCommand extends AbstractCommand
-{
+class ConsumeCommand extends AbstractCommand {
     protected ManagementInterface $management;
     protected NotificationResource $notificationResource;
     protected ResultPager $resultPager;
@@ -39,9 +36,9 @@ class ConsumeCommand extends AbstractCommand
         NotificationResource $notificationResource,
         ResultPager $resultPager
     ) {
-        $this->resultPager          = $resultPager;
+        $this->resultPager = $resultPager;
         $this->notificationResource = $notificationResource;
-        $this->management           = $management;
+        $this->management = $management;
         parent::__construct(
             $eventDispatcher,
             $logger,
@@ -49,47 +46,45 @@ class ConsumeCommand extends AbstractCommand
         );
     }
 
-    protected function configure(): void
-    {
+    protected function configure(): void {
         $this->setName("notification:queue:consume");
         $this->setDescription("Consume notification queue");
     }
 
-    protected function doExecute(): int
-    {
+    protected function doExecute(): int {
         foreach (
             [
-                'getCreatedOrders'   => [
+                'getCreatedOrders' => [
                     'processor' => CreatedCommand::class,
-                    'consumer'  => 'removeCreatedOrder',
+                    'consumer' => 'removeCreatedOrder',
                 ],
-                'getCanceledOrders'  => [
+                'getCanceledOrders' => [
                     'processor' => CanceledCommand::class,
-                    'consumer'  => 'removeCanceledOrder',
+                    'consumer' => 'removeCanceledOrder',
                 ],
                 'getDeliveredOrders' => [
                     'processor' => DeliveredCommand::class,
-                    'consumer'  => 'removeDeliveredOrder',
+                    'consumer' => 'removeDeliveredOrder',
                 ],
-                'getInvoicedOrders'  => [
+                'getInvoicedOrders' => [
                     'processor' => InvoicedCommand::class,
-                    'consumer'  => 'removeInvoicedOrder',
+                    'consumer' => 'removeInvoicedOrder',
                 ],
-                'getPaidOrders'      => [
+                'getPaidOrders' => [
                     'processor' => PaidCommand::class,
-                    'consumer'  => 'removePaidOrder',
+                    'consumer' => 'removePaidOrder',
                 ],
-                'getPayedOrders'     => [
+                'getPayedOrders' => [
                     'processor' => PayedCommand::class,
-                    'consumer'  => 'removePayedOrder',
+                    'consumer' => 'removePayedOrder',
                 ],
-                'getRejectedOrders'  => [
+                'getRejectedOrders' => [
                     'processor' => RejectedCommand::class,
-                    'consumer'  => 'removeRejectedOrder',
+                    'consumer' => 'removeRejectedOrder',
                 ],
-                'getShippedOrders'   => [
+                'getShippedOrders' => [
                     'processor' => ShippedCommand::class,
-                    'consumer'  => 'removeShippedOrder',
+                    'consumer' => 'removeShippedOrder',
                 ],
             ] as $type => $command
         ) {
@@ -120,10 +115,6 @@ class ConsumeCommand extends AbstractCommand
     ) {
         $items = $items['_embedded'] ?? [];
         foreach ($items['orders'] ?? [] as $item) {
-            if (! isset($item['orderId']) && ! isset($item['id'])) {
-                print_r($item);
-                exit;
-            }
             $this->management->append(
                 $command,
                 ['order_id' => $item['id'] ?? $item['orderId']]

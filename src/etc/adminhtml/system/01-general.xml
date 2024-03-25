@@ -27,7 +27,7 @@
         <field id="api_timeout" type="text" sortOrder="10" showInWebsite="1" showInStore="1" showInDefault="1" translate="label">
             <label>API Timeout</label>
             <frontend_model>Gubee\Integration\Block\Adminhtml\System\Config\Form\Field\Disabled</frontend_model>
-            <comment>|                                                                                                                                                                                                                                                                                                                                                                <![CDATA[API Timeout indicate the valid time of the token.]]></comment>
+            <comment>|                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                <![CDATA[API Timeout indicate the valid time of the token.]]></comment>
             <depends>
                 <field id="active">1</field>
             </depends>
@@ -72,39 +72,26 @@
                 <field id="active">1</field>
             </depends>
         </field>
-        <!-- fulfilment grid rules -->
+        <field id="fulfilment_enable" type="select" sortOrder="40" showInWebsite="1" showInStore="1" showInDefault="1" translate="label">
+            <label>Enable Fulfilment rule</label>
+            <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+            <depends>
+                <field id="active">1</field>
+            </depends>
+            <comment>
+                <![CDATA[If this option is enabled, the fulfilment rule will be applied to each order, if not, the all order will be processed normally.]]>
+            </comment>
+        </field>
         <field id="fulfilment_grid_rules" type="textarea" sortOrder="40" showInWebsite="1" showInStore="1" showInDefault="1" translate="label">
             <label>Allow fulfilment</label>
             <comment>
-                <![CDATA[The fulfilment blacklist rules are used to define the rules for the fulfilment.]]>
+                <![CDATA[Enter the rules to allow the fulfilment of the order, by <b>default it is empty.</b>]]>
             </comment>
             <depends>
                 <field id="active">1</field>
+                <field id="fulfilment_enable">1</field>
             </depends>
             <frontend_model>Gubee\Integration\Block\Adminhtml\System\Config\Form\Field\Fulfillment</frontend_model>
-            <backend_model>Magento\Config\Model\Config\Backend\Serialized\ArraySerialized</backend_model>
-        </field>
-
-        <field id="queue_process_blacklist" type="textarea" sortOrder="40" showInWebsite="1" showInStore="1" showInDefault="1" translate="label">
-            <label>Queue Process Blacklist</label>
-            <comment>
-                <![CDATA[The queue process blacklist rules are used to define the rules for the queue process.]]>
-            </comment>
-            <depends>
-                <field id="active">1</field>
-            </depends>
-            <frontend_model>Gubee\Integration\Block\Adminhtml\System\Config\Form\Field\Queue\Process\Blacklist</frontend_model>
-            <backend_model>Magento\Config\Model\Config\Backend\Serialized\ArraySerialized</backend_model>
-        </field>
-        <field id="queue_process_blacklist_marketplace" type="textarea" sortOrder="40" showInWebsite="1" showInStore="1" showInDefault="1" translate="label">
-            <label><![CDATA[<span style="font-weight:normal">Queue Process Blacklist by</span> <b>Marketplace</b>]]></label>
-            <comment>
-                <![CDATA[The queue process blacklist rules are used to define the rules for the queue process.]]>
-            </comment>
-            <depends>
-                <field id="active">1</field>
-            </depends>
-            <frontend_model>Gubee\Integration\Block\Adminhtml\System\Config\Form\Field\Queue\Process\Blacklist\Marketplace</frontend_model>
             <backend_model>Magento\Config\Model\Config\Backend\Serialized\ArraySerialized</backend_model>
         </field>
     </group>

@@ -1,6 +1,6 @@
 <?php
 
-declare(strict_types=1);
+declare (strict_types = 1);
 
 namespace Gubee\Integration\Command\Sales\Order\Processor;
 
@@ -13,6 +13,7 @@ use Gubee\SDK\Resource\Sales\OrderResource;
 use Magento\Framework\DB\TransactionFactory;
 use Magento\Framework\Event\ManagerInterface;
 use Magento\Sales\Api\Data\OrderInterface;
+use Magento\Sales\Api\OrderManagementInterface;
 use Magento\Sales\Api\OrderRepositoryInterface;
 use Magento\Sales\Model\Order\Status\HistoryFactory;
 use Magento\Sales\Model\ResourceModel\Order\CollectionFactory;
@@ -21,11 +22,7 @@ use Psr\Log\LoggerInterface;
 use Symfony\Component\Console\Exception\LogicException;
 use Throwable;
 
-use function __;
-use function count;
-
-class InvoicedCommand extends AbstractProcessorCommand
-{
+class InvoicedCommand extends AbstractProcessorCommand {
     /** @var InvoiceService */
     protected $invoiceService;
 
@@ -49,12 +46,13 @@ class InvoicedCommand extends AbstractProcessorCommand
         InvoiceFactory $invoiceFactory,
         InvoiceRepositoryInterface $invoiceRepository,
         InvoiceService $invoiceService,
+        OrderManagementInterface $orderManagement,
         TransactionFactory $transactionFactory
     ) {
-        $this->invoiceService     = $invoiceService;
+        $this->invoiceService = $invoiceService;
         $this->transactionFactory = $transactionFactory;
-        $this->invoiceFactory     = $invoiceFactory;
-        $this->invoiceRepository  = $invoiceRepository;
+        $this->invoiceFactory = $invoiceFactory;
+        $this->invoiceRepository = $invoiceRepository;
         parent::__construct(
             $eventDispatcher,
             $logger,
@@ -62,12 +60,12 @@ class InvoicedCommand extends AbstractProcessorCommand
             $orderCollectionFactory,
             $orderRepository,
             $historyFactory,
+            $orderManagement,
             "invoiced",
         );
     }
 
-    protected function doExecute(): int
-    {
+    protected function doExecute(): int {
         $order = $this->getOrder(
             $this->input->getArgument('order_id')
         );
@@ -89,7 +87,11 @@ class InvoicedCommand extends AbstractProcessorCommand
                 __("Integrating invoice '%1'", $invoiceData['key'])
             );
             $invoiceMagento = $this->invoiceRepository->getByKey($invoiceData['key']);
-            if ($invoiceMagento->getId()) {
+            if (
+                $invoiceMagento->getId()
+                &&
+                $invoiceMagento->getOrderId() === $order->getId()
+            ) {
                 $this->logger->debug(
                     __("Invoice '%1' already integrated", $invoiceData['key'])
                 );
@@ -97,7 +99,7 @@ class InvoicedCommand extends AbstractProcessorCommand
             }
             try {
                 $invoice = $this->invoiceFactory->create();
-                $date    = DateTime::createFromFormat(
+                $date = DateTime::createFromFormat(
                     'Y-m-d\TH:i:s.v',
                     $invoiceData['issueDate']
                 );
@@ -127,8 +129,7 @@ class InvoicedCommand extends AbstractProcessorCommand
         return 0;
     }
 
-    private function invoiceOrder(OrderInterface $order): void
-    {
+    private function invoiceOrder(OrderInterface $order): void {
         // check if order is invoiced
 
         $invoices = $order->getInvoiceCollection();

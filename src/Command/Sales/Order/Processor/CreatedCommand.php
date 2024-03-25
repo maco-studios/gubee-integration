@@ -1,11 +1,12 @@
 <?php
 
-declare(strict_types=1);
+declare (strict_types = 1);
 
 namespace Gubee\Integration\Command\Sales\Order\Processor;
 
 use Exception;
 use Gubee\Integration\Command\Sales\Order\AbstractProcessorCommand;
+use Gubee\Integration\Model\InvoiceFactory;
 use Gubee\Integration\Service\Model\Catalog\Product\Variation;
 use Gubee\SDK\Resource\Sales\OrderResource;
 use Magento\Catalog\Api\Data\ProductInterface;
@@ -18,35 +19,26 @@ use Magento\Directory\Model\Country;
 use Magento\Directory\Model\Region;
 use Magento\Framework\App\Helper\Context;
 use Magento\Framework\App\ObjectManager;
-use Magento\Framework\Data\Form\FormKey;
 use Magento\Framework\DataObject;
+use Magento\Framework\Data\Form\FormKey;
 use Magento\Framework\Event\ManagerInterface;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Quote\Api\Data\CartInterface;
 use Magento\Quote\Model\QuoteFactory;
 use Magento\Quote\Model\QuoteManagement;
+use Magento\Sales\Api\OrderManagementInterface;
 use Magento\Sales\Api\OrderRepositoryInterface;
+use Magento\Sales\Model\Convert\Order as ConvertOrder;
 use Magento\Sales\Model\Order\Status\HistoryFactory;
 use Magento\Sales\Model\ResourceModel\Order\CollectionFactory;
 use Magento\Sales\Model\Service\OrderService;
 use Magento\Store\Model\StoreManagerInterface;
 use Psr\Log\LoggerInterface;
+use Symfony\Component\Console\Input\ArrayInput;
 use Throwable;
 
-use function __;
-use function end;
-use function explode;
-use function hash;
-use function implode;
-use function microtime;
-use function print_r;
-use function sizeof;
-use function sprintf;
-use function strpos;
-
-class CreatedCommand extends AbstractProcessorCommand
-{
+class CreatedCommand extends AbstractProcessorCommand {
     protected ProductRepositoryInterface $productRepository;
     protected QuoteManagement $quoteManagement;
     protected Context $context;
@@ -57,6 +49,8 @@ class CreatedCommand extends AbstractProcessorCommand
     protected CustomerFactory $customerFactory;
     protected CustomerRepositoryInterface $customerRepository;
     protected OrderService $orderService;
+    protected InvoiceFactory $invoiceFactory;
+    protected ConvertOrder $convertOrder;
 
     public function __construct(
         ManagerInterface $eventDispatcher,
@@ -74,7 +68,10 @@ class CreatedCommand extends AbstractProcessorCommand
         CustomerFactory $customerFactory,
         CustomerRepositoryInterface $customerRepository,
         OrderService $orderService,
-        HistoryFactory $historyFactory
+        InvoiceFactory $invoiceFactory,
+        HistoryFactory $historyFactory,
+        OrderManagementInterface $orderManagement,
+        ConvertOrder $convertOrder
     ) {
         parent::__construct(
             $eventDispatcher,
@@ -83,26 +80,31 @@ class CreatedCommand extends AbstractProcessorCommand
             $orderCollectionFactory,
             $orderRepository,
             $historyFactory,
+            $orderManagement,
             "created"
         );
-        $this->context            = $context;
-        $this->storeManager       = $storeManager;
-        $this->product            = $product;
-        $this->formkey            = $formkey;
-        $this->orderRepository    = $orderRepository;
-        $this->quoteFactory       = $quoteFactory;
-        $this->customerFactory    = $customerFactory;
+        $this->convertOrder = $convertOrder;
+        $this->invoiceFactory = $invoiceFactory;
+        $this->context = $context;
+        $this->storeManager = $storeManager;
+        $this->product = $product;
+        $this->formkey = $formkey;
+        $this->orderRepository = $orderRepository;
+        $this->quoteFactory = $quoteFactory;
+        $this->customerFactory = $customerFactory;
         $this->customerRepository = $customerRepository;
-        $this->orderService       = $orderService;
-        $this->productRepository  = $productRepository;
-        $this->quoteManagement    = $quoteManagement;
+        $this->orderService = $orderService;
+        $this->productRepository = $productRepository;
+        $this->quoteManagement = $quoteManagement;
     }
 
-    protected function doExecute(): int
-    {
+    protected function doExecute(): int {
         $orderId = $this->input->getArgument('order_id');
-        $order   = $this->getOrder($orderId);
+        $order = $this->getOrder($orderId);
         if ($order != null) {
+            $this->logger->info(
+                __("Order with increment ID '%1' found", $orderId)
+            );
             return 0;
         }
 
@@ -124,18 +126,83 @@ class CreatedCommand extends AbstractProcessorCommand
             return 0;
         } catch (Throwable $e) {
             $this->logger->error(
-                __("Error creating order with increment ID '%1'", $orderId)
+                __(
+                    "Error creating order with increment ID '%1', Error: %s",
+                    $orderId,
+                    $e->getMessage()
+                )
             );
             throw $e;
         }
+
     }
 
-    public function create(string $incrementId): bool
-    {
+    public function create(string $incrementId): bool {
         $gubeeOrder = $this->orderResource->loadByOrderId($incrementId);
-        $customer   = $this->prepareCustomer($gubeeOrder);
-        $quote      = $this->prepareQuote($gubeeOrder, $customer);
-        return $this->persistOrder($quote, $customer, $gubeeOrder);
+        $customer = $this->prepareCustomer($gubeeOrder);
+        $quote = $this->prepareQuote($gubeeOrder, $customer);
+        $order = $this->persistOrder($quote, $customer, $gubeeOrder);
+        if (isset($gubeeOrder['invoices']) && count($gubeeOrder['invoices']) > 0) {
+            $this->logger->debug(
+                __("Creating invoices for order '%1'", $order->getIncrementId())
+            );
+            $this->createInvoices($order, $gubeeOrder);
+            $this->logger->debug(
+                __("Invoices for order '%1' created", $order->getIncrementId())
+            );
+        }
+        if (isset($gubeeOrder['shipments']) && count($gubeeOrder['shipments']) > 0) {
+            $this->logger->debug(
+                __("Creating shipments for order '%1'", $order->getIncrementId())
+            );
+            $this->createShipments($order, $gubeeOrder);
+            $this->logger->debug(
+                __("Shipments for order '%1' created", $order->getIncrementId())
+            );
+        }
+        $this->logger->info(
+            __("Order '%1' created", $order->getIncrementId())
+        );
+
+        return true;
+    }
+
+    protected function createShipments(
+        $order,
+        array $gubeeOrder
+    ) {
+        $arrayInput = ObjectManager::getInstance()->create(
+            ArrayInput::class,
+            [
+                'parameters' => [
+                    'order_id' => $order->getIncrementId(),
+                ],
+            ]
+        );
+        $shipmentCommand = ObjectManager::getInstance()->create(
+            ShippedCommand::class
+        );
+
+        return $shipmentCommand->run($arrayInput, $this->getOutput());
+    }
+
+    protected function createInvoices(
+        $order,
+        array $gubeeOrder
+    ) {
+        $arrayInput = ObjectManager::getInstance()->create(
+            ArrayInput::class,
+            [
+                'parameters' => [
+                    'order_id' => $order->getIncrementId(),
+                ],
+            ]
+        );
+        $invoiceCommand = ObjectManager::getInstance()->create(
+            InvoicedCommand::class
+        );
+
+        return $invoiceCommand->run($arrayInput, $this->getOutput());
     }
 
     protected function persistOrder(
@@ -143,12 +210,21 @@ class CreatedCommand extends AbstractProcessorCommand
         CustomerInterface $customer,
         array $gubeeOrder
     ) {
+        $this->logger->debug(
+            __("Persisting order for customer '%1'", $customer->getEmail())
+        );
+        $this->logger->debug(
+            __("Shipping address: %1", json_encode($gubeeOrder['shippingAddress']))
+        );
         $shippingAddress = $this->createAddress(
             new DataObject($gubeeOrder['shippingAddress']),
             $gubeeOrder['customer'],
             $customer->getId()
         );
-        $billingAddress  = $this->createAddress(
+        $this->logger->debug(
+            __("Billing address: %1", json_encode($gubeeOrder['billingAddress']))
+        );
+        $billingAddress = $this->createAddress(
             new DataObject($gubeeOrder['billingAddress']),
             $gubeeOrder['customer'],
             $customer->getId()
@@ -157,6 +233,9 @@ class CreatedCommand extends AbstractProcessorCommand
          * Set flag to not collect and recalculate totals
          */
         $quote->setCustomer($customer);
+        $this->logger->debug(
+            __("Setting customer '%1' to quote", $customer->getEmail())
+        );
         $quote->setCustomerIsGuest(false);
         $quote->setCustomerEmail($customer->getEmail());
         $quote->setCustomerFirstname($customer->getFirstname());
@@ -172,13 +251,22 @@ class CreatedCommand extends AbstractProcessorCommand
             ->setShippingMethod(
                 'gubee_gubee'
             );
+        $this->logger->debug(
+            __("Setting shipping method '%1' to quote", 'gubee_gubee')
+        );
         $quote->setPaymentMethod('gubee');
+        $this->logger->debug(
+            __("Setting payment method '%1' to quote", 'gubee')
+        );
         $quote->setInventoryProcessed(true);
         $quote->save();
 
         $paymentData = [
             'method' => 'gubee',
         ];
+        $this->logger->debug(
+            __("Setting payment data '%1' to quote", json_encode($paymentData))
+        );
         foreach ($gubeeOrder['payments'] as $payment) {
             $paymentData['additional_data']['payment'][] = $payment;
         }
@@ -186,35 +274,60 @@ class CreatedCommand extends AbstractProcessorCommand
         $quote->getPayment()->importData(
             $paymentData
         );
+
+        $quote->getPayment()->setAdditionalInformation(
+            'payment', json_encode($paymentData)
+        );
+
+        $this->logger->debug(
+            __("Importing payment data '%1' to quote", json_encode($paymentData))
+        );
         $shippingAmount = $gubeeOrder['totalFreight'];
         $quote->setTotalsCollectedFlag(false);
         $quote->collectTotals()->save();
         $externalId = $gubeeOrder['id'];
-        $order      = $this->quoteManagement->submit($quote);
+        $order = $this->quoteManagement->submit($quote);
         $order->setShippingAmount($shippingAmount);
         $order->setBaseShippingAmount($shippingAmount);
 
         $order->setEmailSent(0);
         $order->setIncrementId($externalId);
         $order->save();
-        $this->addOrderHistory(
-            __("Order created by Gubee Integration")
+        $this->logger->debug(
+            __("Order for customer '%1' persisted", $customer->getEmail())
         );
-
-        return true;
+        $this->addOrderHistory(
+            __("Order created by Gubee Integration")->__toString(),
+            (int) $order->getId()
+        );
+        $this->logger->debug(
+            __("Order history for order '%1' created", $order->getIncrementId())
+        );
+        return $order;
     }
 
-    public function prepareCustomer(array $gubeeOrder): CustomerInterface
-    {
+    public function prepareCustomer(array $gubeeOrder): CustomerInterface {
+        $this->logger->debug(
+            __("Preparing customer for order '%1'", $gubeeOrder['id'])
+        );
         try {
             $customer = $this->customerRepository->get(
                 $gubeeOrder['customer']['email'],
                 $this->storeManager->getWebsite()->getId()
             );
+            $this->logger->debug(
+                __("Customer '%1' found", $gubeeOrder['customer']['email'])
+            );
         } catch (Exception $e) {
             $customer = $this->customerFactory->create();
+            $this->logger->debug(
+                __("Customer '%1' not found, creating it", $gubeeOrder['customer']['email'])
+            );
         }
-        if (! $customer->getId()) {
+        if (!$customer->getId()) {
+            $this->logger->debug(
+                __("Customer '%1' not found, creating it", $gubeeOrder['customer']['email'])
+            );
             [$firstname, $lastname] = explode(' ', $gubeeOrder['customer']['name']);
             $customer->setEmail($gubeeOrder['customer']['email']);
             $customer->setTaxvat(
@@ -247,17 +360,19 @@ class CreatedCommand extends AbstractProcessorCommand
         return $quote;
     }
 
-    protected function addItemsToQuote(array $gubeeOrder, CartInterface $quote)
-    {
-        echo '<pre>';
-        print_r($gubeeOrder);
-        exit;
+    protected function addItemsToQuote(array $gubeeOrder, CartInterface $quote) {
+        $this->logger->debug(
+            __("Adding items to quote for order '%1'", $gubeeOrder['id'])
+        );
         foreach ($gubeeOrder['items'] as $item) {
+            $this->logger->debug(
+                __("Adding item '%1' to quote", $item['skuId'])
+            );
             try {
                 $product = $this->getProductByGubeeSku(
                     isset($item['subItems']) ? $item['subItems'][0]['skuId'] : $item['skuId']
                 );
-                if (! $product->getId()) {
+                if (!$product->getId()) {
                     throw new Exception(
                         __("Product with SKU '%1' not found", isset($item['subItems']) ? $item['subItems'][0]['skuId'] : $item['skuId'])->__toString()
                     );
@@ -266,7 +381,10 @@ class CreatedCommand extends AbstractProcessorCommand
                     $this->getItemPrice($item)
                 );
                 // product add area
-                $item = $quote->addProduct($product, $item['qty']);
+                $quoteItem = $quote->addProduct($product, $item['qty']);
+                $quoteItem->setAdditionalData(
+                    json_encode($item)
+                );
             } catch (Throwable $e) {
                 $message = __(
                     "Error adding product with SKU '%1' to quote, error: " . (string) $e->getMessage(),
@@ -279,6 +397,9 @@ class CreatedCommand extends AbstractProcessorCommand
                 );
             }
         }
+        $this->logger->debug(
+            __("Items added to quote for order '%1'", $gubeeOrder['id'])
+        );
     }
 
     /**
@@ -290,16 +411,13 @@ class CreatedCommand extends AbstractProcessorCommand
      * @param mixed $item
      * @return float
      */
-    public function getItemPrice($item)
-    {
+    public function getItemPrice($item) {
         if (isset($item['subItems'])) {
             $price = $item['salePrice'] / ($item['subItems'][0]['qty'] * $item['qty']);
             if (isset($item['subItems'][0]['percentageOfTotal'])) {
                 $price *= $item['subItems'][0]['percentageOfTotal'] / 100;
             }
         } else {
-            print_r($item);
-            exit;
             $price = $item['salePrice'] / $item['qty'];
         }
         return $price;
@@ -308,13 +426,19 @@ class CreatedCommand extends AbstractProcessorCommand
     protected function getProductByGubeeSku(
         string $sku
     ): ProductInterface {
+        $this->logger->debug(
+            __("Getting product with SKU '%1'", $sku)
+        );
         if (strpos($sku, Variation::SEPARATOR) !== false) {
             $sku = explode(Variation::SEPARATOR, $sku);
             $sku = end($sku);
         }
         try {
+            $this->logger->debug(
+                __("Loading product with SKU '%1'", $sku)
+            );
             $product = $this->productRepository->get($sku);
-            if (! $product->getId()) {
+            if (!$product->getId()) {
                 throw new NoSuchEntityException(
                     __("Product with SKU '%1' not found on Magento", $sku)
                 );
@@ -327,52 +451,75 @@ class CreatedCommand extends AbstractProcessorCommand
             $this->logger->error($e->getMessage());
             throw $e;
         }
-
+        $this->logger->debug(
+            __("Product with SKU '%1' found", $sku)
+        );
         return $product;
     }
 
-    public function createAddress($address, $customer, $mageCustomerId)
-    {
-        $customer = new DataObject($customer);
-        $region   = ObjectManager::getInstance()->create(
-            Region::class
-        )->loadByName(
-            $address->getRegion(),
-            'BR'
+    public function createAddress($address, $customer, $mageCustomerId) {
+        $this->logger->debug(
+            __("Creating address for customer '%1'", $customer['email'])
         );
 
-        $country    = ObjectManager::getInstance()->create(Country::class)
+        $regionCollection = ObjectManager::getInstance()->create(
+            Region::class
+        )->getCollection();
+
+        $regionCollection->addFieldToFilter(
+            'default_name',
+            $address->getRegion()
+        );
+
+        if ($regionCollection->getSize() === 0) {
+            $region = ObjectManager::getInstance()->create(
+                Region::class
+            )->loadByCode(
+                $address->getRegion(),
+                'BR'
+            );
+        } else {
+            $region = $regionCollection->getFirstItem();
+        }
+        $customer = new DataObject($customer);
+
+        $country = ObjectManager::getInstance()->create(Country::class)
             ->loadByCode(
                 'BR'
             );
-        $phone      = $customer->getData('phones/0');
-        $phone      = sprintf(
+        $phone = $customer->getData('phones/0');
+        $phone = sprintf(
             "(%s) %s",
-            $phone['ddd'],
-            $phone['number']
+            isset($phone['ddd']) ? $phone['ddd'] : "11",
+            isset($phone['number']) ? $phone['number'] : "999999999"
         );
-        $name       = explode(' ', $customer->getName());
+        $name = explode(' ', $customer->getName());
         $secondName = end($name);
         unset($name[sizeof($name) - 1]);
         $firstName = implode(' ', $name);
-        $address   = [
-            'firstname'            => $firstName,
-            'lastname'             => $secondName,
-            'email'                => $customer->getEmail(),
-            'street'               => [
+
+        $address = [
+            'firstname' => $firstName,
+            'lastname' => $secondName,
+            'email' => $customer->getEmail(),
+            'street' => [
                 $address->getStreet() ?: __("Street not informed"),
                 $address->getNumber() ?: __("Number not informed"),
                 $address->getComplement() ?: __("Complement not informed"),
             ],
-            'city'                 => $address->getCity(),
-            'country_id'           => $country->getId(),
-            'region'               => $region->getDefaultName(),
-            'region_id'            => $region->getId(),
-            'postcode'             => $address->getData('postCode'),
-            'telephone'            => $phone,
+            'city' => $address->getCity(),
+            'country_id' => $country->getId(),
+            'region' => $region->getDefaultName(),
+            'region_id' => $region->getId(),
+            'postcode' => $address->getData('postCode'),
+            'telephone' => $phone,
             'save_in_address_book' => 1,
-            'customer_id'          => $mageCustomerId,
+            'customer_id' => $mageCustomerId,
         ];
+
+        $this->logger->debug(
+            __("Address for customer '%1' created", $customer['email'])
+        );
         return $address;
     }
 }

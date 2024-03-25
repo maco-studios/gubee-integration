@@ -1,24 +1,23 @@
 <?php
 
-declare(strict_types=1);
+declare (strict_types = 1);
 
 namespace Gubee\Integration\Command\Sales\Order\Shipment;
 
 use DateTime;
 use Gubee\Integration\Command\Sales\Order\AbstractProcessorCommand;
 use Gubee\Integration\Model\Config;
+use Gubee\Integration\Service\Model\Catalog\Product\Variation;
 use Gubee\SDK\Resource\Sales\OrderResource;
 use Magento\Framework\Event\ManagerInterface;
+use Magento\Sales\Api\OrderManagementInterface;
 use Magento\Sales\Api\OrderRepositoryInterface;
 use Magento\Sales\Model\Order\Status\HistoryFactory;
 use Magento\Sales\Model\ResourceModel\Order\CollectionFactory;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\Console\Exception\LogicException;
 
-use function print_r;
-
-class SendCommand extends AbstractProcessorCommand
-{
+class SendCommand extends AbstractProcessorCommand {
     protected Config $config;
 
     /**
@@ -32,6 +31,7 @@ class SendCommand extends AbstractProcessorCommand
         CollectionFactory $orderCollectionFactory,
         OrderRepositoryInterface $orderRepository,
         HistoryFactory $historyFactory,
+        OrderManagementInterface $orderManagement,
         Config $config
     ) {
         $this->config = $config;
@@ -42,57 +42,84 @@ class SendCommand extends AbstractProcessorCommand
             $orderCollectionFactory,
             $orderRepository,
             $historyFactory,
+            $orderManagement,
             "shipment:send"
         );
     }
 
-    protected function doExecute(): int
-    {
+    protected function doExecute(): int {
         $orderId = $this->getInput()->getArgument('order_id');
-        $order   = $this->getOrder($orderId);
-
-        // $this->orderResource->updateShipped(
-        //     $order->getIncrementId(),
-        //     [
-        //         'code' => $order->getShippingMethod(),
-        //         'estimatedDeliveryDt' => new \DateTime(
-        //             'now + '
-        //             . $this->config->getDefaultDeliveryTime()
-        //             . ' days'
-        //         ),
-        //         'transport' => [
-        //             'carrier' => $order->getShippingDescription(),
-        //             'link' => $order->getShippingTracking(),
-        //             'method' => $order->getShippingMethod(),
-        //         ],
-        //     ]
-        // );
-
-        // get all tracking numbers
+        $order = $this->getOrder($orderId);
         $trackings = $order->getTracksCollection();
+        $this->logger->debug(
+            sprintf(
+                "Order '%s' has '%d' tracking(s)",
+                $order->getIncrementId(),
+                count($trackings)
+            )
+        );
         foreach ($trackings as $tracking) {
-            print_r($tracking->getData());
-            print_r(
-                [
-                    'code'                => $order->getShippingMethod(),
-                    'estimatedDeliveryDt' => new DateTime(
-                        'now + '
-                        . $this->config->getDefaultDeliveryTime()
-                        . ' days'
-                    ),
-                    'transport'           => [
-                        'carrier'      => $tracking->getTitle(),
-                        'link'         => $order->getShippingTracking(),
-                        'method'       => $order->getShippingMethod(),
-                        'trackingCode' => $tracking->getTrackNumber(),
-                    ],
-                ]
+            $items = $tracking->getShipment()->getItems();
+            $gubeeItems = [];
+            foreach ($items as $key => $value) {
+                $orderItem = $value->getOrderItem();
+                $additionalData = json_decode(
+                    $orderItem->getAdditionalData(),
+                    true
+                );
+                $gubeeItems[] = [
+                    'qty' => (int) $value->getQty(),
+                    'sku' => isset($additionalData['subItems']) ? $additionalData['subItems'][0]['skuId'] : $additionalData['skuId'],
+                ];
+            }
+
+            $trackingGubee = [
+                'code' => sprintf("%s:%s", $order->getIncrementId(), $tracking->getId()),
+                'items' => $gubeeItems,
+                'estimatedDeliveryDt' => (new DateTime(
+                    'now + '
+                    . $this->config->getDefaultDeliveryTime()
+                    . ' days'
+                ))->format('Y-m-d\TH:i:s.v'),
+                'transport' => [
+                    'carrier' => $tracking->getTitle(),
+                    'link' => "https://gubee.com.br/",
+                    'method' => $tracking->getCarrierCode(),
+                    'trackingCode' => $tracking->getTrackNumber(),
+                ],
+            ];
+            $this->orderResource->updateShipped($order->getIncrementId(), $trackingGubee);
+            $this->logger->info(
+                sprintf(
+                    "Order '%s' has been shipped with tracking '%s'",
+                    $order->getIncrementId(),
+                    $tracking->getTrackNumber()
+                )
             );
         }
-        exit;
 
-        exit;
+        $this->logger->info(
+            sprintf(
+                "Order '%s' has been shipped, with '%d' tracking(s)",
+                $order->getIncrementId(),
+                count($trackings)
+            )
+        );
 
         return 0;
+    }
+
+    protected function getSku(
+        string $sku
+    ): string {
+        $this->logger->debug(
+            __("Getting product with SKU '%1'", $sku)
+        );
+        if (strpos($sku, Variation::SEPARATOR) !== false) {
+            $sku = explode(Variation::SEPARATOR, $sku);
+            $sku = end($sku);
+        }
+
+        return $sku;
     }
 }

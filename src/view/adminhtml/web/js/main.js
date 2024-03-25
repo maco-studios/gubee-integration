@@ -3,10 +3,44 @@ import './assets/css/style.css'
 import App from './vue/components/App.vue'
 import Validation from './vue/components/Validation.vue'
 import Details2 from './vue/components/Message/Details2.vue'
+import PaymentInfo from './vue/components/PaymentInfo.vue'
+import OrderInfo from './vue/components/OrderInfo.vue'
+import ShippingInfo from './vue/components/ShippingInfo.vue'
 
 if (!window.gubeeIntegration) {
     window.gubeeIntegration = {}
 }
+
+document.addEventListener('DOMContentLoaded', function () {
+    if (!document.querySelector('body.sales-order-view')) {
+        return
+    }
+    var container;
+    if (container = document.querySelector('.gubee-payment-placeholder')) {
+        createApp(
+            PaymentInfo
+        ).mount(
+            container.parentNode.parentNode.parentNode
+        )
+    }
+
+    var placeholder = document.createElement('div');
+    placeholder.setAttribute('id', 'gubee_shipping_info_placeholder');
+    var target = document.querySelector('.order-shipping-method')
+    createApp(
+        ShippingInfo
+    ).mount(target)
+    var placeholder = document.createElement('div');
+    placeholder.setAttribute('id', 'gubee_order_info_placeholder');
+    var target = document.querySelector('.order-view-account-information')
+    // add after target
+    target.parentNode.insertBefore(placeholder, target)
+    createApp(
+        OrderInfo
+    ).mount(placeholder)
+
+
+})
 
 document.addEventListener('DOMContentLoaded', function () {
     var doc = document.querySelector('body.gubee-install-index .page-wrapper')

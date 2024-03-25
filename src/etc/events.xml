@@ -22,7 +22,15 @@
     <event name="catalog_category_save_after">
         <observer name="Gubee\Integration\Observer\Catalog\Category\Save\After" instance="Gubee\Integration\Observer\Catalog\Category\Save\After" />
     </event>
+
     <event name="sales_order_shipment_save_after">
         <observer name="Gubee\Integration\Observer\Sales\Order\Shipment\Save\After" instance="Gubee\Integration\Observer\Sales\Order\Shipment\Save\After" />
     </event>
+    <event name="gubee_command_execute_before">
+        <observer name="Gubee\Integration\Observer\Gubee\Command\Execute\Before" instance="Gubee\Integration\Observer\Gubee\Command\Execute\Before" />
+    </event>
+    <event name="gubee_command_gubee_sales_order_processor_created_run_before">
+        <observer name="Gubee\Integration\Observer\Gubee\Command\Sales\Order\Processor\Created\Run\Before" instance="Gubee\Integration\Observer\Gubee\Command\Sales\Order\Processor\Created\Run\Before" />
+    </event>
+
 </config>

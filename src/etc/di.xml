@@ -76,7 +76,6 @@
         <arguments>
             <argument name="commands" xsi:type="array">
                 <item name="Gubee\Integration\Command\Gubee\Queue\ConsumeCommand" xsi:type="object">Gubee\Integration\Command\Gubee\Queue\ConsumeCommand</item>
-                <item name="Gubee\Integration\Command\Gubee\Notification\Queue\ConsumeCommand" xsi:type="object">Gubee\Integration\Command\Gubee\Notification\Queue\ConsumeCommand</item>
             </argument>
         </arguments>
     </type>

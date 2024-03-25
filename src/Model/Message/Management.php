@@ -1,14 +1,15 @@
 <?php
 
-declare(strict_types=1);
+declare (strict_types = 1);
 
 namespace Gubee\Integration\Model\Message;
 
 use Gubee\Integration\Api\Data\MessageInterface;
 use Gubee\Integration\Api\Enum\Message\StatusEnum;
-use Gubee\Integration\Api\Message\ManagementInterface;
 use Gubee\Integration\Api\MessageRepositoryInterface;
+use Gubee\Integration\Api\Message\ManagementInterface;
 use Gubee\Integration\Command\Catalog\Product\SendCommand;
+use Gubee\Integration\Command\Sales\Order\Processor\Exception\BlacklistedException;
 use Gubee\Integration\Helper\Catalog\Attribute;
 use Gubee\Integration\Model\Config;
 use InvalidArgumentException;
@@ -24,11 +25,7 @@ use Psr\Log\LoggerInterface;
 use Symfony\Component\Console\Input\ArrayInput;
 use Symfony\Component\Console\Output\BufferedOutput;
 
-use function __;
-use function sprintf;
-
-class Management implements ManagementInterface
-{
+class Management implements ManagementInterface {
     protected DateTime $date;
     protected FileDriver $fileDriver;
     protected LoggerInterface $logger;
@@ -53,20 +50,19 @@ class Management implements ManagementInterface
         Registry $registry,
         Attribute $attribute
     ) {
-        $this->config                = $config;
-        $this->productRepository     = $productRepository;
-        $this->attribute             = $attribute;
-        $this->date                  = $date;
-        $this->logger                = $logger;
-        $this->messageRepository     = $messageRepository;
-        $this->objectManager         = $objectManager;
-        $this->scopeConfig           = $scopeConfig;
+        $this->config = $config;
+        $this->productRepository = $productRepository;
+        $this->attribute = $attribute;
+        $this->date = $date;
+        $this->logger = $logger;
+        $this->messageRepository = $messageRepository;
+        $this->objectManager = $objectManager;
+        $this->scopeConfig = $scopeConfig;
         $this->searchCriteriaBuilder = $searchCriteriaBuilder;
-        $this->registry              = $registry;
+        $this->registry = $registry;
     }
 
-    public function process(MessageInterface $message): void
-    {
+    public function process(MessageInterface $message): void {
         if ($this->registry->registry('gubee_current_message')) {
             $this->registry->unregister('gubee_current_message');
         }
@@ -84,7 +80,7 @@ class Management implements ManagementInterface
             if ($message->getCommand() !== SendCommand::class) {
                 if ($message->getProductId()) {
                     $product = $this->productRepository->getById($message->getProductId());
-                    if (! $product->getId()) {
+                    if (!$product->getId()) {
                         throw new NoSuchEntityException(
                             __(
                                 "Product with ID '%s' not found",
@@ -119,6 +115,14 @@ class Management implements ManagementInterface
             );
             $this->execute($message);
             $status = StatusEnum::DONE();
+        } catch (BlacklistedException $e) {
+            $status = StatusEnum::DONE();
+            $this->logger->error(
+                $e->getMessage()
+            );
+            $message->setMessage(
+                (string) $e->getMessage()
+            );
         } catch (ErrorException $e) {
             $status = StatusEnum::ERROR();
 
@@ -177,19 +181,18 @@ class Management implements ManagementInterface
         );
     }
 
-    protected function execute(MessageInterface $message): void
-    {
+    protected function execute(MessageInterface $message): void {
         try {
             $command = $this->objectManager->create(
                 $message->getCommand()
             );
-            $input   = $this->objectManager->create(
+            $input = $this->objectManager->create(
                 ArrayInput::class,
                 [
                     'parameters' => $message->getPayload(),
                 ]
             );
-            $output  = $this->objectManager->create(
+            $output = $this->objectManager->create(
                 BufferedOutput::class
             );
             $command->run($input, $output);
@@ -203,31 +206,28 @@ class Management implements ManagementInterface
         }
     }
 
-    private function updateMessageStatus(MessageInterface $message, StatusEnum $status): void
-    {
+    private function updateMessageStatus(MessageInterface $message, StatusEnum $status): void {
         $message->setStatus($status);
         $this->messageRepository->save($message);
     }
 
-    public function getPending()
-    {
+    public function getPending() {
         $searchCriteria = $this->searchCriteriaBuilder
             ->addFilter(
                 MessageInterface::STATUS,
                 (int) StatusEnum::PENDING()->__toString()
             )->setPageSize(
-                $this->config->getQueuePageSize()
-            )->create();
+            $this->config->getQueuePageSize()
+        )->create();
 
         return $this->messageRepository->getList(
             $searchCriteria
         );
     }
 
-    public function getToBeRetried(): array
-    {
+    public function getToBeRetried(): array {
         $retryAmount = $this->scopeConfig->getValue('queue/general/auto_retry_amount');
-        if (! $retryAmount) {
+        if (!$retryAmount) {
             return [];
         }
 
@@ -244,8 +244,7 @@ class Management implements ManagementInterface
      *
      * @param iterable<MessageInterface> $messages
      */
-    public function massProcess(iterable $messages): void
-    {
+    public function massProcess(iterable $messages): void {
         foreach ($messages as $message) {
             $this->process($message);
         }

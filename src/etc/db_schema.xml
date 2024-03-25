@@ -58,6 +58,7 @@
         <column name="line" nullable="true" xsi:type="text" comment="line"/>
         <column name="number" nullable="true" xsi:type="text" comment="number"/>
         <column name="origin" nullable="false" xsi:type="int" comment="origin" default="0"/>
+        <column name="shipment_id" nullable="true" xsi:type="int" padding="10" unsigned="true" comment="shipment_id"/>
         <column name="order_id" nullable="true" xsi:type="int" padding="10" unsigned="true" comment="order_id"/>
         <column name="created_at" xsi:type="timestamp" nullable="false" default="CURRENT_TIMESTAMP" comment="Created At"/>
         <column name="updated_at" xsi:type="timestamp" nullable="false" default="CURRENT_TIMESTAMP" on_update="true" comment="Updated At"/>
@@ -65,6 +66,7 @@
             <column name="invoice_id"/>
         </constraint>
         <constraint xsi:type="foreign" referenceId="GUBEE_INTEGRATION_INVOICE_ORDER_ID_SALES_ORDER_ENTITY_ENTITY_ID" table="gubee_integration_invoice" column="order_id" referenceTable="sales_order" referenceColumn="entity_id" onDelete="SET NULL"/>
+        <constraint xsi:type="foreign" referenceId="GUBEE_INTEGRATION_INVOICE_SHIPMENT_ID_SALES_SHIPMENT_ENTITY_ENTITY_ID" table="gubee_integration_invoice" column="shipment_id" referenceTable="sales_shipment" referenceColumn="entity_id" onDelete="SET NULL"/>
         <index referenceId="GUBEE_INTEGRATION_INVOICE_KEY" indexType="btree">
             <column name="key"/>
         </index>
