@@ -1,6 +1,6 @@
 <?php
 
-declare (strict_types = 1);
+declare(strict_types=1);
 
 namespace Gubee\Integration\Observer\Sales\Order\Shipment\Save;
 
@@ -10,13 +10,15 @@ use Gubee\Integration\Model\InvoiceRepository;
 use Gubee\Integration\Model\Queue\Management;
 use Gubee\Integration\Observer\AbstractObserver;
 use Magento\Framework\App\RequestInterface;
-use Magento\Framework\Event\Observer;
 use Magento\Framework\Message\ManagerInterface;
 use Magento\Framework\Registry;
 use Psr\Log\LoggerInterface;
 
-class Before extends AbstractObserver {
+use function __;
+use function in_array;
 
+class Before extends AbstractObserver
+{
     protected RequestInterface $request;
     protected InvoiceRepository $invoiceRepository;
     protected Registry $registry;
@@ -32,18 +34,19 @@ class Before extends AbstractObserver {
         ManagerInterface $messageManager
     ) {
         parent::__construct($config, $logger, $queueManagement);
-        $this->request = $request;
-        $this->registry = $registry;
+        $this->request           = $request;
+        $this->registry          = $registry;
         $this->invoiceRepository = $invoiceRepository;
-        $this->messageManager = $messageManager;
+        $this->messageManager    = $messageManager;
     }
 
-    protected function process(): void {
+    protected function process(): void
+    {
         $params = $this->request->getParams();
         try {
             foreach ($params['tracking'] as $tracking) {
-                if (!isset($tracking['shipment_key'])) {
-                    throw new \Exception(
+                if (! isset($tracking['shipment_key'])) {
+                    throw new Exception(
                         __("Each shipment of Gubee must be associated with a invoice key.")->__toString()
                     );
                 }
@@ -57,7 +60,7 @@ class Before extends AbstractObserver {
                     $invoiceKeys[] = $tracking['shipment_key'];
                 }
             }
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             $this->logger->error($e->getMessage());
             $this->messageManager->addErrorMessage($e->getMessage());
             throw $e;
@@ -67,7 +70,8 @@ class Before extends AbstractObserver {
     /**
      * Validate if the observer is allowed to run
      */
-    protected function isAllowed(): bool {
+    protected function isAllowed(): bool
+    {
         $order = $this->registry->registry('current_shipment')
             ->getOrder();
         if ($order->getPayment()->getMethod() !== 'gubee') {
@@ -76,5 +80,4 @@ class Before extends AbstractObserver {
 
         return parent::isAllowed();
     }
-
 }

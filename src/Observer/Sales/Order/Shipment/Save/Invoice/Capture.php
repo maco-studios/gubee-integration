@@ -1,23 +1,28 @@
 <?php
 
-declare (strict_types = 1);
+declare(strict_types=1);
 
 namespace Gubee\Integration\Observer\Sales\Order\Shipment\Save\Invoice;
+
 use Gubee\Integration\Observer\Sales\Order\Shipment\Save\Before;
 use Magento\Framework\DataObject;
 
-class Capture extends Before {
+use function md5;
+use function trim;
 
-    protected function process(): void {
+class Capture extends Before
+{
+    protected function process(): void
+    {
         // create a lock to avoid loop with registry
         if ($this->registry->registry('gubee_shipment_save_invoice_capture')) {
             return;
         }
         $shipment = $this->getObserver()->getShipment();
-        $params = new DataObject(
+        $params   = new DataObject(
             $this->request->getParams()
         );
-        $hashes = [];
+        $hashes   = [];
         foreach ($params->getTracking() as $tracking) {
             $hashes[$this->hashTracking(
                 trim($tracking['title']),
@@ -32,7 +37,7 @@ class Capture extends Before {
                 trim($tracking->getCarrierCode()),
                 trim($tracking->getNumber())
             );
-            if (!isset($hashes[$hash])) {
+            if (! isset($hashes[$hash])) {
                 continue;
             }
             $tracking->setShipmentId($hashes[$hash]);

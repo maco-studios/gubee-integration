@@ -1,6 +1,6 @@
 <?php
 
-declare (strict_types = 1);
+declare(strict_types=1);
 
 namespace Gubee\Integration\Service\Gubee;
 
@@ -10,7 +10,8 @@ use Gubee\SDK\Library\HttpClient\Builder;
 use Magento\Framework\App\ObjectManager;
 use Psr\Log\LoggerInterface;
 
-class Client extends \Gubee\SDK\Client {
+class Client extends \Gubee\SDK\Client
+{
     public function __construct(
         Config $config,
         ?ServiceProviderInterface $serviceProvider = null,
@@ -22,7 +23,8 @@ class Client extends \Gubee\SDK\Client {
         $this->authenticate($config->getApiToken());
     }
 
-    public function buildServiceProvider(): ServiceProviderInterface {
+    public function buildServiceProvider(): ServiceProviderInterface
+    {
         return ObjectManager::getInstance()->get(ServiceProviderInterface::class);
     }
 }

@@ -1,21 +1,30 @@
 <?php
 
-declare (strict_types = 1);
+declare(strict_types=1);
 
 namespace Gubee\Integration\Observer\Gubee\Command\Sales\Order\Processor\Created\Run;
+
 use Gubee\Integration\Command\Sales\Order\AbstractProcessorCommand;
 use Gubee\Integration\Command\Sales\Order\Processor\Exception\BlacklistedException;
 use Gubee\Integration\Model\Config;
+use Gubee\Integration\Model\Message;
 use Gubee\Integration\Model\Queue\Management;
 use Gubee\Integration\Observer\AbstractObserver;
 use Gubee\SDK\Resource\PlatformResource;
 use Gubee\SDK\Resource\Sales\OrderResource;
-use Magento\Framework\Event\Observer;
 use Magento\Framework\Registry;
 use Psr\Log\LoggerInterface;
+use ReflectionClass;
 
-class Before extends AbstractObserver {
+use function in_array;
+use function is_array;
+use function is_subclass_of;
+use function sprintf;
+use function str_replace;
+use function strtoupper;
 
+class Before extends AbstractObserver
+{
     protected Registry $registry;
     protected PlatformResource $platformResource;
     protected OrderResource $orderResource;
@@ -29,21 +38,23 @@ class Before extends AbstractObserver {
         OrderResource $orderResource
     ) {
         parent::__construct($config, $logger, $queueManagement);
-        $this->registry = $registry;
+        $this->registry         = $registry;
         $this->platformResource = $platformResource;
-        $this->orderResource = $orderResource;
+        $this->orderResource    = $orderResource;
     }
-    protected function process(): void {
-        /** @var \Gubee\Integration\Model\Message $message */
+
+    protected function process(): void
+    {
+        /** @var Message $message */
         $message = $this->registry->registry('gubee_current_message');
-        if (!is_subclass_of($message->getCommand(), AbstractProcessorCommand::class)) {
+        if (! is_subclass_of($message->getCommand(), AbstractProcessorCommand::class)) {
             return;
         }
 
-        $command = $message->getCommand();
-        $class = new \ReflectionClass($command);
-        $className = $class->getShortName();
-        $blacklist = $this->getBlacklist();
+        $command    = $message->getCommand();
+        $class      = new ReflectionClass($command);
+        $className  = $class->getShortName();
+        $blacklist  = $this->getBlacklist();
         $statusName = str_replace(
             "Command",
             "",
@@ -52,7 +63,7 @@ class Before extends AbstractObserver {
         $statusName = strtoupper($statusName);
 
         $order = $this->getOrder($message->getPayload()['order_id']);
-        if (!$order) {
+        if (! $order) {
             $this->logger->error(
                 sprintf(
                     "Order with ID %s not found",
@@ -81,8 +92,9 @@ class Before extends AbstractObserver {
         }
     }
 
-    public function getBlacklist() {
-        $response = $this->platformResource->createdBlacklist();
+    public function getBlacklist()
+    {
+        $response  = $this->platformResource->createdBlacklist();
         $blacklist = [];
         foreach ($response as $item) {
             $blacklist[$item['name']] = $item['status'];
@@ -90,8 +102,8 @@ class Before extends AbstractObserver {
         return $blacklist;
     }
 
-    public function getOrder(string $orderId) {
+    public function getOrder(string $orderId)
+    {
         return $this->orderResource->loadByOrderId($orderId);
     }
-
 }

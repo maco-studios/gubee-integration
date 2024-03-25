@@ -1,10 +1,9 @@
 <?php
 
-declare (strict_types = 1);
+declare(strict_types=1);
 
 namespace Gubee\Integration\Command\Sales\Order\Processor;
 
-use Exception;
 use Gubee\SDK\Resource\Sales\OrderResource;
 use Magento\Framework\Event\ManagerInterface;
 use Magento\Sales\Api\OrderManagementInterface;
@@ -13,8 +12,8 @@ use Magento\Sales\Model\Order\Status\HistoryFactory;
 use Magento\Sales\Model\ResourceModel\Order\CollectionFactory;
 use Psr\Log\LoggerInterface;
 
-class RejectedCommand extends CanceledCommand {
-
+class RejectedCommand extends CanceledCommand
+{
     /**
      * @param string|null $name The name of the command; passing null means it must be set in configure()
      * @throws LogicException When the command name is empty.
@@ -40,5 +39,4 @@ class RejectedCommand extends CanceledCommand {
             "rejected"
         );
     }
-
 }

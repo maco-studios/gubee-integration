@@ -1,6 +1,6 @@
 <?php
 
-declare (strict_types = 1);
+declare(strict_types=1);
 
 namespace Gubee\Integration\Command\Sales\Order\Processor;
 
@@ -14,7 +14,8 @@ use Magento\Sales\Model\ResourceModel\Order\CollectionFactory;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\Console\Exception\LogicException;
 
-class ShippedCommand extends AbstractProcessorCommand {
+class ShippedCommand extends AbstractProcessorCommand
+{
     /**
      * @param string|null $name The name of the command; passing null means it must be set in configure()
      * @throws LogicException When the command name is empty.
@@ -39,7 +40,9 @@ class ShippedCommand extends AbstractProcessorCommand {
             "shipped"
         );
     }
-    protected function doExecute(): int {
+
+    protected function doExecute(): int
+    {
         return 0;
     }
 }

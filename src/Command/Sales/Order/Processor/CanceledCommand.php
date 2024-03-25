@@ -1,6 +1,6 @@
 <?php
 
-declare (strict_types = 1);
+declare(strict_types=1);
 
 namespace Gubee\Integration\Command\Sales\Order\Processor;
 
@@ -14,9 +14,13 @@ use Magento\Sales\Model\Order\Status\HistoryFactory;
 use Magento\Sales\Model\ResourceModel\Order\CollectionFactory;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\Console\Exception\LogicException;
+use Throwable;
 
-class CanceledCommand extends AbstractProcessorCommand {
+use function __;
+use function sprintf;
 
+class CanceledCommand extends AbstractProcessorCommand
+{
     /**
      * @param string|null $name The name of the command; passing null means it must be set in configure()
      * @throws LogicException When the command name is empty.
@@ -44,7 +48,9 @@ class CanceledCommand extends AbstractProcessorCommand {
             "canceled"
         );
     }
-    protected function doExecute(): int {
+
+    protected function doExecute(): int
+    {
         $order = $this->getOrder(
             $this->input->getArgument('order_id')
         );
@@ -64,7 +70,8 @@ class CanceledCommand extends AbstractProcessorCommand {
         return 0;
     }
 
-    private function cancelOrder($order): void {
+    private function cancelOrder($order): void
+    {
         try {
             // cancel invoices
             $invoices = $order->getInvoiceCollection();
@@ -88,7 +95,7 @@ class CanceledCommand extends AbstractProcessorCommand {
                     (string) $order->getId()
                 )
             );
-        } catch (\Throwable $e) {
+        } catch (Throwable $e) {
             $this->logger->error(
                 sprintf(
                     "Error canceling order with ID %s: %s",

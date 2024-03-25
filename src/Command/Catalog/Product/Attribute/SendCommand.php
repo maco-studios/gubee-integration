@@ -1,6 +1,6 @@
 <?php
 
-declare (strict_types = 1);
+declare(strict_types=1);
 
 namespace Gubee\Integration\Command\Catalog\Product\Attribute;
 
@@ -13,7 +13,8 @@ use Magento\Framework\ObjectManagerInterface;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\Console\Input\InputArgument;
 
-class SendCommand extends AbstractCommand {
+class SendCommand extends AbstractCommand
+{
     protected Client $client;
     protected ProductAttributeRepositoryInterface $productAttributeRepository;
     protected ObjectManagerInterface $objectManager;
@@ -26,8 +27,8 @@ class SendCommand extends AbstractCommand {
         ProductAttributeRepositoryInterface $productAttributeRepository
     ) {
         $this->productAttributeRepository = $productAttributeRepository;
-        $this->client = $client;
-        $this->objectManager = $objectManager;
+        $this->client                     = $client;
+        $this->objectManager              = $objectManager;
         parent::__construct(
             $eventDispatcher,
             $logger,
@@ -35,13 +36,15 @@ class SendCommand extends AbstractCommand {
         );
     }
 
-    protected function configure(): void {
+    protected function configure(): void
+    {
         $this->setDescription("Send the attribute to Gubee");
         $this->setHelp("This command will send the attribute to Gubee");
         $this->addArgument("attribute", InputArgument::REQUIRED, "The attribute code to be sent");
     }
 
-    protected function doExecute(): int {
+    protected function doExecute(): int
+    {
         $this->logger->info("Sending attribute");
 
         $attribute = $this->input->getArgument("attribute");
@@ -55,7 +58,8 @@ class SendCommand extends AbstractCommand {
         return 0;
     }
 
-    public function getClient(): Client {
+    public function getClient(): Client
+    {
         return $this->client;
     }
 }
