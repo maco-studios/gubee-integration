@@ -1,6 +1,6 @@
 <?php
 
-declare(strict_types=1);
+declare (strict_types = 1);
 
 namespace Gubee\Integration\Cron\Queue;
 
@@ -12,10 +12,7 @@ use Psr\Log\LoggerInterface;
 use Symfony\Component\Console\Input\ArrayInput;
 use Symfony\Component\Console\Output\BufferedOutput;
 
-use function __;
-
-class Process
-{
+class Process {
     protected Management $queueManagement;
     protected LoggerInterface $logger;
     protected ObjectManagerInterface $objectManager;
@@ -26,21 +23,25 @@ class Process
         Config $config
     ) {
         $this->objectManager = $objectManager;
-        $this->config        = $config;
-        $this->logger        = $logger;
+        $this->config = $config;
+        $this->logger = $logger;
     }
 
-    public function execute(): int
-    {
-        if (! $this->isAllowed()) {
+    public function execute(): int {
+        if (!$this->isAllowed()) {
             return 0;
         }
 
         $this->logger->info(
             __("Processing queue")
         );
-        $input   = $this->objectManager->create(ArrayInput::class);
-        $output  = $this->objectManager->create(BufferedOutput::class);
+        $input = $this->objectManager->create(ArrayInput::class,
+            [
+                'parameters' => [
+                ],
+            ]
+        );
+        $output = $this->objectManager->create(BufferedOutput::class);
         $command = $this->objectManager->create(ConsumeCommand::class);
         $command->run($input, $output);
         $command = $this->objectManager->create(QueueConsumeCommand::class);
@@ -53,8 +54,11 @@ class Process
                 "Consuming notifications queue"
             )
         );
-        $input   = $this->objectManager->create(ArrayInput::class);
-        $output  = $this->objectManager->create(BufferedOutput::class);
+        $input = $this->objectManager->create(ArrayInput::class, [
+            'parameters' => [
+            ],
+        ]);
+        $output = $this->objectManager->create(BufferedOutput::class);
         $command = $this->objectManager->create(ConsumeCommand::class);
         $command->run($input, $output);
         $this->logger->info(
@@ -65,8 +69,7 @@ class Process
         return 0;
     }
 
-    protected function isAllowed(): bool
-    {
+    protected function isAllowed(): bool {
         return $this->config->getActive();
     }
 }

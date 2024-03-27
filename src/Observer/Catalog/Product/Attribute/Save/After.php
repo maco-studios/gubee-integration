@@ -1,6 +1,6 @@
 <?php
 
-declare(strict_types=1);
+declare (strict_types = 1);
 
 namespace Gubee\Integration\Observer\Catalog\Product\Attribute\Save;
 
@@ -9,13 +9,9 @@ use Gubee\Integration\Model\Config;
 use Gubee\Integration\Model\Queue\Management;
 use Gubee\Integration\Model\ResourceModel\Catalog\Product\Attribute\CollectionFactory;
 use Gubee\Integration\Observer\AbstractObserver;
-use Magento\Catalog\Api\Data\ProductAttributeInterface;
 use Psr\Log\LoggerInterface;
 
-use function in_array;
-
-class After extends AbstractObserver
-{
+class After extends AbstractObserver {
     protected CollectionFactory $collectionFactory;
 
     public function __construct(
@@ -32,9 +28,7 @@ class After extends AbstractObserver
         );
     }
 
-    protected function process(): void
-    {
-        $this->logger->info("Attribute saved");
+    protected function process(): void {
         $this->getQueueManagement()->append(
             SendCommand::class,
             [
@@ -44,26 +38,30 @@ class After extends AbstractObserver
         );
     }
 
-    protected function isAllowed(): bool
-    {
-        if (
-            in_array(
-                $this->getObserver()->getObject()->getAttributeCode(), /** @phpstan-ignore-line */
-                $this->getConfig()->getBlacklistAttribute()
-            )
-        ) {
-            return false;
+    protected function isAllowed(): bool {
+        if ($this->getObserver()->getObject() instanceof \Magento\Catalog\Api\Data\EavAttributeInterface) {
+
+            return true;
         }
 
-        if (
-            $this->getObserver()->getObject()->getAttributeCode() /** @phpstan-ignore-line */
-            ===
-            $this->getConfig()->getBrandAttribute()
-        ) {
-            return false;
-        }
+        return false;
+        // if (
+        //     in_array(
+        //         $this->getObserver()->getObject()->getAttributeCode() ?: [], /** @phpstan-ignore-line */
+        //         $this->getConfig()->getBlacklistAttribute()
+        //     )
+        // ) {
+        //     return false;
+        // }
 
-        return parent::isAllowed() &&
-            $this->getObserver()->getObject() instanceof ProductAttributeInterface; /** @phpstan-ignore-line */
+        // if (
+        //     $this->getObserver()->getObject()->getAttributeCode() /** @phpstan-ignore-line */
+        //     ===
+        //     $this->getConfig()->getBrandAttribute()
+        // ) {
+        //     return false;
+        // }
+
+        // return parent::isAllowed(); /** @phpstan-ignore-line */
     }
 }

@@ -1,6 +1,6 @@
 <?php
 
-declare(strict_types=1);
+declare (strict_types = 1);
 
 namespace Gubee\Integration\Command\Catalog\Product\Stock;
 
@@ -14,11 +14,7 @@ use Magento\Framework\ObjectManagerInterface;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\Console\Input\InputArgument;
 
-use function __;
-use function sprintf;
-
-class SendCommand extends AbstractCommand
-{
+class SendCommand extends AbstractCommand {
     protected ProductRepositoryInterface $productRepository;
     protected ObjectManagerInterface $objectManager;
     protected Attribute $attribute;
@@ -32,12 +28,11 @@ class SendCommand extends AbstractCommand
     ) {
         parent::__construct($eventDispatcher, $logger, "catalog:product:stock:send");
         $this->productRepository = $productRepository;
-        $this->objectManager     = $objectManager;
-        $this->attribute         = $attribute;
+        $this->objectManager = $objectManager;
+        $this->attribute = $attribute;
     }
 
-    protected function configure()
-    {
+    protected function configure() {
         $this->setDescription("Send the stock of a product to Gubee");
         $this->addArgument(
             'sku',
@@ -46,10 +41,9 @@ class SendCommand extends AbstractCommand
         );
     }
 
-    protected function doExecute(): int
-    {
+    protected function doExecute(): int {
         $product = $this->productRepository->get($this->input->getArgument('sku'));
-        if (! $product->getId()) {
+        if (!$product->getId()) {
             $this->logger->error(
                 sprintf(
                     "%s",
@@ -86,5 +80,9 @@ class SendCommand extends AbstractCommand
 
         $product->saveStock();
         return 0;
+    }
+
+    public function getPriority(): int {
+        return 700;
     }
 }

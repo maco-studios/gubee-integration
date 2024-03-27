@@ -1,9 +1,10 @@
 <?php
 
-declare(strict_types=1);
+declare (strict_types = 1);
 
 namespace Gubee\Integration\Command\Sales\Order\Processor;
 
+use Gubee\Integration\Api\OrderRepositoryInterface as GubeeOrderRepositoryInterface;
 use Gubee\Integration\Command\Sales\Order\AbstractProcessorCommand;
 use Gubee\SDK\Resource\Sales\OrderResource;
 use Magento\Framework\Event\ManagerInterface;
@@ -13,8 +14,7 @@ use Magento\Sales\Model\Order\Status\HistoryFactory;
 use Magento\Sales\Model\ResourceModel\Order\CollectionFactory;
 use Psr\Log\LoggerInterface;
 
-class PaidCommand extends AbstractProcessorCommand
-{
+class PaidCommand extends AbstractProcessorCommand {
     /**
      * @param string|null $name The name of the command; passing null means it must be set in configure()
      * @throws LogicException When the command name is empty.
@@ -25,6 +25,7 @@ class PaidCommand extends AbstractProcessorCommand
         OrderResource $orderResource,
         CollectionFactory $orderCollectionFactory,
         OrderRepositoryInterface $orderRepository,
+        GubeeOrderRepositoryInterface $gubeeOrderRepository,
         HistoryFactory $historyFactory,
         OrderManagementInterface $orderManagement,
         ?string $name = null
@@ -35,14 +36,40 @@ class PaidCommand extends AbstractProcessorCommand
             $orderResource,
             $orderCollectionFactory,
             $orderRepository,
+            $gubeeOrderRepository,
             $historyFactory,
             $orderManagement,
             "payed"
         );
     }
 
-    protected function doExecute(): int
-    {
+    protected function doExecute(): int {
+        $gubeeOrder = $this->orderResource->loadByOrderId(
+            $this->getInput()->getArgument('order_id')
+        );
+        $order = $this->getOrder($this->getInput()->getArgument('order_id'));
+        try {
+            $order->setTotalPaid(
+                $order->getGrandTotal()
+            );
+            $order->setState(
+                'processing'
+            );
+            $order->setStatus(
+                'processing'
+            );
+            $this->orderRepository->save($order);
+            $this->addOrderHistory(
+                __(
+                    "Order paid"
+                )->__toString(),
+                (int) $order->getId()
+            );
+        } catch (\Exception $e) {
+            $this->logger->error($e->getMessage());
+            return 1;
+        }
+
         return 0;
     }
 }

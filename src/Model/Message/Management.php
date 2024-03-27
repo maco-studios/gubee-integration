@@ -1,13 +1,13 @@
 <?php
 
-declare(strict_types=1);
+declare (strict_types = 1);
 
 namespace Gubee\Integration\Model\Message;
 
 use Gubee\Integration\Api\Data\MessageInterface;
 use Gubee\Integration\Api\Enum\Message\StatusEnum;
-use Gubee\Integration\Api\Message\ManagementInterface;
 use Gubee\Integration\Api\MessageRepositoryInterface;
+use Gubee\Integration\Api\Message\ManagementInterface;
 use Gubee\Integration\Command\Catalog\Product\SendCommand;
 use Gubee\Integration\Command\Sales\Order\Processor\Exception\BlacklistedException;
 use Gubee\Integration\Helper\Catalog\Attribute;
@@ -25,11 +25,7 @@ use Psr\Log\LoggerInterface;
 use Symfony\Component\Console\Input\ArrayInput;
 use Symfony\Component\Console\Output\BufferedOutput;
 
-use function __;
-use function sprintf;
-
-class Management implements ManagementInterface
-{
+class Management implements ManagementInterface {
     protected DateTime $date;
     protected FileDriver $fileDriver;
     protected LoggerInterface $logger;
@@ -54,20 +50,19 @@ class Management implements ManagementInterface
         Registry $registry,
         Attribute $attribute
     ) {
-        $this->config                = $config;
-        $this->productRepository     = $productRepository;
-        $this->attribute             = $attribute;
-        $this->date                  = $date;
-        $this->logger                = $logger;
-        $this->messageRepository     = $messageRepository;
-        $this->objectManager         = $objectManager;
-        $this->scopeConfig           = $scopeConfig;
+        $this->config = $config;
+        $this->productRepository = $productRepository;
+        $this->attribute = $attribute;
+        $this->date = $date;
+        $this->logger = $logger;
+        $this->messageRepository = $messageRepository;
+        $this->objectManager = $objectManager;
+        $this->scopeConfig = $scopeConfig;
         $this->searchCriteriaBuilder = $searchCriteriaBuilder;
-        $this->registry              = $registry;
+        $this->registry = $registry;
     }
 
-    public function process(MessageInterface $message): void
-    {
+    public function process(MessageInterface $message): void {
         if ($this->registry->registry('gubee_current_message')) {
             $this->registry->unregister('gubee_current_message');
         }
@@ -80,12 +75,26 @@ class Management implements ManagementInterface
                 $message->getStatus()
             )
         );
+        // if ($message->getAttempts() == $this->config->getMaxAttempts()) {
+        //     $this->updateMessageStatus(
+        //         $message,
+        //         StatusEnum::ERROR()
+        //     );
+        //     $this->logger->error(
+        //         sprintf(
+        //             "Message '%s' reached the maximum number of attempts",
+        //             $message->getId()
+        //         )
+        //     );
+        //     return;
+        // }
+
         $status = StatusEnum::ERROR();
         try {
             if ($message->getCommand() !== SendCommand::class) {
                 if ($message->getProductId()) {
                     $product = $this->productRepository->getById($message->getProductId());
-                    if (! $product->getId()) {
+                    if (!$product->getId()) {
                         throw new NoSuchEntityException(
                             __(
                                 "Product with ID '%s' not found",
@@ -119,7 +128,7 @@ class Management implements ManagementInterface
                 )
             );
             $this->execute($message);
-            $status = StatusEnum::DONE();
+            $this->updateMessageStatus($message, StatusEnum::DONE());
         } catch (BlacklistedException $e) {
             $status = StatusEnum::DONE();
             $this->logger->error(
@@ -128,6 +137,7 @@ class Management implements ManagementInterface
             $message->setMessage(
                 (string) $e->getMessage()
             );
+            $this->updateMessageStatus($message, StatusEnum::DONE());
         } catch (ErrorException $e) {
             $status = StatusEnum::ERROR();
 
@@ -136,7 +146,6 @@ class Management implements ManagementInterface
                 'var/log/exception.log',
                 (string) $e->getResponse()->getBody() ?: $e->getMessage()
             )->__toString();
-            $status = StatusEnum::ERROR();
 
             $this->logger->error(
                 $result,
@@ -147,8 +156,9 @@ class Management implements ManagementInterface
             $message->setMessage(
                 (string) $result
             );
+            $this->updateMessageStatus($message, StatusEnum::ERROR());
+
         } catch (InvalidArgumentException $e) {
-            $status = StatusEnum::ERROR();
 
             $this->logger->warning(
                 $e->getMessage()
@@ -157,9 +167,10 @@ class Management implements ManagementInterface
                 $message,
                 StatusEnum::PENDING()
             );
-        } catch (Throwable $e) {
+            $this->updateMessageStatus($message, StatusEnum::ERROR());
+        } catch (\Throwable $e) {
             $result = __(
-                "EXCEPTION: '%1', check the %s for more details.",
+                "EXCEPTION: '%1', check the %2 for more details.",
                 'var/log/exception.log',
                 $e->getMessage()
             );
@@ -172,10 +183,9 @@ class Management implements ManagementInterface
                 ]
             );
             $message->setMessage(
-                (string) $result
+                (string) $e->getMessage()
             );
-        } finally {
-            $this->updateMessageStatus($message, $status);
+            $this->updateMessageStatus($message, StatusEnum::ERROR());
         }
         $this->logger->debug(
             sprintf(
@@ -186,19 +196,18 @@ class Management implements ManagementInterface
         );
     }
 
-    protected function execute(MessageInterface $message): void
-    {
+    protected function execute(MessageInterface $message): void {
         try {
             $command = $this->objectManager->create(
                 $message->getCommand()
             );
-            $input   = $this->objectManager->create(
+            $input = $this->objectManager->create(
                 ArrayInput::class,
                 [
                     'parameters' => $message->getPayload(),
                 ]
             );
-            $output  = $this->objectManager->create(
+            $output = $this->objectManager->create(
                 BufferedOutput::class
             );
             $command->run($input, $output);
@@ -209,34 +218,36 @@ class Management implements ManagementInterface
             $message->setMessage(
                 (string) $e->getMessage()
             );
+            throw $e;
         }
     }
 
-    private function updateMessageStatus(MessageInterface $message, StatusEnum $status): void
-    {
+    private function updateMessageStatus(MessageInterface $message, StatusEnum $status): void {
         $message->setStatus($status);
+        $this->logger->debug(
+            sprintf(
+                "Updating message '%s' status to '%s'",
+                $message->getId(),
+                $message->getStatus()
+            )
+        );
         $this->messageRepository->save($message);
     }
 
-    public function getPending()
-    {
+    public function getPending() {
         $searchCriteria = $this->searchCriteriaBuilder
             ->addFilter(
                 MessageInterface::STATUS,
-                (int) StatusEnum::PENDING()->__toString()
-            )->setPageSize(
-                $this->config->getQueuePageSize()
-            )->create();
+                (int) StatusEnum::PENDING()->__toString())->create();
 
         return $this->messageRepository->getList(
             $searchCriteria
         );
     }
 
-    public function getToBeRetried(): array
-    {
+    public function getToBeRetried(): array {
         $retryAmount = $this->scopeConfig->getValue('queue/general/auto_retry_amount');
-        if (! $retryAmount) {
+        if (!$retryAmount) {
             return [];
         }
 
@@ -253,8 +264,7 @@ class Management implements ManagementInterface
      *
      * @param iterable<MessageInterface> $messages
      */
-    public function massProcess(iterable $messages): void
-    {
+    public function massProcess(iterable $messages): void {
         foreach ($messages as $message) {
             $this->process($message);
         }

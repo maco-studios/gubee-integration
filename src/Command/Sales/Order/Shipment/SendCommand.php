@@ -1,10 +1,11 @@
 <?php
 
-declare(strict_types=1);
+declare (strict_types = 1);
 
 namespace Gubee\Integration\Command\Sales\Order\Shipment;
 
 use DateTime;
+use Gubee\Integration\Api\OrderRepositoryInterface as GubeeOrderRepositoryInterface;
 use Gubee\Integration\Command\Sales\Order\AbstractProcessorCommand;
 use Gubee\Integration\Model\Config;
 use Gubee\Integration\Service\Model\Catalog\Product\Variation;
@@ -17,16 +18,7 @@ use Magento\Sales\Model\ResourceModel\Order\CollectionFactory;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\Console\Exception\LogicException;
 
-use function __;
-use function count;
-use function end;
-use function explode;
-use function json_decode;
-use function sprintf;
-use function strpos;
-
-class SendCommand extends AbstractProcessorCommand
-{
+class SendCommand extends AbstractProcessorCommand {
     protected Config $config;
 
     /**
@@ -40,6 +32,7 @@ class SendCommand extends AbstractProcessorCommand
         CollectionFactory $orderCollectionFactory,
         OrderRepositoryInterface $orderRepository,
         HistoryFactory $historyFactory,
+        GubeeOrderRepositoryInterface $gubeeOrderRepository,
         OrderManagementInterface $orderManagement,
         Config $config
     ) {
@@ -50,16 +43,16 @@ class SendCommand extends AbstractProcessorCommand
             $orderResource,
             $orderCollectionFactory,
             $orderRepository,
+            $gubeeOrderRepository,
             $historyFactory,
             $orderManagement,
             "shipment:send"
         );
     }
 
-    protected function doExecute(): int
-    {
-        $orderId   = $this->getInput()->getArgument('order_id');
-        $order     = $this->getOrder($orderId);
+    protected function doExecute(): int {
+        $orderId = $this->getInput()->getArgument('order_id');
+        $order = $this->getOrder($orderId);
         $trackings = $order->getTracksCollection();
         $this->logger->debug(
             sprintf(
@@ -69,32 +62,32 @@ class SendCommand extends AbstractProcessorCommand
             )
         );
         foreach ($trackings as $tracking) {
-            $items      = $tracking->getShipment()->getItems();
+            $items = $tracking->getShipment()->getItems();
             $gubeeItems = [];
             foreach ($items as $key => $value) {
-                $orderItem      = $value->getOrderItem();
+                $orderItem = $value->getOrderItem();
                 $additionalData = json_decode(
                     $orderItem->getAdditionalData(),
                     true
                 );
-                $gubeeItems[]   = [
+                $gubeeItems[] = [
                     'qty' => (int) $value->getQty(),
                     'sku' => isset($additionalData['subItems']) ? $additionalData['subItems'][0]['skuId'] : $additionalData['skuId'],
                 ];
             }
 
             $trackingGubee = [
-                'code'                => sprintf("%s:%s", $order->getIncrementId(), $tracking->getId()),
-                'items'               => $gubeeItems,
+                'code' => sprintf("%s:%s", $order->getIncrementId(), $tracking->getId()),
+                'items' => $gubeeItems,
                 'estimatedDeliveryDt' => (new DateTime(
                     'now + '
                     . $this->config->getDefaultDeliveryTime()
                     . ' days'
                 ))->format('Y-m-d\TH:i:s.v'),
-                'transport'           => [
-                    'carrier'      => $tracking->getTitle(),
-                    'link'         => "https://gubee.com.br/",
-                    'method'       => $tracking->getCarrierCode(),
+                'transport' => [
+                    'carrier' => $tracking->getTitle(),
+                    'link' => "https://gubee.com.br/",
+                    'method' => $tracking->getCarrierCode(),
                     'trackingCode' => $tracking->getTrackNumber(),
                 ],
             ];
@@ -131,5 +124,9 @@ class SendCommand extends AbstractProcessorCommand
         }
 
         return $sku;
+    }
+
+    public function getPriority(): int {
+        return 100;
     }
 }

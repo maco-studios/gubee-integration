@@ -1,6 +1,6 @@
 <?php
 
-declare(strict_types=1);
+declare (strict_types = 1);
 
 namespace Gubee\Integration\Observer\Catalog\Product\Stock\Item\Save;
 
@@ -9,13 +9,8 @@ use Gubee\Integration\Observer\Catalog\Product\AbstractProduct;
 use Magento\Catalog\Api\Data\ProductInterface;
 use Magento\Framework\Event\Observer;
 
-use function json_decode;
-use function json_encode;
-
-class After extends AbstractProduct
-{
-    protected function process(): void
-    {
+class After extends AbstractProduct {
+    protected function process(): void {
         $this->queueManagement->append(
             SendCommand::class,
             [
@@ -33,9 +28,8 @@ class After extends AbstractProduct
      *
      * @return void
      */
-    public function execute(Observer $observer)
-    {
-        if (! $observer->getDataObject() instanceof ProductInterface) {
+    public function execute(Observer $observer) {
+        if (!$observer->getDataObject() instanceof ProductInterface) {
             $product = $this->productRepository->getById(
                 $observer->getDataObject()->getProductId()
             );
@@ -43,6 +37,7 @@ class After extends AbstractProduct
             $product = $observer->getDataObject();
         }
         $this->setProduct($product);
+
         if ($this->isAllowed()) {
             $this->process();
             $this->appendForParent(
@@ -54,29 +49,50 @@ class After extends AbstractProduct
     /**
      * Validate if the observer is allowed to run
      */
-    protected function isAllowed(): bool
-    {
-        $product  = $this->getProduct();
+    protected function isAllowed(): bool {
+        if (!$this->getConfig()->getActive()) {
+            return false;
+        }
+        $product = $this->getProduct();
+        $productStock = $this->objectManager->get(
+            \Magento\CatalogInventory\Api\StockRegistryInterface::class
+        )->getStockItem(
+            $product->getId(),
+            $product->getStore()->getWebsiteId()
+        );
+
         $origJson = json_decode(
             json_encode(
                 $product->getOrigData()
             ),
             true
         );
-        if (isset($origJson['quantity_and_stock_status'])) {
+        if (
+            isset($origJson['quantity_and_stock_status']) &&
+            isset($origJson['quantity_and_stock_status']['qty']) &&
+            isset($origJson['quantity_and_stock_status']['is_in_stock'])
+        ) {
             if (
                 $origJson['quantity_and_stock_status']['qty']
                 ==
-                $product->getData('stock_data/qty')
+                $productStock->getData('qty')
                 &&
                 $origJson['quantity_and_stock_status']['is_in_stock']
                 ==
-                $product->getData('stock_data/is_in_stock')
+                $productStock->getData('is_in_stock')
             ) {
                 return false;
             }
         }
-
-        return parent::isAllowed();
+        $product = $this->getProduct();
+        if (
+            $this->attribute->getRawAttributeValue(
+                'gubee',
+                $product
+            ) == 0
+        ) {
+            return false;
+        }
+        return true;
     }
 }

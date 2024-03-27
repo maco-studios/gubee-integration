@@ -32,5 +32,8 @@
     <event name="gubee_command_gubee_sales_order_processor_created_run_before">
         <observer name="Gubee\Integration\Observer\Gubee\Command\Sales\Order\Processor\Created\Run\Before" instance="Gubee\Integration\Observer\Gubee\Command\Sales\Order\Processor\Created\Run\Before" />
     </event>
+    <event name="order_cancel_after">
+        <observer name="Gubee\Integration\Observer\Sales\Order\Cancel\After" instance="Gubee\Integration\Observer\Sales\Order\Cancel\After" />
+    </event>
 
 </config>

@@ -15,6 +15,14 @@
     <preference for="Gubee\Integration\Api\Data\InvoiceInterface" type="Gubee\Integration\Model\Invoice"/>
     <preference for="Gubee\Integration\Api\Data\InvoiceSearchResultsInterface" type="Magento\Framework\Api\SearchResults"/>
 
+    <preference for="Gubee\Integration\Api\OrderRepositoryInterface" type="Gubee\Integration\Model\OrderRepository"/>
+    <preference for="Gubee\Integration\Api\Data\OrderInterface" type="Gubee\Integration\Model\Order"/>
+    <preference for="Gubee\Integration\Api\Data\OrderSearchResultsInterface" type="Magento\Framework\Api\SearchResults"/>
+
+    <type name="Magento\Framework\View\Element\UiComponent\DataProvider\CollectionFactory">
+        <plugin name="Gubee\Integration\Plugin\Sales\Order\Grid\Marketplace\Column" type="Gubee\Integration\Plugin\Sales\Order\Grid\Marketplace\Column" sortOrder="100" disabled="false" />
+    </type>
+
 
     <type name="Gubee\Integration\Service\Gubee\Client">
         <arguments>

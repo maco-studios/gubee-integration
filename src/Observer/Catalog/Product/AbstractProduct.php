@@ -1,6 +1,6 @@
 <?php
 
-declare(strict_types=1);
+declare (strict_types = 1);
 
 namespace Gubee\Integration\Observer\Catalog\Product;
 
@@ -15,8 +15,7 @@ use Magento\Framework\Event\Observer;
 use Magento\Framework\ObjectManagerInterface;
 use Psr\Log\LoggerInterface;
 
-abstract class AbstractProduct extends AbstractObserver
-{
+abstract class AbstractProduct extends AbstractObserver {
     protected Attribute $attribute;
     protected ProductInterface $product;
     protected ProductRepositoryInterface $productRepository;
@@ -31,9 +30,9 @@ abstract class AbstractProduct extends AbstractObserver
         ObjectManagerInterface $objectManager
     ) {
         parent::__construct($config, $logger, $queueManagement);
-        $this->attribute         = $attribute;
+        $this->attribute = $attribute;
         $this->productRepository = $productRepository;
-        $this->objectManager     = $objectManager;
+        $this->objectManager = $objectManager;
     }
 
     public function appendForParent(
@@ -47,7 +46,7 @@ abstract class AbstractProduct extends AbstractObserver
         foreach ($parentIds as $parentId) {
             $parent = $this->productRepository->getById($parentId);
             if (
-                ! $this->attribute->getRawAttributeValue(
+                !$this->attribute->getRawAttributeValue(
                     'gubee',
                     $parent
                 )
@@ -55,7 +54,7 @@ abstract class AbstractProduct extends AbstractObserver
                 continue;
             }
             if (
-                ! $this->attribute->getRawAttributeValue(
+                !$this->attribute->getRawAttributeValue(
                     'gubee_sync',
                     $parent
                 )
@@ -73,9 +72,11 @@ abstract class AbstractProduct extends AbstractObserver
      *
      * @return void
      */
-    public function execute(Observer $observer)
-    {
-        $this->setProduct($observer->getProduct() ?: $observer->getDataObject());
+    public function execute(Observer $observer) {
+        $this->setObserver($observer);
+        $this->setProduct(
+            $this->getObserver()->getEvent()->getDataObject()
+        );
         if ($this->isAllowed()) {
             $this->process();
             $this->appendForParent(
@@ -87,23 +88,23 @@ abstract class AbstractProduct extends AbstractObserver
     /**
      * Validate if the observer is allowed to run
      */
-    protected function isAllowed(): bool
-    {
+    protected function isAllowed(): bool {
+
         $product = $this->getProduct();
 
         if (
-            ! $this->attribute->getRawAttributeValue(
+            !$this->attribute->getRawAttributeValue(
                 'gubee_sync',
                 $product
             )
             &&
-            ! $product->dataHasChangedFor('gubee')
+            !$product->dataHasChangedFor('gubee')
         ) {
             return false;
         }
 
         if (
-            ! $this->attribute->getRawAttributeValue(
+            !$this->attribute->getRawAttributeValue(
                 'gubee',
                 $product
             )
@@ -114,13 +115,11 @@ abstract class AbstractProduct extends AbstractObserver
         return parent::isAllowed();
     }
 
-    public function getProduct(): ProductInterface
-    {
+    public function getProduct(): ProductInterface {
         return $this->product;
     }
 
-    public function setProduct(ProductInterface $product): self
-    {
+    public function setProduct(ProductInterface $product): self {
         $this->product = $product;
         return $this;
     }

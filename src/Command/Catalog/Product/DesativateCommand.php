@@ -1,6 +1,6 @@
 <?php
 
-declare(strict_types=1);
+declare (strict_types = 1);
 
 namespace Gubee\Integration\Command\Catalog\Product;
 
@@ -12,11 +12,7 @@ use Magento\Framework\ObjectManagerInterface;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\Console\Input\InputArgument;
 
-use function __;
-use function sprintf;
-
-class DesativateCommand extends AbstractCommand
-{
+class DesativateCommand extends AbstractCommand {
     protected ProductRepositoryInterface $productRepository;
     protected ObjectManagerInterface $objectManager;
 
@@ -28,11 +24,10 @@ class DesativateCommand extends AbstractCommand
     ) {
         parent::__construct($eventDispatcher, $logger, "catalog:product:desativate");
         $this->productRepository = $productRepository;
-        $this->objectManager     = $objectManager;
+        $this->objectManager = $objectManager;
     }
 
-    protected function configure()
-    {
+    protected function configure() {
         $this->setDescription("Desativate a product by its SKU on Gubee");
         $this->addArgument(
             'sku',
@@ -41,10 +36,9 @@ class DesativateCommand extends AbstractCommand
         );
     }
 
-    protected function doExecute(): int
-    {
+    protected function doExecute(): int {
         $product = $this->productRepository->get($this->input->getArgument('sku'));
-        if (! $product->getId()) {
+        if (!$product->getId()) {
             $this->log->error(
                 sprintf(
                     "%s",
@@ -66,5 +60,9 @@ class DesativateCommand extends AbstractCommand
 
         $product->desativate();
         return 0;
+    }
+
+    public function getPriority(): int {
+        return 500;
     }
 }

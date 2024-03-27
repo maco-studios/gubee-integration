@@ -72,5 +72,37 @@
         </index>
     </table>
 
+    <table name="gubee_integration_order" resource="default" engine="innodb" comment="gubee_integration_order Table">
+        <column xsi:type="int" name="entity_id" padding="10" unsigned="true" nullable="false" identity="true" comment="Entity Id"/>
+        <column name="order_id" nullable="true" xsi:type="int" padding="10" unsigned="true" comment="order_id"/>
+        <column name="gubee_order_id" nullable="true" xsi:type="varchar" comment="gubee_order_id" length="255"/>
+        <column name="gubee_marketplace" nullable="true" xsi:type="varchar" comment="gubee_marketplace" length="255"/>
+        <constraint xsi:type="primary" referenceId="PRIMARY">
+            <column name="entity_id"/>
+        </constraint>
+        <constraint xsi:type="foreign" referenceId="GUBEE_INTEGRATION_ORDER_ORDER_ID_SALES_ORDER_ENTITY_ENTITY_ID" table="gubee_integration_order" column="order_id" referenceTable="sales_order" referenceColumn="entity_id" onDelete="SET NULL"/>
+    </table>
+
+
+    <table name="sales_order" resource="default">
+        <column xsi:type="decimal" name="gubee_marketplace_total_amount" scale="4" precision="12" unsigned="false" nullable="true" comment="Finance Cost Amount"/>
+        <column xsi:type="decimal" name="base_gubee_marketplace_total_amount" scale="4" precision="12" unsigned="false" nullable="true" comment="Base Finance Cost Amount"/>
+    </table>
+    <table name="quote" resource="default">
+        <column xsi:type="decimal" name="gubee_marketplace_total_amount" scale="4" precision="12" unsigned="false" nullable="true" comment="Finance Cost Amount"/>
+        <column xsi:type="decimal" name="base_gubee_marketplace_total_amount" scale="4" precision="12" unsigned="false" nullable="true" comment="Base Finance Cost Amount"/>
+    </table>
+    <table name="sales_invoice" resource="default">
+        <column xsi:type="decimal" name="gubee_marketplace_total_amount" scale="4" precision="12" unsigned="false" nullable="true" comment="Finance Cost Amount"/>
+        <column xsi:type="decimal" name="base_gubee_marketplace_total_amount" scale="4" precision="12" unsigned="false" nullable="true" comment="Base Finance Cost Amount"/>
+    </table>
+    <table name="sales_creditmemo" resource="default">
+        <column xsi:type="decimal" name="gubee_marketplace_total_amount" scale="4" precision="12" unsigned="false" nullable="true" comment="Finance Cost Amount"/>
+        <column xsi:type="decimal" name="base_gubee_marketplace_total_amount" scale="4" precision="12" unsigned="false" nullable="true" comment="Base Finance Cost Amount"/>
+    </table>
+    <table name="quote_address" resource="default">
+        <column xsi:type="decimal" name="gubee_marketplace_total_amount" scale="4" precision="12" unsigned="false" nullable="true" comment="Finance Cost Amount"/>
+        <column xsi:type="decimal" name="base_gubee_marketplace_total_amount" scale="4" precision="12" unsigned="false" nullable="true" comment="Base Finance Cost Amount"/>
+    </table>
 
 </schema>

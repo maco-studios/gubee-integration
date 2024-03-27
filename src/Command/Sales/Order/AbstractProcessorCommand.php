@@ -1,9 +1,10 @@
 <?php
 
-declare(strict_types=1);
+declare (strict_types = 1);
 
 namespace Gubee\Integration\Command\Sales\Order;
 
+use Gubee\Integration\Api\OrderRepositoryInterface as GubeeOrderRepositoryInterface;
 use Gubee\Integration\Command\AbstractCommand;
 use Gubee\Integration\Command\Sales\Order\Processor\CreatedCommand;
 use Gubee\SDK\Resource\Sales\OrderResource;
@@ -22,15 +23,13 @@ use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\BufferedOutput;
 use Symfony\Component\Console\Output\OutputInterface;
 
-use function sprintf;
-
-abstract class AbstractProcessorCommand extends AbstractCommand
-{
+abstract class AbstractProcessorCommand extends AbstractCommand {
     protected OrderRepositoryInterface $orderRepository;
     protected CollectionFactory $orderCollectionFactory;
     protected OrderResource $orderResource;
     protected HistoryFactory $historyFactory;
     protected OrderManagementInterface $orderManagement;
+    protected GubeeOrderRepositoryInterface $gubeeOrderRepository;
 
     /**
      * @param string|null $name The name of the command; passing null means it must be set in configure()
@@ -42,15 +41,17 @@ abstract class AbstractProcessorCommand extends AbstractCommand
         OrderResource $orderResource,
         CollectionFactory $orderCollectionFactory,
         OrderRepositoryInterface $orderRepository,
+        GubeeOrderRepositoryInterface $gubeeOrderRepository,
         HistoryFactory $historyFactory,
         OrderManagementInterface $orderManagement,
         ?string $name = null
     ) {
+        $this->gubeeOrderRepository = $gubeeOrderRepository;
         $this->orderCollectionFactory = $orderCollectionFactory;
-        $this->orderManagement        = $orderManagement;
-        $this->orderRepository        = $orderRepository;
-        $this->orderResource          = $orderResource;
-        $this->historyFactory         = $historyFactory;
+        $this->orderManagement = $orderManagement;
+        $this->orderRepository = $orderRepository;
+        $this->orderResource = $orderResource;
+        $this->historyFactory = $historyFactory;
         parent::__construct(
             $eventDispatcher,
             $logger,
@@ -58,22 +59,20 @@ abstract class AbstractProcessorCommand extends AbstractCommand
         );
     }
 
-    protected function configure()
-    {
+    protected function configure() {
         $this->addArgument('order_id', InputArgument::REQUIRED, 'Order increment ID');
     }
 
-    protected function beforeExecute($input, $output)
-    {
+    protected function beforeExecute($input, $output) {
         /**
          * Any non created command should validate if order is already created
          * if not, it should execute the created command
          */
-        if (! $this instanceof CreatedCommand) {
+        if (!$this instanceof CreatedCommand) {
             $orderId = $input->getArgument('order_id');
-            $order   = $this->getOrder($orderId);
-            if (! $order) {
-                $inputTmp  = ObjectManager::getInstance()->create(ArrayInput::class, [
+            $order = $this->getOrder($orderId);
+            if (!$order) {
+                $inputTmp = ObjectManager::getInstance()->create(ArrayInput::class, [
                     'parameters' => [
                         'order_id' => $orderId,
                     ],
@@ -85,23 +84,28 @@ abstract class AbstractProcessorCommand extends AbstractCommand
         }
     }
 
-    protected function execute(InputInterface $input, OutputInterface $output)
-    {
+    protected function execute(InputInterface $input, OutputInterface $output) {
         $this->beforeExecute($input, $output);
         $result = parent::execute($input, $output);
         if ($result !== 0) {
             return $result;
         }
 
-        $orderId = $input->getArgument('order_id');
-        $order   = $this->getOrder($orderId);
-        if (! $order) {
+        $this->afterExecute();
+
+        return $result;
+    }
+
+    protected function afterExecute() {
+        $orderId = $this->getInput()->getArgument('order_id');
+        $order = $this->getOrder($orderId);
+        if (!$order) {
             $this->logger->error(sprintf("Order with increment ID %s not found", $orderId));
             return 1;
         }
 
         $orderContent = $this->orderResource->loadByOrderId($orderId);
-        if (! $orderContent) {
+        if (!$orderContent) {
             $this->logger->error(sprintf("Order with increment ID %s not found in Gubee", $orderId));
             return 1;
         }
@@ -114,25 +118,28 @@ abstract class AbstractProcessorCommand extends AbstractCommand
         $this->logger->debug(sprintf("Order with increment ID %s loaded from Gubee", $orderId));
         $this->orderRepository->save($order);
         $this->logger->debug(sprintf("Order with increment ID %s updated", $orderId));
-
-        return $result;
     }
 
-    public function getOrder(string $incrementId): ?OrderInterface
-    {
+    public function getOrder(string $incrementId): ?OrderInterface {
+        try {
+            $gubeeOrder = $this->gubeeOrderRepository->getByGubeeOrderId($incrementId);
+        } catch (\Throwable $e) {
+            return null;
+        }
         $order = $this->orderCollectionFactory->create()
-            ->addFieldToFilter('increment_id', $incrementId)
+            ->addFieldToFilter(
+                'entity_id',
+                $gubeeOrder->getOrderId()
+            )
             ->getFirstItem();
-
-        if (! $order->getId()) {
+        if (!$order->getId()) {
             return null;
         }
 
         return $order;
     }
 
-    public function addOrderHistory(string $message, int $orderId)
-    {
+    public function addOrderHistory(string $message, int $orderId) {
         $history = $this->historyFactory->create();
         $history->setComment(
             sprintf("[Gubee Integration] %s", (string) $message)
