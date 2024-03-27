@@ -1,20 +1,21 @@
 <?php
 
+declare(strict_types=1);
+
 namespace MercadoPago\Core\Model\Creditmemo;
 
-/**
- * Class FinanceCost
- *
- * @package MercadoPago\Core\Model\Creditmemo
- */
-class Marketplace extends \Magento\Sales\Model\Order\Total\AbstractTotal {
+use Magento\Sales\Model\Order\Creditmemo;
+use Magento\Sales\Model\Order\Total\AbstractTotal;
+
+class Marketplace extends AbstractTotal
+{
     /**
-     * @param \Magento\Sales\Model\Order\Creditmemo $creditmemo
      * @return $this
      */
-    public function collect(\Magento\Sales\Model\Order\Creditmemo $creditmemo) {
-        $order = $creditmemo->getOrder();
-        $amount = $order->getGubeeMarketplaceTotalAmount();
+    public function collect(Creditmemo $creditmemo)
+    {
+        $order      = $creditmemo->getOrder();
+        $amount     = $order->getGubeeMarketplaceTotalAmount();
         $baseAmount = $order->getBaseGubeeMarketplaceTotalAmount();
 
         if ($amount) {

@@ -1,6 +1,6 @@
 <?php
 
-declare (strict_types = 1);
+declare(strict_types=1);
 
 namespace Gubee\Integration\Command;
 
@@ -13,7 +13,11 @@ use Symfony\Component\Console\Exception\LogicException;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
-abstract class AbstractCommand extends Command {
+use function sprintf;
+use function str_replace;
+
+abstract class AbstractCommand extends Command
+{
     public const SUCCESS = 0;
     public const FAILURE = 1;
     protected InputInterface $input;
@@ -31,7 +35,7 @@ abstract class AbstractCommand extends Command {
         ?string $name = null
     ) {
         $this->eventDispatcher = $eventDispatcher;
-        $this->logger = $logger;
+        $this->logger          = $logger;
         parent::__construct($name);
     }
 
@@ -48,8 +52,9 @@ abstract class AbstractCommand extends Command {
      * @return int The command exit code.
      * @throws ExceptionInterface When input binding fails. Bypass this by calling {@link ignoreValidationErrors()}.
      */
-    public function run(InputInterface $input, OutputInterface $output) {
-        $this->input = $input;
+    public function run(InputInterface $input, OutputInterface $output)
+    {
+        $this->input  = $input;
         $this->output = $output;
         $this->getEventDispatcher()->dispatch(
             $this->normalizeEventName(
@@ -60,8 +65,8 @@ abstract class AbstractCommand extends Command {
             ),
             [
                 'command' => $this,
-                'input' => $input,
-                'output' => $output,
+                'input'   => $input,
+                'output'  => $output,
             ]
         );
 
@@ -75,9 +80,9 @@ abstract class AbstractCommand extends Command {
             ),
             [
                 'command' => $this,
-                'input' => $input,
-                'output' => $output,
-                'result' => $result,
+                'input'   => $input,
+                'output'  => $output,
+                'result'  => $result,
             ]
         );
 
@@ -97,9 +102,10 @@ abstract class AbstractCommand extends Command {
      * @return int 0 if everything went fine, or an exit code
      * @throws LogicException When this abstract method is not implemented.
      */
-    protected function execute(InputInterface $input, OutputInterface $output) {
+    protected function execute(InputInterface $input, OutputInterface $output)
+    {
         $this->output = $output;
-        $this->input = $input;
+        $this->input  = $input;
         $this->getLogger()->info(
             sprintf(
                 "Running command '%s'",
@@ -110,8 +116,8 @@ abstract class AbstractCommand extends Command {
             $this->normalizeEventName("gubee.command.execute.before"),
             [
                 'command' => $this,
-                'input' => $input,
-                'output' => $output,
+                'input'   => $input,
+                'output'  => $output,
             ]
         );
 
@@ -124,8 +130,8 @@ abstract class AbstractCommand extends Command {
             ),
             [
                 'command' => $this,
-                'input' => $input,
-                'output' => $output,
+                'input'   => $input,
+                'output'  => $output,
             ]
         );
 
@@ -140,9 +146,9 @@ abstract class AbstractCommand extends Command {
             ),
             [
                 'command' => $this,
-                'input' => $input,
-                'output' => $output,
-                'result' => $result,
+                'input'   => $input,
+                'output'  => $output,
+                'result'  => $result,
             ]
         );
 
@@ -150,9 +156,9 @@ abstract class AbstractCommand extends Command {
             $this->normalizeEventName("gubee.command.execute.after"),
             [
                 'command' => $this,
-                'input' => $input,
-                'output' => $output,
-                'result' => $result,
+                'input'   => $input,
+                'output'  => $output,
+                'result'  => $result,
             ]
         );
 
@@ -176,7 +182,8 @@ abstract class AbstractCommand extends Command {
      * @return $this
      * @throws InvalidArgumentException When the name is invalid.
      */
-    public function setName($name) {
+    public function setName($name)
+    {
         return parent::setName(
             sprintf(
                 '%s:%s',
@@ -186,23 +193,28 @@ abstract class AbstractCommand extends Command {
         );
     }
 
-    public function getInput(): InputInterface {
+    public function getInput(): InputInterface
+    {
         return $this->input;
     }
 
-    public function getEventDispatcher(): ManagerInterface {
+    public function getEventDispatcher(): ManagerInterface
+    {
         return $this->eventDispatcher;
     }
 
-    public function getLogger(): LoggerInterface {
+    public function getLogger(): LoggerInterface
+    {
         return $this->logger;
     }
 
-    public function getOutput(): OutputInterface {
+    public function getOutput(): OutputInterface
+    {
         return $this->output;
     }
 
-    protected function normalizeEventName(string $name) {
+    protected function normalizeEventName(string $name)
+    {
         // replace any non-alphanumeric characters with a dash
         return str_replace(
             [":", "."],
@@ -211,7 +223,8 @@ abstract class AbstractCommand extends Command {
         );
     }
 
-    public function getPriority(): int {
+    public function getPriority(): int
+    {
         return 0;
     }
 }

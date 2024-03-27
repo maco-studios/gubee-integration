@@ -1,6 +1,6 @@
 <?php
 
-declare (strict_types = 1);
+declare(strict_types=1);
 
 namespace Gubee\Integration\Model\Queue;
 
@@ -18,7 +18,12 @@ use Magento\Framework\ObjectManagerInterface;
 use Psr\Log\LoggerInterface;
 use Throwable;
 
-class Management implements ManagementInterface {
+use function __;
+use function json_encode;
+use function sprintf;
+
+class Management implements ManagementInterface
+{
     protected LoggerInterface $logger;
     protected MessageCollectionFactory $messageCollectionFactory; /* @phpstan-ignore-line */
     protected MessageInterfaceFactory $messageFactory; /* @phpstan-ignore-line */
@@ -35,13 +40,13 @@ class Management implements ManagementInterface {
         ObjectManagerInterface $objectManager,
         Attribute $attribute
     ) {
-        $this->attribute = $attribute;
-        $this->productRepository = $productRepository;
-        $this->logger = $logger;
+        $this->attribute                = $attribute;
+        $this->productRepository        = $productRepository;
+        $this->logger                   = $logger;
         $this->messageCollectionFactory = $messageCollectionFactory;
-        $this->messageFactory = $messageFactory;
-        $this->messageRepository = $messageRepository;
-        $this->objectManager = $objectManager;
+        $this->messageFactory           = $messageFactory;
+        $this->messageRepository        = $messageRepository;
+        $this->objectManager            = $objectManager;
     }
 
     /**
@@ -49,12 +54,13 @@ class Management implements ManagementInterface {
      *
      * @param array<int|string, mixed> $params
      */
-    public function append(string $command, array $params = [], ?int $productId = null): self {
+    public function append(string $command, array $params = [], ?int $productId = null): self
+    {
         try {
             if ($command !== SendCommand::class) {
                 if ($productId) {
                     $product = $this->productRepository->getById($productId);
-                    if (!$product->getId()) {
+                    if (! $product->getId()) {
                         throw new NoSuchEntityException(
                             __(
                                 "Product with ID '%s' not found",
@@ -85,7 +91,7 @@ class Management implements ManagementInterface {
                 $message->setProductId($productId);
             }
 
-            if (!$this->alreadyQueued($message)) {
+            if (! $this->alreadyQueued($message)) {
                 $this->messageRepository->save($message);
             }
         } catch (Throwable $th) {
@@ -93,8 +99,8 @@ class Management implements ManagementInterface {
                 "Queue Management: Error while appending message to queue",
                 [
                     'exception' => $th,
-                    'command' => $command,
-                    'params' => $params,
+                    'command'   => $command,
+                    'params'    => $params,
                 ]
             );
         }
@@ -105,7 +111,8 @@ class Management implements ManagementInterface {
     /**
      * Check if given message is already queued
      */
-    public function alreadyQueued(MessageInterface $message): bool {
+    public function alreadyQueued(MessageInterface $message): bool
+    {
         /* @phpstan-ignore-next-line */
         $queued = $this->messageCollectionFactory->create()
             ->addFieldToFilter(MessageInterface::COMMAND, $message->getCommand());

@@ -1,6 +1,6 @@
 <?php
 
-declare (strict_types = 1);
+declare(strict_types=1);
 
 namespace Gubee\Integration\Command\Catalog\Category;
 
@@ -15,7 +15,8 @@ use Magento\Framework\ObjectManagerInterface;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\Console\Exception\LogicException;
 
-class SyncCommand extends AbstractCommand {
+class SyncCommand extends AbstractCommand
+{
     protected ObjectManagerInterface $objectManager;
     protected Collection $collection;
     protected CategoryResource $categoryResource;
@@ -33,29 +34,31 @@ class SyncCommand extends AbstractCommand {
         CollectionFactory $categoryCollectionFactory
     ) {
         parent::__construct($eventDispatcher, $logger, "catalog:category:sync");
-        $this->categoryResource = $categoryResource;
-        $this->collection = $categoryCollectionFactory->create()
+        $this->categoryResource   = $categoryResource;
+        $this->collection         = $categoryCollectionFactory->create()
             ->addAttributeToSelect('*')
             ->addAttributeToFilter('entity_id', ['gt' => 0]);
-        $this->objectManager = $objectManager;
+        $this->objectManager      = $objectManager;
         $this->categoryRepository = $categoryRepository;
     }
 
-    protected function configure() {
+    protected function configure()
+    {
         $this->setDescription("Sync the categories with Gubee");
     }
 
-    protected function doExecute(): int {
+    protected function doExecute(): int
+    {
         $categories = [];
         foreach ($this->collection as $category) {
             $categories[] = $this->objectManager->create(
                 Category::class,
                 [
-                    'id' => $category->getId(),
-                    'name' => $category->getName() ?: 'Unnamed category',
+                    'id'          => $category->getId(),
+                    'name'        => $category->getName() ?: 'Unnamed category',
                     'description' => $category->getDescription() ?: '',
-                    'is_active' => $category->getIsActive(),
-                    'parent' => $category->getParentId() > 0 ? (int) $category->getParentId() : null,
+                    'is_active'   => $category->getIsActive(),
+                    'parent'      => $category->getParentId() > 0 ? (int) $category->getParentId() : null,
                 ]
             );
         }
@@ -63,7 +66,8 @@ class SyncCommand extends AbstractCommand {
         return 0;
     }
 
-    public function getPriority(): int {
+    public function getPriority(): int
+    {
         return 1000;
     }
 }

@@ -1,6 +1,6 @@
 <?php
 
-declare (strict_types = 1);
+declare(strict_types=1);
 
 namespace Gubee\Integration\Command\Sales\Order\Processor;
 
@@ -23,7 +23,11 @@ use Psr\Log\LoggerInterface;
 use Symfony\Component\Console\Exception\LogicException;
 use Throwable;
 
-class InvoicedCommand extends AbstractProcessorCommand {
+use function __;
+use function count;
+
+class InvoicedCommand extends AbstractProcessorCommand
+{
     /** @var InvoiceService */
     protected $invoiceService;
 
@@ -44,7 +48,6 @@ class InvoicedCommand extends AbstractProcessorCommand {
         CollectionFactory $orderCollectionFactory,
         OrderRepositoryInterface $orderRepository,
         GubeeOrderRepositoryInterface $gubeeOrderRepository,
-
         HistoryFactory $historyFactory,
         InvoiceFactory $invoiceFactory,
         InvoiceRepositoryInterface $invoiceRepository,
@@ -52,10 +55,10 @@ class InvoicedCommand extends AbstractProcessorCommand {
         OrderManagementInterface $orderManagement,
         TransactionFactory $transactionFactory
     ) {
-        $this->invoiceService = $invoiceService;
+        $this->invoiceService     = $invoiceService;
         $this->transactionFactory = $transactionFactory;
-        $this->invoiceFactory = $invoiceFactory;
-        $this->invoiceRepository = $invoiceRepository;
+        $this->invoiceFactory     = $invoiceFactory;
+        $this->invoiceRepository  = $invoiceRepository;
         parent::__construct(
             $eventDispatcher,
             $logger,
@@ -69,7 +72,8 @@ class InvoicedCommand extends AbstractProcessorCommand {
         );
     }
 
-    protected function doExecute(): int {
+    protected function doExecute(): int
+    {
         $order = $this->getOrder(
             $this->input->getArgument('order_id')
         );
@@ -103,7 +107,7 @@ class InvoicedCommand extends AbstractProcessorCommand {
             }
             try {
                 $invoice = $this->invoiceFactory->create();
-                $date = DateTime::createFromFormat(
+                $date    = DateTime::createFromFormat(
                     'Y-m-d\TH:i:s.v',
                     $invoiceData['issueDate']
                 );
@@ -133,7 +137,8 @@ class InvoicedCommand extends AbstractProcessorCommand {
         return 0;
     }
 
-    private function invoiceOrder(OrderInterface $order): void {
+    private function invoiceOrder(OrderInterface $order): void
+    {
         // check if order is invoiced
 
         $invoices = $order->getInvoiceCollection();

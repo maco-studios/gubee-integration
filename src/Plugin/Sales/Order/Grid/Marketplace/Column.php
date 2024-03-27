@@ -1,12 +1,16 @@
 <?php
 
-declare (strict_types = 1);
+declare(strict_types=1);
 
 namespace Gubee\Integration\Plugin\Sales\Order\Grid\Marketplace;
+
+use Closure;
 use Magento\Framework\Message\ManagerInterface as MessageManager;
+use Magento\Framework\View\Element\UiComponent\DataProvider\CollectionFactory;
 use Magento\Sales\Model\ResourceModel\Order\Grid\Collection as SalesOrderGridCollection;
 
-class Column {
+class Column
+{
     protected MessageManager $messageManager;
     protected SalesOrderGridCollection $collection;
 
@@ -15,12 +19,12 @@ class Column {
         SalesOrderGridCollection $collection
     ) {
         $this->messageManager = $messageManager;
-        $this->collection = $collection;
+        $this->collection     = $collection;
     }
 
     public function aroundGetReport(
-        \Magento\Framework\View\Element\UiComponent\DataProvider\CollectionFactory $subject,
-        \Closure $proceed,
+        CollectionFactory $subject,
+        Closure $proceed,
         $requestName
     ) {
         $result = $proceed($requestName);
@@ -30,7 +34,7 @@ class Column {
                 $select->join(
                     ["gubee_order" => "gubee_integration_order"],
                     'main_table.entity_id = gubee_order.order_id ',
-                    array('gubee_marketplace', 'gubee_order_id')
+                    ['gubee_marketplace', 'gubee_order_id']
                 )->distinct();
                 // $select->joinRight(
                 //     ["gubee_order" => "gubee_integration_order"],

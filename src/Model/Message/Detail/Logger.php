@@ -1,6 +1,6 @@
 <?php
 
-declare (strict_types = 1);
+declare(strict_types=1);
 
 namespace Gubee\Integration\Model\Message\Detail;
 
@@ -10,7 +10,12 @@ use Magento\Framework\Registry;
 use Psr\Log\InvalidArgumentException;
 use Psr\Log\LoggerInterface;
 
-class Logger implements LoggerInterface {
+use function array_merge;
+use function implode;
+use function php_sapi_name;
+
+class Logger implements LoggerInterface
+{
     protected DetailFactory $detailFactory;
     protected Registry $registry;
     protected LoggerInterface $logger;
@@ -21,8 +26,8 @@ class Logger implements LoggerInterface {
         LoggerInterface $logger
     ) {
         $this->detailFactory = $detailFactory;
-        $this->registry = $registry;
-        $this->logger = $logger;
+        $this->registry      = $registry;
+        $this->logger        = $logger;
     }
 
     /**
@@ -32,7 +37,8 @@ class Logger implements LoggerInterface {
      * @param array<mixed, mixed> $context
      * @return void
      */
-    public function emergency($message, array $context = []) {
+    public function emergency($message, array $context = [])
+    {
         return $this->log('emergency', $message, $context);
     }
 
@@ -46,7 +52,8 @@ class Logger implements LoggerInterface {
      * @param array<mixed, mixed> $context
      * @return void
      */
-    public function alert($message, array $context = []) {
+    public function alert($message, array $context = [])
+    {
         return $this->log('alert', $message, $context);
     }
 
@@ -59,7 +66,8 @@ class Logger implements LoggerInterface {
      * @param array<mixed, mixed> $context
      * @return void
      */
-    public function critical($message, array $context = []) {
+    public function critical($message, array $context = [])
+    {
         return $this->log('critical', $message, $context);
     }
 
@@ -71,7 +79,8 @@ class Logger implements LoggerInterface {
      * @param array<mixed, mixed> $context
      * @return void
      */
-    public function error($message, array $context = []) {
+    public function error($message, array $context = [])
+    {
         return $this->log('error', $message, $context);
     }
 
@@ -85,7 +94,8 @@ class Logger implements LoggerInterface {
      * @param array<mixed, mixed> $context
      * @return void
      */
-    public function warning($message, array $context = []) {
+    public function warning($message, array $context = [])
+    {
         return $this->log('warning', $message, $context);
     }
 
@@ -96,7 +106,8 @@ class Logger implements LoggerInterface {
      * @param array<mixed, mixed> $context
      * @return void
      */
-    public function notice($message, array $context = []) {
+    public function notice($message, array $context = [])
+    {
         return $this->log('notice', $message, $context);
     }
 
@@ -109,7 +120,8 @@ class Logger implements LoggerInterface {
      * @param array<mixed, mixed> $context
      * @return void
      */
-    public function info($message, array $context = []) {
+    public function info($message, array $context = [])
+    {
         return $this->log('info', $message, $context);
     }
 
@@ -120,7 +132,8 @@ class Logger implements LoggerInterface {
      * @param array<mixed, mixed> $context
      * @return void
      */
-    public function debug($message, array $context = []) {
+    public function debug($message, array $context = [])
+    {
         return $this->log('debug', $message, $context);
     }
 
@@ -133,42 +146,43 @@ class Logger implements LoggerInterface {
      * @return void
      * @throws InvalidArgumentException
      */
-    public function log($level, $message, array $context = []) {
+    public function log($level, $message, array $context = [])
+    {
         switch ($level) {
-        case 'emergency':
-            $level = 0;
-            break;
-        case 'alert':
-            $level = 1;
-            break;
-        case 'critical':
-            $level = 2;
-            break;
-        case 'error':
-            $level = 3;
-            break;
-        case 'warning':
-            $level = 4;
-            break;
-        case 'notice':
-            $level = 5;
-            break;
-        case 'info':
-            $level = 6;
-            break;
-        case 'debug':
-        default:
-            $level = 7;
+            case 'emergency':
+                $level = 0;
+                break;
+            case 'alert':
+                $level = 1;
+                break;
+            case 'critical':
+                $level = 2;
+                break;
+            case 'error':
+                $level = 3;
+                break;
+            case 'warning':
+                $level = 4;
+                break;
+            case 'notice':
+                $level = 5;
+                break;
+            case 'info':
+                $level = 6;
+                break;
+            case 'debug':
+            default:
+                $level = 7;
         }
 
-        $detail = $this->detailFactory->create();
+        $detail  = $this->detailFactory->create();
         $context = array_merge(
             [
-                'uri' => $_SERVER['REQUEST_URI'] ?? (isset($_SERVER['argv']) ? implode(' ', $_SERVER['argv']) : ''),
-                'ip' => $_SERVER['REMOTE_ADDR'] ?? (isset($_SERVER['argv']) ? 'cli' : ''),
+                'uri'        => $_SERVER['REQUEST_URI'] ?? (isset($_SERVER['argv']) ? implode(' ', $_SERVER['argv']) : ''),
+                'ip'         => $_SERVER['REMOTE_ADDR'] ?? (isset($_SERVER['argv']) ? 'cli' : ''),
                 'user_agent' => php_sapi_name() == 'cli' ? 'cli' : $_SERVER['HTTP_USER_AGENT'],
-                'referer' => $_SERVER['HTTP_REFERER'] ?? 'cli',
-                'method' => $_SERVER['REQUEST_METHOD'] ?? (isset($_SERVER['argv']) ? 'cli' : ''),
+                'referer'    => $_SERVER['HTTP_REFERER'] ?? 'cli',
+                'method'     => $_SERVER['REQUEST_METHOD'] ?? (isset($_SERVER['argv']) ? 'cli' : ''),
             ],
             $context
         );

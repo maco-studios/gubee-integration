@@ -1,6 +1,6 @@
 <?php
 
-declare (strict_types = 1);
+declare(strict_types=1);
 
 namespace Gubee\Integration\Command\Catalog\Product\Attribute;
 
@@ -12,7 +12,8 @@ use Magento\Framework\Event\ManagerInterface;
 use Magento\Framework\ObjectManagerInterface;
 use Psr\Log\LoggerInterface;
 
-class SyncCommand extends AbstractCommand {
+class SyncCommand extends AbstractCommand
+{
     protected ObjectManagerInterface $objectManager;
     protected AttributeResource $attributeResource;
 
@@ -23,9 +24,9 @@ class SyncCommand extends AbstractCommand {
         AttributeResource $attributeResource,
         CollectionFactory $collectionFactory
     ) {
-        $this->attributeResource = $attributeResource;
+        $this->attributeResource   = $attributeResource;
         $this->attributeCollection = $collectionFactory->create();
-        $this->objectManager = $objectManager;
+        $this->objectManager       = $objectManager;
         parent::__construct(
             $eventDispatcher,
             $logger,
@@ -33,7 +34,8 @@ class SyncCommand extends AbstractCommand {
         );
     }
 
-    protected function doExecute(): int {
+    protected function doExecute(): int
+    {
         $this->logger->info("Syncing attributes");
         $attributes = [];
         foreach ($this->attributeCollection->getItems() as $attribute) {
@@ -48,7 +50,8 @@ class SyncCommand extends AbstractCommand {
         return 0;
     }
 
-    public function getPriority(): int {
+    public function getPriority(): int
+    {
         return 1000;
     }
 }

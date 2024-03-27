@@ -1,8 +1,11 @@
 <?php
 
-declare (strict_types = 1);
+declare(strict_types=1);
 
 namespace Gubee\Integration\Command\Sales\Order\Cancel;
+
+use DateTime;
+use DateTimeZone;
 use Gubee\Integration\Api\OrderRepositoryInterface as GubeeOrderRepositoryInterface;
 use Gubee\Integration\Command\Sales\Order\AbstractProcessorCommand;
 use Gubee\SDK\Resource\Sales\OrderResource;
@@ -14,8 +17,8 @@ use Magento\Sales\Model\ResourceModel\Order\CollectionFactory;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\Console\Exception\LogicException;
 
-class SendCommand extends AbstractProcessorCommand {
-
+class SendCommand extends AbstractProcessorCommand
+{
     /**
      * @param string|null $name The name of the command; passing null means it must be set in configure()
      * @throws LogicException When the command name is empty.
@@ -44,16 +47,18 @@ class SendCommand extends AbstractProcessorCommand {
         );
     }
 
-    protected function doExecute(): int {
+    protected function doExecute(): int
+    {
         $this->orderResource->cancelOrder(
             $this->getInput()->getArgument('order_id'),
-            new \DateTime('now', new \DateTimeZone('UTC'))
+            new DateTime('now', new DateTimeZone('UTC'))
         );
 
         return 0;
     }
 
-    public function getPriority(): int {
+    public function getPriority(): int
+    {
         return 999;
     }
 }

@@ -1,6 +1,6 @@
 <?php
 
-declare (strict_types = 1);
+declare(strict_types=1);
 
 namespace Gubee\Integration\Observer;
 
@@ -10,7 +10,8 @@ use Magento\Framework\Event\Observer;
 use Magento\Framework\Event\ObserverInterface;
 use Psr\Log\LoggerInterface;
 
-abstract class AbstractObserver implements ObserverInterface {
+abstract class AbstractObserver implements ObserverInterface
+{
     protected Observer $observer;
     protected LoggerInterface $logger;
     protected Config $config;
@@ -21,8 +22,8 @@ abstract class AbstractObserver implements ObserverInterface {
         LoggerInterface $logger,
         Management $queueManagement
     ) {
-        $this->config = $config;
-        $this->logger = $logger;
+        $this->config          = $config;
+        $this->logger          = $logger;
         $this->queueManagement = $queueManagement;
     }
 
@@ -31,7 +32,8 @@ abstract class AbstractObserver implements ObserverInterface {
      *
      * @return void
      */
-    public function execute(Observer $observer) {
+    public function execute(Observer $observer)
+    {
         $this->setObserver($observer);
         if ($this->isAllowed() == true) {
             $this->process();
@@ -46,32 +48,38 @@ abstract class AbstractObserver implements ObserverInterface {
     /**
      * Validate if the observer is allowed to run
      */
-    protected function isAllowed(): bool {
-        if (!$this->getConfig()->getActive()) {
+    protected function isAllowed(): bool
+    {
+        if (! $this->getConfig()->getActive()) {
             return false;
         }
 
         return true;
     }
 
-    public function getObserver(): Observer {
+    public function getObserver(): Observer
+    {
         return $this->observer;
     }
 
-    public function setObserver(Observer $observer): self {
+    public function setObserver(Observer $observer): self
+    {
         $this->observer = $observer;
         return $this;
     }
 
-    public function getLogger(): LoggerInterface {
+    public function getLogger(): LoggerInterface
+    {
         return $this->logger;
     }
 
-    public function getConfig(): Config {
+    public function getConfig(): Config
+    {
         return $this->config;
     }
 
-    public function getQueueManagement(): Management {
+    public function getQueueManagement(): Management
+    {
         return $this->queueManagement;
     }
 }

@@ -1,14 +1,17 @@
 <?php
 
-declare (strict_types = 1);
+declare(strict_types=1);
 
 namespace Gubee\Integration\Observer\Catalog\Product\Save;
 
 use Gubee\Integration\Command\Catalog\Product\DesativateCommand;
 use Gubee\Integration\Observer\Catalog\Product\AbstractProduct;
+use Magento\Catalog\Model\Product\Attribute\Source\Status;
 
-class Desativate extends AbstractProduct {
-    protected function process(): void {
+class Desativate extends AbstractProduct
+{
+    protected function process(): void
+    {
         $this->queueManagement->append(
             DesativateCommand::class,
             [
@@ -18,13 +21,14 @@ class Desativate extends AbstractProduct {
         );
     }
 
-    protected function isAllowed(): bool {
-        if (!$this->getConfig()->getActive()) {
+    protected function isAllowed(): bool
+    {
+        if (! $this->getConfig()->getActive()) {
             return false;
         }
         $product = $this->getProduct();
         if (
-            !$this->attribute->getRawAttributeValue(
+            ! $this->attribute->getRawAttributeValue(
                 'gubee',
                 $product
             )
@@ -33,7 +37,8 @@ class Desativate extends AbstractProduct {
         }
 
         if (
-            $product->getStatus() == \Magento\Catalog\Model\Product\Attribute\Source\Status::STATUS_ENABLED) {
+            $product->getStatus() == Status::STATUS_ENABLED
+        ) {
             return false;
         }
 

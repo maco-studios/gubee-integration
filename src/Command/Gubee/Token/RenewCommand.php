@@ -1,6 +1,6 @@
 <?php
 
-declare (strict_types = 1);
+declare(strict_types=1);
 
 namespace Gubee\Integration\Command\Gubee\Token;
 
@@ -15,7 +15,8 @@ use Magento\Framework\Registry;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\Console\Input\InputArgument;
 
-class RenewCommand extends AbstractCommand {
+class RenewCommand extends AbstractCommand
+{
     protected Client $client;
     protected Config $config;
 
@@ -26,12 +27,12 @@ class RenewCommand extends AbstractCommand {
         Registry $registry,
         Config $config
     ) {
-        $this->client = new Client(
+        $this->client   = new Client(
             $serviceProvider,
             $logger
         );
         $this->registry = $registry;
-        $this->config = $config;
+        $this->config   = $config;
         parent::__construct(
             $eventDispatcher,
             $logger,
@@ -44,7 +45,8 @@ class RenewCommand extends AbstractCommand {
      *
      * @return void
      */
-    protected function configure() {
+    protected function configure()
+    {
         $this->setDescription("Renew the token");
         $this->setHelp("This command will renew the token");
         $this->addArgument("token", InputArgument::REQUIRED, "The token to be renewed");
@@ -53,7 +55,8 @@ class RenewCommand extends AbstractCommand {
     /**
      * Executes the command.
      */
-    protected function doExecute(): int {
+    protected function doExecute(): int
+    {
         $this->logger->info("Renewing token");
         try {
             $token = $this->getClient()->token()->revalidate(
@@ -79,11 +82,13 @@ class RenewCommand extends AbstractCommand {
         return self::SUCCESS;
     }
 
-    public function getClient(): Client {
+    public function getClient(): Client
+    {
         return $this->client;
     }
 
-    public function getPriority(): int {
+    public function getPriority(): int
+    {
         return 150;
     }
 }

@@ -1,9 +1,10 @@
 <?php
 
-declare (strict_types = 1);
+declare(strict_types=1);
 
 namespace Gubee\Integration\Command\Sales\Order\Processor;
 
+use Exception;
 use Gubee\Integration\Api\OrderRepositoryInterface as GubeeOrderRepositoryInterface;
 use Gubee\Integration\Command\Sales\Order\AbstractProcessorCommand;
 use Gubee\SDK\Resource\Sales\OrderResource;
@@ -19,8 +20,11 @@ use Psr\Log\LoggerInterface;
 use Symfony\Component\Console\Exception\LogicException;
 use Throwable;
 
-class CanceledCommand extends AbstractProcessorCommand {
+use function __;
+use function sprintf;
 
+class CanceledCommand extends AbstractProcessorCommand
+{
     protected RefundOrder $refundOrder;
     protected ItemCreationFactory $itemCreationFactory;
     /**
@@ -41,8 +45,8 @@ class CanceledCommand extends AbstractProcessorCommand {
         ItemCreationFactory $itemCreationFactory,
         ?string $name = null
     ) {
-        $this->refundOrder = $refundOrder;
-        $this->invoiceManagement = $invoiceManagement;
+        $this->refundOrder         = $refundOrder;
+        $this->invoiceManagement   = $invoiceManagement;
         $this->itemCreationFactory = $itemCreationFactory;
         parent::__construct(
             $eventDispatcher,
@@ -57,7 +61,8 @@ class CanceledCommand extends AbstractProcessorCommand {
         );
     }
 
-    protected function doExecute(): int {
+    protected function doExecute(): int
+    {
         $order = $this->getOrder(
             $this->input->getArgument('order_id')
         );
@@ -77,7 +82,8 @@ class CanceledCommand extends AbstractProcessorCommand {
         return 0;
     }
 
-    private function cancelOrder($order): void {
+    private function cancelOrder($order): void
+    {
         try {
             if ($order->canCreditmemo()) {
                 $itemIdsToRefund = [];
@@ -93,7 +99,7 @@ class CanceledCommand extends AbstractProcessorCommand {
                         __('Order refunded!')->__toString(),
                         (int) $order->getId()
                     );
-                } catch (\Exception $e) {
+                } catch (Exception $e) {
                     $this->logger->error(
                         $e->getMessage()
                     );
@@ -124,7 +130,8 @@ class CanceledCommand extends AbstractProcessorCommand {
         }
     }
 
-    public function getPriority(): int {
+    public function getPriority(): int
+    {
         return 950;
     }
 }

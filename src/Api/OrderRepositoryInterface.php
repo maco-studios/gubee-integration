@@ -1,28 +1,32 @@
 <?php
 
-declare (strict_types = 1);
+declare(strict_types=1);
 
 namespace Gubee\Integration\Api;
 
-use Magento\Framework\Api\SearchCriteriaInterface;
+use Gubee\Integration\Api\Data\OrderInterface;
+use Gubee\Integration\Api\Data\OrderSearchResultsInterface;
+use Magento\Framework\Exception\LocalizedException;
+use Magento\Framework\Exception\NoSuchEntityException;
 
-interface OrderRepositoryInterface {
-
+interface OrderRepositoryInterface
+{
     /**
      * Save Order
-     * @param \Gubee\Integration\Api\Data\OrderInterface $order
-     * @return \Gubee\Integration\Api\Data\OrderInterface
-     * @throws \Magento\Framework\Exception\LocalizedException
+     *
+     * @return OrderInterface
+     * @throws LocalizedException
      */
     public function save(
-        \Gubee\Integration\Api\Data\OrderInterface $order
+        OrderInterface $order
     );
 
     /**
      * Retrieve Order
+     *
      * @param string $orderId
-     * @return \Gubee\Integration\Api\Data\OrderInterface
-     * @throws \Magento\Framework\Exception\LocalizedException
+     * @return OrderInterface
+     * @throws LocalizedException
      */
     public function get($orderId);
 
@@ -30,7 +34,7 @@ interface OrderRepositoryInterface {
      * Retrieve Order matching the specified criteria.
      *
      * @param string $gubeeOrderId
-     * @return \Gubee\Integration\Api\Data\OrderInterface
+     * @return OrderInterface
      */
     public function getByGubeeOrderId($gubeeOrderId);
 
@@ -38,37 +42,37 @@ interface OrderRepositoryInterface {
      * Retrieve Order matching the specified criteria.
      *
      * @param string $orderId
-     * @return \Gubee\Integration\Api\Data\OrderInterface
+     * @return OrderInterface
      */
     public function getByOrderId($orderId);
 
-
     /**
      * Retrieve Order matching the specified criteria.
-     * @param \Magento\Framework\Api\SearchCriteriaInterface $searchCriteria
-     * @return \Gubee\Integration\Api\Data\OrderSearchResultsInterface
-     * @throws \Magento\Framework\Exception\LocalizedException
+     *
+     * @return OrderSearchResultsInterface
+     * @throws LocalizedException
      */
     public function getList(
-        \Magento\Framework\Api\SearchCriteriaInterface $searchCriteria
+        SearchCriteriaInterface $searchCriteria
     );
 
     /**
      * Delete Order
-     * @param \Gubee\Integration\Api\Data\OrderInterface $order
+     *
      * @return bool true on success
-     * @throws \Magento\Framework\Exception\LocalizedException
+     * @throws LocalizedException
      */
     public function delete(
-        \Gubee\Integration\Api\Data\OrderInterface $order
+        OrderInterface $order
     );
 
     /**
      * Delete Order by ID
+     *
      * @param string $orderId
      * @return bool true on success
-     * @throws \Magento\Framework\Exception\NoSuchEntityException
-     * @throws \Magento\Framework\Exception\LocalizedException
+     * @throws NoSuchEntityException
+     * @throws LocalizedException
      */
     public function deleteById($orderId);
 }

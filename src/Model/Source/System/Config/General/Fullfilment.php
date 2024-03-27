@@ -1,11 +1,14 @@
 <?php
 
-declare (strict_types = 1);
+declare(strict_types=1);
 
 namespace Gubee\Integration\Model\Source\System\Config\General;
-use Gubee\SDK\Resource\PlatformResource;
 
-class Fullfilment implements \Magento\Framework\Option\ArrayInterface {
+use Gubee\SDK\Resource\PlatformResource;
+use Magento\Framework\Option\ArrayInterface;
+
+class Fullfilment implements ArrayInterface
+{
     protected PlatformResource $platformResource;
     public function __construct(
         PlatformResource $platformResource
@@ -13,8 +16,9 @@ class Fullfilment implements \Magento\Framework\Option\ArrayInterface {
         $this->platformResource = $platformResource;
     }
 
-    public function toOptionArray() {
-        $options = [];
+    public function toOptionArray()
+    {
+        $options   = [];
         $platforms = $this->platformResource->configuration();
         foreach ($platforms as $platform) {
             $options[] = [
@@ -24,5 +28,4 @@ class Fullfilment implements \Magento\Framework\Option\ArrayInterface {
         }
         return $options;
     }
-
 }

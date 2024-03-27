@@ -1,6 +1,6 @@
 <?php
 
-declare (strict_types = 1);
+declare(strict_types=1);
 
 namespace Gubee\Integration\Model\ResourceModel\Catalog\Product\Attribute;
 
@@ -9,10 +9,11 @@ use Magento\Catalog\Api\Data\ProductAttributeSearchResultsInterface;
 use Magento\Catalog\Api\ProductAttributeRepositoryInterface;
 use Magento\Eav\Api\Data\AttributeSearchResultsInterface;
 use Magento\Framework\Api\FilterBuilder;
-use Magento\Framework\Api\SearchCriteria;
 use Magento\Framework\Api\Search\SearchCriteriaBuilder;
+use Magento\Framework\Api\SearchCriteria;
 
-class CollectionFactory {
+class CollectionFactory
+{
     protected ProductAttributeRepositoryInterface $productAttributeRepository;
     protected SearchCriteriaBuilder $searchCriteriaBuilder;
     protected SearchCriteria $searchCriteria;
@@ -25,10 +26,10 @@ class CollectionFactory {
         FilterBuilder $filterBuilder,
         Config $config
     ) {
-        $this->config = $config;
-        $this->filterBuilder = $filterBuilder;
+        $this->config                     = $config;
+        $this->filterBuilder              = $filterBuilder;
         $this->productAttributeRepository = $productAttributeRepository;
-        $this->searchCriteriaBuilder = $searchCriteriaBuilder;
+        $this->searchCriteriaBuilder      = $searchCriteriaBuilder;
         $this->searchCriteriaBuilder
             ->addFilter(
                 $this->filterBuilder->setField('attribute_code')
@@ -36,51 +37,51 @@ class CollectionFactory {
                     ->setConditionType('neq')
                     ->create()
             )->addFilter(
-            $this->filterBuilder->setField('attribute_code')
+                $this->filterBuilder->setField('attribute_code')
                 ->setValue('gubee_%')
                 ->setConditionType('nlike')
                 ->create()
-        )->addFilter(
-            $this->filterBuilder->setField('attribute_code')
+            )->addFilter(
+                $this->filterBuilder->setField('attribute_code')
                 ->setValue($this->config->getEanAttribute())
                 ->setConditionType('neq')
                 ->create()
-        )->addFilter(
-            $this->filterBuilder->setField('attribute_code')
+            )->addFilter(
+                $this->filterBuilder->setField('attribute_code')
                 ->setValue($this->config->getWidthAttribute())
                 ->setConditionType('neq')
                 ->create()
-        )->addFilter(
-            $this->filterBuilder->setField('attribute_code')
+            )->addFilter(
+                $this->filterBuilder->setField('attribute_code')
                 ->setValue($this->config->getHeightAttribute())
                 ->setConditionType('neq')
                 ->create()
-        )->addFilter(
-            $this->filterBuilder->setField('attribute_code')
+            )->addFilter(
+                $this->filterBuilder->setField('attribute_code')
                 ->setValue($this->config->getDepthAttribute())
                 ->setConditionType('neq')
                 ->create()
-        )->addFilter(
-            $this->filterBuilder->setField('attribute_code')
+            )->addFilter(
+                $this->filterBuilder->setField('attribute_code')
                 ->setValue($this->config->getMeasureUnitAttribute())
                 ->setConditionType('neq')
                 ->create()
-        )->addFilter(
-            $this->filterBuilder->setField('attribute_code')
+            )->addFilter(
+                $this->filterBuilder->setField('attribute_code')
                 ->setValue($this->config->getCrossDockingTimeAttribute())
                 ->setConditionType('neq')
                 ->create()
-        )->addFilter(
-            $this->filterBuilder->setField('attribute_code')
+            )->addFilter(
+                $this->filterBuilder->setField('attribute_code')
                 ->setValue($this->config->getNbmAttribute())
                 ->setConditionType('neq')
                 ->create()
-        )->addFilter(
-            $this->filterBuilder->setField('attribute_code')
+            )->addFilter(
+                $this->filterBuilder->setField('attribute_code')
                 ->setValue($this->config->getBrandAttribute())
                 ->setConditionType('neq')
                 ->create()
-        )
+            )
             ->addFilter(
                 $this->filterBuilder->setField('frontend_label')
                     ->setValue("1")
@@ -120,7 +121,8 @@ class CollectionFactory {
      *
      * @return AttributeSearchResultsInterface|ProductAttributeSearchResultsInterface .
      */
-    public function create() {
+    public function create()
+    {
         return $this->productAttributeRepository->getList(
             $this->searchCriteriaBuilder->create()
         );
@@ -147,11 +149,13 @@ class CollectionFactory {
         return $this;
     }
 
-    public function getProductAttributeRepository(): ProductAttributeRepositoryInterface {
+    public function getProductAttributeRepository(): ProductAttributeRepositoryInterface
+    {
         return $this->productAttributeRepository;
     }
 
-    public function setProductAttributeRepository(ProductAttributeRepositoryInterface $productAttributeRepository): self {
+    public function setProductAttributeRepository(ProductAttributeRepositoryInterface $productAttributeRepository): self
+    {
         $this->productAttributeRepository = $productAttributeRepository;
         return $this;
     }

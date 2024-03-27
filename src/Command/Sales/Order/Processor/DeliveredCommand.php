@@ -1,6 +1,6 @@
 <?php
 
-declare (strict_types = 1);
+declare(strict_types=1);
 
 namespace Gubee\Integration\Command\Sales\Order\Processor;
 
@@ -15,8 +15,10 @@ use Magento\Sales\Model\ResourceModel\Order\CollectionFactory;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\Console\Exception\LogicException;
 
-class DeliveredCommand extends AbstractProcessorCommand {
+use function __;
 
+class DeliveredCommand extends AbstractProcessorCommand
+{
     /**
      * @param string|null $name The name of the command; passing null means it must be set in configure()
      * @throws LogicException When the command name is empty.
@@ -45,7 +47,8 @@ class DeliveredCommand extends AbstractProcessorCommand {
         );
     }
 
-    protected function doExecute(): int {
+    protected function doExecute(): int
+    {
         $order = $this->getOrder(
             $this->getInput()->getArgument('order_id')
         );
@@ -55,7 +58,8 @@ class DeliveredCommand extends AbstractProcessorCommand {
         return 0;
     }
 
-    private function deliverOrder($order): void {
+    private function deliverOrder($order): void
+    {
         // set order as completed
         $this->addOrderHistory(
             __("Order was delivered!")->__toString(),

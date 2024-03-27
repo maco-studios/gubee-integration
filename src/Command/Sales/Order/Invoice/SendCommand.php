@@ -1,6 +1,6 @@
 <?php
 
-declare (strict_types = 1);
+declare(strict_types=1);
 
 namespace Gubee\Integration\Command\Sales\Order\Invoice;
 
@@ -19,7 +19,10 @@ use Psr\Log\LoggerInterface;
 use Symfony\Component\Console\Exception\LogicException;
 use Symfony\Component\Console\Input\InputArgument;
 
-class SendCommand extends AbstractProcessorCommand {
+use function __;
+
+class SendCommand extends AbstractProcessorCommand
+{
     protected InvoiceRepositoryInterface $invoiceRepository;
 
     /**
@@ -51,22 +54,25 @@ class SendCommand extends AbstractProcessorCommand {
         );
     }
 
-    protected function configure() {
+    protected function configure()
+    {
         $this->addArgument('invoice_id', InputArgument::REQUIRED, 'Invoice ID');
     }
 
-    protected function beforeExecute($input, $output) {
+    protected function beforeExecute($input, $output)
+    {
         /**
          * This command is only called by the magento internal process,
          * so we don't need to check if the order is already existent.
          */
     }
 
-    protected function afterExecute() {
-
+    protected function afterExecute()
+    {
     }
 
-    protected function doExecute(): int {
+    protected function doExecute(): int
+    {
         $invoice = $this->getInvoice();
         if ($invoice->getOrigin() === InvoiceInterface::ORIGIN_GUBEE) {
             throw new InvalidArgumentException(
@@ -86,12 +92,14 @@ class SendCommand extends AbstractProcessorCommand {
         return 0;
     }
 
-    private function getInvoice(): InvoiceInterface {
+    private function getInvoice(): InvoiceInterface
+    {
         $invoiceId = $this->input->getArgument('invoice_id');
         return $this->invoiceRepository->get($invoiceId);
     }
 
-    public function getPriority(): int {
+    public function getPriority(): int
+    {
         return 150;
     }
 }

@@ -1,16 +1,22 @@
 <?php
 
-declare (strict_types = 1);
+declare(strict_types=1);
 
 namespace Gubee\Integration\Observer\Catalog\Product\Stock\Item\Save;
 
 use Gubee\Integration\Command\Catalog\Product\Stock\SendCommand;
 use Gubee\Integration\Observer\Catalog\Product\AbstractProduct;
 use Magento\Catalog\Api\Data\ProductInterface;
+use Magento\CatalogInventory\Api\StockRegistryInterface;
 use Magento\Framework\Event\Observer;
 
-class After extends AbstractProduct {
-    protected function process(): void {
+use function json_decode;
+use function json_encode;
+
+class After extends AbstractProduct
+{
+    protected function process(): void
+    {
         $this->queueManagement->append(
             SendCommand::class,
             [
@@ -28,8 +34,9 @@ class After extends AbstractProduct {
      *
      * @return void
      */
-    public function execute(Observer $observer) {
-        if (!$observer->getDataObject() instanceof ProductInterface) {
+    public function execute(Observer $observer)
+    {
+        if (! $observer->getDataObject() instanceof ProductInterface) {
             $product = $this->productRepository->getById(
                 $observer->getDataObject()->getProductId()
             );
@@ -49,13 +56,14 @@ class After extends AbstractProduct {
     /**
      * Validate if the observer is allowed to run
      */
-    protected function isAllowed(): bool {
-        if (!$this->getConfig()->getActive()) {
+    protected function isAllowed(): bool
+    {
+        if (! $this->getConfig()->getActive()) {
             return false;
         }
-        $product = $this->getProduct();
+        $product      = $this->getProduct();
         $productStock = $this->objectManager->get(
-            \Magento\CatalogInventory\Api\StockRegistryInterface::class
+            StockRegistryInterface::class
         )->getStockItem(
             $product->getId(),
             $product->getStore()->getWebsiteId()

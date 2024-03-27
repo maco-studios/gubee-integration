@@ -1,15 +1,29 @@
 <?php
 
-declare (strict_types = 1);
+declare(strict_types=1);
 
 namespace Gubee\Integration\Ui\Component\Sales\Order\Listing\Column;
 
+use Exception;
 use Gubee\SDK\Resource\PlatformResource;
-use Magento\Framework\View\Element\UiComponentFactory;
 use Magento\Framework\View\Element\UiComponent\ContextInterface;
+use Magento\Framework\View\Element\UiComponentFactory;
+use Magento\Ui\Component\Listing\Columns\Column;
 
-class Marketplace extends \Magento\Ui\Component\Listing\Columns\Column {
+use function curl_close;
+use function curl_exec;
+use function curl_getinfo;
+use function curl_init;
+use function curl_setopt;
 
+use const CURLINFO_CONTENT_TYPE;
+use const CURLINFO_HTTP_CODE;
+use const CURLOPT_FOLLOWLOCATION;
+use const CURLOPT_NOBODY;
+use const CURLOPT_RETURNTRANSFER;
+
+class Marketplace extends Column
+{
     protected static $platform = [];
     protected PlatformResource $platformResource;
 
@@ -30,10 +44,11 @@ class Marketplace extends \Magento\Ui\Component\Listing\Columns\Column {
      * @param array $dataSource
      * @return array
      */
-    public function prepareDataSource(array $dataSource) {
+    public function prepareDataSource(array $dataSource)
+    {
         if (isset($dataSource['data']['items'])) {
             foreach ($dataSource['data']['items'] as &$item) {
-                $status = $item['status'];
+                $status                       = $item['status'];
                 $item[$this->getData('name')] = $this->getMarketplaceCell($item[$this->getData('name')]);
             }
         }
@@ -41,7 +56,8 @@ class Marketplace extends \Magento\Ui\Component\Listing\Columns\Column {
         return $dataSource;
     }
 
-    public function getMarketplaceCell(string $marketplace) {
+    public function getMarketplaceCell(string $marketplace)
+    {
         $content = "";
         if ($this->getMarketplaceLogo($marketplace)) {
             $content .= '<img src="' . $this->getMarketplaceLogo($marketplace) . '" alt="' . $marketplace . '" width="40" />';
@@ -57,26 +73,23 @@ class Marketplace extends \Magento\Ui\Component\Listing\Columns\Column {
 
     /**
      * Get marketplace logo
-     *
-     * @param string $marketplace
-     * @return string|null
      */
-    private function getMarketplaceLogo(string $marketplace): ?string {
+    private function getMarketplaceLogo(string $marketplace): ?string
+    {
         try {
             $platformConfig = $this->getPlatformConfig();
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             return null;
         }
 
-        $logo = isset($platformConfig[$marketplace]['logoUrl'])
-        ? $platformConfig[$marketplace]['logoUrl']
-        : $platformConfig['HUBEE']['logoUrl'];
+        $logo = $platformConfig[$marketplace]['logoUrl'] ?? $platformConfig['HUBEE']['logoUrl'];
         return $this->isAvailable(
             $logo
         ) ? $logo : $platformConfig['HUBEE']['logoUrl'];
     }
 
-    public function isAvailable(string $logoUrl): bool {
+    public function isAvailable(string $logoUrl): bool
+    {
         $curl = curl_init($logoUrl);
         curl_setopt($curl, CURLOPT_NOBODY, true);
         curl_setopt($curl, CURLOPT_FOLLOWLOCATION, true);
@@ -92,7 +105,8 @@ class Marketplace extends \Magento\Ui\Component\Listing\Columns\Column {
         return $httpcode == 200;
     }
 
-    public function getPlatformConfig() {
+    public function getPlatformConfig()
+    {
         if (empty(self::$platform)) {
             $result = $this->platformResource->configuration();
             foreach ($result as $key => $value) {

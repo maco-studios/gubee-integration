@@ -1,23 +1,31 @@
 <?php
 
-declare (strict_types = 1);
+declare(strict_types=1);
 
 namespace Gubee\Integration\Model\Quote\Address\Total;
 
-class Marketplace extends \Magento\Quote\Model\Quote\Address\Total\AbstractTotal {
+use Magento\Quote\Api\Data\ShippingAssignmentInterface;
+use Magento\Quote\Model\Quote;
+use Magento\Quote\Model\Quote\Address\Total;
+use Magento\Quote\Model\Quote\Address\Total\AbstractTotal;
+
+use function __;
+
+class Marketplace extends AbstractTotal
+{
     protected $_code = 'gubee_marketplace_total';
 
     public function collect(
-        \Magento\Quote\Model\Quote $quote,
-        \Magento\Quote\Api\Data\ShippingAssignmentInterface $shippingAssignment,
-        \Magento\Quote\Model\Quote\Address\Total $total
+        Quote $quote,
+        ShippingAssignmentInterface $shippingAssignment,
+        Total $total
     ) {
         $address = $shippingAssignment->getShipping()->getAddress();
         parent::collect($quote, $shippingAssignment, $total);
 
         $grandTotal = $total->getGrandTotal();
-        $shipping = $address->getShippingAmount();
-        $tmpTotal = $grandTotal - $shipping;
+        $shipping   = $address->getShippingAmount();
+        $tmpTotal   = $grandTotal - $shipping;
 
         $address->setGubeeMarketplaceTotalAmount($tmpTotal);
         $address->setBaseGubeeMarketplaceTotalAmount($tmpTotal);
@@ -33,22 +41,23 @@ class Marketplace extends \Magento\Quote\Model\Quote\Address\Total\AbstractTotal
     }
 
     public function fetch(
-        \Magento\Quote\Model\Quote $quote,
-        \Magento\Quote\Model\Quote\Address\Total $total
+        Quote $quote,
+        Total $total
     ) {
-
         return [
-            'code' => $this->getCode(),
+            'code'  => $this->getCode(),
             'title' => __('Marketplace Total'),
             'value' => $this->getGubeeMarketplaceTotalAmount(),
         ];
     }
 
-    public function getLabel() {
+    public function getLabel()
+    {
         return __('Marketplace Total');
     }
 
-    public function getLabelTitle() {
+    public function getLabelTitle()
+    {
         return __('Marketplace Total');
     }
 }

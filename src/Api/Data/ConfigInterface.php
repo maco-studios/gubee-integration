@@ -1,13 +1,14 @@
 <?php
 
-declare (strict_types = 1);
+declare(strict_types=1);
 
 namespace Gubee\Integration\Api\Data;
 
 use DateTimeInterface;
 use Gubee\Integration\Api\Enum\MainCategoryEnum;
 
-interface ConfigInterface {
+interface ConfigInterface
+{
     /**
      * Path to 'active' system config.
      *
@@ -170,8 +171,8 @@ interface ConfigInterface {
     public const CONFIG_PATH_QUEUE_PAGE_SIZE = 'gubee/general/queue_page_size';
 
     public const CONFIG_PATH_DEFAULT_DELIVERY_TIME = 'carriers/gubee/default_delivery_time';
-    public const CONFIG_PATH_FULFILMENT_ENABLE = 'gubee/general/fulfilment_enable';
-    public const CONFIG_PATH_FULFILMENT_RULES = 'gubee/general/fulfilment_rules';
+    public const CONFIG_PATH_FULFILMENT_ENABLE     = 'gubee/general/fulfilment_enable';
+    public const CONFIG_PATH_FULFILMENT_RULES      = 'gubee/general/fulfilment_rules';
 
     /**
      * Set the 'active' system config.

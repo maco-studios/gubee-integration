@@ -1,9 +1,10 @@
 <?php
 
-declare (strict_types = 1);
+declare(strict_types=1);
 
 namespace Gubee\Integration\Observer\Gubee\Command\Execute;
 
+use Exception;
 use Gubee\Integration\Api\InvoiceRepositoryInterface;
 use Gubee\Integration\Api\OrderRepositoryInterface;
 use Gubee\Integration\Command\Sales\Order\AbstractProcessorCommand;
@@ -16,7 +17,12 @@ use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Registry;
 use Psr\Log\LoggerInterface;
 
-class Before extends AbstractObserver {
+use function __;
+use function in_array;
+use function is_subclass_of;
+
+class Before extends AbstractObserver
+{
     protected Registry $registry;
     protected OrderResource $orderResource;
 
@@ -30,7 +36,8 @@ class Before extends AbstractObserver {
         $this->registry = $registry;
     }
 
-    protected function process(): void {
+    protected function process(): void
+    {
         $rules = $this->config->getFulfilmentRules();
         if (empty($rules) || $rules == []) {
             $this->logger->debug(
@@ -39,13 +46,14 @@ class Before extends AbstractObserver {
             return;
         }
         $message = $this->registry->registry('gubee_current_message');
-        if (!$message) {
+        if (! $message) {
             return;
         }
-        if (!is_subclass_of(
-            $message->getCommand(),
-            AbstractProcessorCommand::class
-        )
+        if (
+            ! is_subclass_of(
+                $message->getCommand(),
+                AbstractProcessorCommand::class
+            )
         ) {
             return;
         }
@@ -61,8 +69,8 @@ class Before extends AbstractObserver {
                     InvoiceRepositoryInterface::class
                 );
             $invoice = $invoice->get($message->getPayload()['invoice_id']);
-            if (!$invoice) {
-                throw new \Exception(
+            if (! $invoice) {
+                throw new Exception(
                     __("Invoice not found")->__toString()
                 );
             }
@@ -81,20 +89,21 @@ class Before extends AbstractObserver {
             );
         }
 
-        if (!$this->isFulfilment($order)) {
+        if (! $this->isFulfilment($order)) {
             return;
         }
-        if (!in_array($order['plataform'], $rules)) {
-            throw new \Exception(
+        if (! in_array($order['plataform'], $rules)) {
+            throw new Exception(
                 __("Order not allowed to be fulfilled")->__toString()
             );
         }
     }
 
-    protected function isFulfilment($order) {
+    protected function isFulfilment($order)
+    {
         $isFullfilment = false;
         foreach ($order['items'] as $item) {
-            if (!isset($item['fulfillment'])) {
+            if (! isset($item['fulfillment'])) {
                 continue;
             }
             if ($item['fulfillment'] == true) {
@@ -109,8 +118,9 @@ class Before extends AbstractObserver {
     /**
      * Validate if the observer is allowed to run
      */
-    protected function isAllowed(): bool {
-        if (!$this->getConfig()->getFulfilmentEnable()) {
+    protected function isAllowed(): bool
+    {
+        if (! $this->getConfig()->getFulfilmentEnable()) {
             return false;
         }
 
