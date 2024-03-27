@@ -1,16 +1,16 @@
 <?php
 
-declare(strict_types=1);
+declare (strict_types = 1);
 
 namespace Gubee\Integration\Api;
 
 use Gubee\Integration\Api\Data\OrderInterface;
 use Gubee\Integration\Api\Data\OrderSearchResultsInterface;
+use Magento\Framework\Api\SearchCriteriaInterface;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Exception\NoSuchEntityException;
 
-interface OrderRepositoryInterface
-{
+interface OrderRepositoryInterface {
     /**
      * Save Order
      *

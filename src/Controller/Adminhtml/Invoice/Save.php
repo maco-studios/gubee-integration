@@ -1,6 +1,6 @@
 <?php
 
-declare(strict_types=1);
+declare (strict_types = 1);
 
 namespace Gubee\Integration\Controller\Adminhtml\Invoice;
 
@@ -14,10 +14,7 @@ use Magento\Framework\Controller\ResultFactory;
 use Magento\Framework\Controller\ResultInterface;
 use Magento\Framework\Exception\LocalizedException;
 
-use function __;
-
-class Save extends Action
-{
+class Save extends Action {
     protected $dataPersistor;
 
     public function __construct(
@@ -33,16 +30,15 @@ class Save extends Action
      *
      * @return ResultInterface
      */
-    public function execute()
-    {
+    public function execute() {
         /** @var Redirect $resultRedirect */
         $resultRedirect = $this->resultRedirectFactory->create();
-        $data           = $this->getRequest()->getPostValue();
+        $data = $this->getRequest()->getPostValue();
         if ($data) {
             $id = $this->getRequest()->getParam('invoice_id');
 
             $model = $this->_objectManager->create(Invoice::class)->load($id);
-            if (! $model->getId() && $id) {
+            if (!$model->getId() && $id) {
                 $this->messageManager->addErrorMessage(__('This Invoice no longer exists.'));
                 return $resultRedirect->setPath('*/*/');
             }
@@ -58,8 +54,8 @@ class Save extends Action
                 if ($this->getRequest()->getParam('isAjax')) {
                     return $this->jsonResponse(
                         [
-                            'success'    => true,
-                            'message'    => __('You saved the Invoice.'),
+                            'success' => true,
+                            'message' => __('You saved the Invoice.'),
                             'invoice_id' => $model->getId(),
                         ]
                     );
@@ -93,7 +89,12 @@ class Save extends Action
                         ]
                     );
                 }
-                $this->messageManager->addExceptionMessage($e, __('Something went wrong while saving the Invoice.'));
+                $this->messageManager->addExceptionMessage(
+                    $e, __(
+                        'Something went wrong while saving the Invoice, Error: %1',
+                        $e->getMessage()
+                    )
+                );
             }
 
             $this->dataPersistor->set('gubee_integration_invoice', $data);
@@ -106,8 +107,7 @@ class Save extends Action
      * @param Invoice $model
      * @return ResultInterface
      */
-    protected function jsonResponse(array $model)
-    {
+    protected function jsonResponse(array $model) {
         $resultJson = $this->resultFactory->create(ResultFactory::TYPE_JSON);
         $resultJson->setData($model);
         return $resultJson;
