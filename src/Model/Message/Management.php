@@ -156,7 +156,8 @@ class Management implements ManagementInterface
             $this->logger->error(
                 $result,
                 [
-                    'exception' => $e,
+                    'exception' => $e->getMessage(),
+                    'trace'     => $e->getTraceAsString()
                 ]
             );
             $message->setMessage(
@@ -183,7 +184,8 @@ class Management implements ManagementInterface
             $this->logger->error(
                 $result,
                 [
-                    'exception' => $e,
+                    'exception' => $e->getMessage(),
+                    'trace'     => $e->getTraceAsString()
                 ]
             );
             $message->setMessage(

@@ -81,7 +81,7 @@ class SendCommand extends AbstractCommand
                     )->__toString()
                 )
             );
-            return 1;
+            throw $e;
         }
         return 0;
     }

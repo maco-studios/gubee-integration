@@ -34,7 +34,9 @@ class Marketplace extends Column {
     public function prepareDataSource(array $dataSource) {
         if (isset($dataSource['data']['items'])) {
             foreach ($dataSource['data']['items'] as &$item) {
-                $status = $item['status'];
+                if (!isset($item[$this->getData('name')])) {
+                    continue;
+                }
                 $item[$this->getData('name')] = $this->getMarketplaceCell($item[$this->getData('name')]);
             }
         }

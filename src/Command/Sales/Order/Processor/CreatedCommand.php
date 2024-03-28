@@ -414,8 +414,8 @@ class CreatedCommand extends AbstractProcessorCommand {
         );
 
         foreach ($gubeeOrder['items'] as $item) {
-            echo '<pre><hr/>';
-            print_r($item);
+            // echo '<pre><hr/>';
+            // print_r($item);
             $this->logger->debug(
                 __("Adding item '%1' to quote", $item['skuId'])
             );
@@ -447,12 +447,14 @@ class CreatedCommand extends AbstractProcessorCommand {
                                 $productToBeAdd,
                                 $toBeAdded['qty'] * $item['qty']
                             );
+                            // echo"<hr>", "Price: ",  $price, "<hr>";
                             $quoteItem->setCustomPrice(
-                                $price / $quoteItem->getQty()
+                                $price
                             );
                             $quoteItem->setOriginalCustomPrice(
-                                $price / $quoteItem->getQty()
+                                $price
                             );
+                            // echo json_encode($quoteItem->getData(), JSON_PRETTY_PRINT);
                         } catch (Throwable $e) {
                             $message = __(
                                 "Error adding product with SKU '%1' to quote, error: " . (string) $e->getMessage(),
@@ -470,14 +472,17 @@ class CreatedCommand extends AbstractProcessorCommand {
                         $productToBeAdd = $this->getProductByGubeeSku(
                             $item['skuId']
                         );
+                        $price = $fullPrice;
+                        // echo"<hr>", "Price: ",  $price, "<hr>";
                         $quoteItem = $quote->addProduct(
                             $productToBeAdd,
                             $item['qty']
                         );
                         $quoteItem->setCustomPrice(
-                            $fullPrice / $quoteItem->getQty()
+                            $price
                         );
-                        $quoteItem->setOriginalCustomPrice($fullPrice / $quoteItem->getQty());
+                        $quoteItem->setOriginalCustomPrice($price);
+                        // echo json_encode($quoteItem->getData(), JSON_PRETTY_PRINT);
                     } catch (Throwable $e) {
                         $message = __(
                             "Error adding product with SKU '%1' to quote, error: " . (string) $e->getMessage(),
@@ -495,6 +500,8 @@ class CreatedCommand extends AbstractProcessorCommand {
                 throw $e;
             }
         }
+
+        // exit;
 
         $this->logger->debug(
             __("Items added to quote for order '%1'", $gubeeOrder['id'])

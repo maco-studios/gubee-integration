@@ -367,6 +367,7 @@ class Variation
                 $attribute->getAttributeCode(),
                 $this->product
             );
+
             if (! $value) {
                 continue;
             }

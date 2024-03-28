@@ -7,6 +7,7 @@ namespace Gubee\Integration\Observer\Catalog\Product\Stock\Item\Save;
 use Gubee\Integration\Command\Catalog\Product\Stock\SendCommand;
 use Gubee\Integration\Observer\Catalog\Product\AbstractProduct;
 use Magento\Catalog\Api\Data\ProductInterface;
+use Magento\ConfigurableProduct\Model\ResourceModel\Product\Type\Configurable;
 use Magento\CatalogInventory\Api\StockRegistryInterface;
 use Magento\Framework\Event\Observer;
 
@@ -17,6 +18,35 @@ class After extends AbstractProduct
 {
     protected function process(): void
     {
+
+        $parents = $this->objectManager->create(
+            Configurable::class
+        )->getParentIdsByChild(
+            $this->getProduct()->getId()
+        );
+
+        if (! empty($parents)) {
+
+            foreach ($parents as $parentId) {
+                $parentProduct = $this->productRepository->getById($parentId);
+                if ($this->attribute->getRawAttributeValue('gubee', $parentProduct) != 1) {
+                    continue;
+                }
+
+                $this->queueManagement->append(
+                    SendCommand::class,
+                    [
+                        'sku' => $this->productRepository->getById($parentId)->getSku(),
+                    ],
+                    (int) $parentId
+                );
+            }
+        }
+
+        if ($this->attribute->getRawAttributeValue('gubee', $this->getProduct()) != 1) {
+            return;
+        }
+
         $this->queueManagement->append(
             SendCommand::class,
             [
@@ -36,7 +66,7 @@ class After extends AbstractProduct
      */
     public function execute(Observer $observer)
     {
-        if (! $observer->getDataObject() instanceof ProductInterface) {
+        if (!$observer->getDataObject() instanceof ProductInterface) {
             $product = $this->productRepository->getById(
                 $observer->getDataObject()->getProductId()
             );
@@ -47,9 +77,6 @@ class After extends AbstractProduct
 
         if ($this->isAllowed()) {
             $this->process();
-            $this->appendForParent(
-                $this->getProduct()
-            );
         }
     }
 
@@ -91,15 +118,6 @@ class After extends AbstractProduct
             ) {
                 return false;
             }
-        }
-        $product = $this->getProduct();
-        if (
-            $this->attribute->getRawAttributeValue(
-                'gubee',
-                $product
-            ) == 0
-        ) {
-            return false;
         }
         return true;
     }

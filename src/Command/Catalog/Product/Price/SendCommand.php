@@ -73,6 +73,12 @@ class SendCommand extends AbstractCommand
                     $this->input->getArgument('sku')
                 )->__toString()
             );
+            throw new \Exception(
+                __(
+                    "The product with the SKU '%1' is not integrated with Gubee yet",
+                    $this->input->getArgument('sku')
+                )->__toString()
+            );
             return 1;
         }
 

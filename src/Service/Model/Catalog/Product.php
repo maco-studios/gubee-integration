@@ -342,16 +342,24 @@ class Product
         foreach ($variations as $variation) {
             foreach ($variation->getVariantSpecification() as $spec) {
                 if (isset($attrs[$spec->getAttribute()])) {
-                    $attrs[$spec->getAttribute()]->setValues(
-                        array_merge(
-                            $attrs[$spec->getAttribute()]->getValues(),
-                            $spec->getValues()
-                        )
+                    $attrs[$spec->getAttribute()] = array_merge(
+                        $attrs[$spec->getAttribute()],
+                        $spec->getValues()
                     );
                 } else {
-                    $attrs[$spec->getAttribute()] = $spec;
+                    $attrs[$spec->getAttribute()] = $spec->getValues();
                 }
             }
+        }
+
+        foreach ($attrs as $attribute => $values) {
+            $attrs[$attribute] = $this->objectManager->create(
+                AttributeValue::class,
+                [
+                    'attribute' => $attribute,
+                    'values' => $values,
+                ]
+            );
         }
 
         return $attrs;
