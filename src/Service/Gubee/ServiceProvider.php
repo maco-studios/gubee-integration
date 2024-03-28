@@ -19,7 +19,7 @@ class ServiceProvider extends ObjectManager implements ServiceProviderInterface
      * @param string $id Identifier of the entry to look for.
      * @return bool
      */
-    public function has(string $id)
+    public function has($id)
     {
         return parent::get($id);
     }
