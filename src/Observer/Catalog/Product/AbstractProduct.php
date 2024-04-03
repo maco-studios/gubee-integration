@@ -18,7 +18,8 @@ use Psr\Log\LoggerInterface;
 abstract class AbstractProduct extends AbstractObserver
 {
     protected Attribute $attribute;
-    protected ProductInterface $product;
+    /** @var ProductInterface|null */
+    protected $product;
     protected ProductRepositoryInterface $productRepository;
     protected ObjectManagerInterface $objectManager;
 
@@ -76,9 +77,11 @@ abstract class AbstractProduct extends AbstractObserver
     public function execute(Observer $observer)
     {
         $this->setObserver($observer);
-        $this->setProduct(
-            $this->getObserver()->getEvent()->getDataObject()
-        );
+        if ($this->getObserver()->getEvent()->getDataObject()) {
+            $this->setProduct(
+                $this->getObserver()->getEvent()->getDataObject()
+            );
+        }
         if ($this->isAllowed()) {
             $this->process();
             $this->appendForParent(
@@ -92,7 +95,9 @@ abstract class AbstractProduct extends AbstractObserver
      */
     protected function isAllowed(): bool
     {
-        $product = $this->getProduct();
+        if (!$product = $this->getProduct()) {
+            return false;
+        }
 
         if (
             ! $this->attribute->getRawAttributeValue(
@@ -117,7 +122,10 @@ abstract class AbstractProduct extends AbstractObserver
         return parent::isAllowed();
     }
 
-    public function getProduct(): ProductInterface
+    /**
+     * @return ProductInterface|null
+     */
+    public function getProduct()
     {
         return $this->product;
     }
