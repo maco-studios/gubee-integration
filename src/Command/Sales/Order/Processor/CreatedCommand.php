@@ -607,15 +607,28 @@ class CreatedCommand extends AbstractProcessorCommand {
         unset($name[sizeof($name) - 1]);
         $firstName = implode(' ', $name);
 
+        if (
+            class_exists(
+                \Pagarme\Pagarme\Observer\CustomerAddressSaveBefore::class
+            )
+        ) {
+            $street = [
+                is_string($address->getStreet()) ? trim($address->getStreet()) : __("Street not informed"),
+                is_string($address->getNumber()) ? trim($address->getNumber()) : __("Number not informed"),
+                trim($address->getComplement()) ?: __("Complement not informed"),
+            ];
+        } else {
+            $street = [
+                is_string($address->getStreet()) ? trim($address->getStreet()) : __("Street not informed"),
+                is_string($address->getNumber()) ? trim($address->getNumber()) : __("Number not informed"),
+            ];
+        }
+
         $address = [
             'firstname' => $firstName,
             'lastname' => $secondName,
             'email' => $customer->getEmail(),
-            'street' => [
-                is_string($address->getStreet()) ? trim($address->getStreet()) : __("Street not informed"),
-                is_string($address->getNumber()) ? trim($address->getNumber()) : __("Number not informed"),
-                // trim($address->getComplement()) ?: __("Complement not informed"),
-            ],
+            'street' => $street,
             'city' => $address->getCity(),
             'country_id' => $country->getId(),
             'region' => $region->getDefaultName(),
