@@ -1,0 +1,25 @@
+{
+    "name": "gubee/integration",
+    "description": "The Gubee Integration for Magento 2 is designed to streamline the synchronization process between your Magento 2 store and Gubee's advanced integration services.",
+    "type": "magento2-module",
+    "license": "Mozilla Public License Version 2.0",
+    "minimum-stability": "stable",
+    "authors": [
+        {
+            "name": "Marcos 'Marcão' Aurelio",
+            "email": "macosaures+git+gubee@gmail.com",
+            "homepage": "https://maco-studios.dev",
+            "role": "Maintainer"
+        },
+        {
+            "name": "Gubee",
+            "email": "contato@gubee.com.br",
+            "role": "Sponsor"
+        }
+    ],
+    "require": {},
+    "config": {
+        "sort-packages": true,
+        "optimize-autoloader": true
+    }
+}
