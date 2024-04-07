@@ -615,7 +615,7 @@ class CreatedCommand extends AbstractProcessorCommand {
             $street = [
                 is_string($address->getStreet()) ? trim($address->getStreet()) : __("Street not informed"),
                 is_string($address->getNumber()) ? trim($address->getNumber()) : __("Number not informed"),
-                trim($address->getComplement()) ?: __("Complement not informed"),
+                is_string($address->getComplement()) ? trim($address->getComplement()) : __("Complement not informed"),
             ];
         } else {
             $street = [
