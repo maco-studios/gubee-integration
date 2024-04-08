@@ -14,8 +14,5 @@
                 <argument name="block" xsi:type="string">Gubee\Integration\Block\Adminhtml\Sales\Order\View\Tab\Gubee\Invoice\Grid</argument>
             </action>
         </referenceBlock>
-        <referenceContainer name="order_totals">
-            <block class="Gubee\Integration\Block\Adminhtml\Sales\Totals\Marketplace" name="marketplace_cost"/>
-        </referenceContainer>
     </body>
 </page>
