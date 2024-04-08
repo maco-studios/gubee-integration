@@ -261,7 +261,10 @@ class Variation
 
     protected function buildDescription()
     {
-        return $this->product->getDescription();
+        return $this->product->getDescription() ?: $this->attribute->getRawAttributeValue(
+            'description',
+            $this->product
+        );
     }
 
     protected function buildEan()
