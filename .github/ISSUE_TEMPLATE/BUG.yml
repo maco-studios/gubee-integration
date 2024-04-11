@@ -1,0 +1,73 @@
+name: "🐛 Bug"
+description: Criar um relatório de bug para nos ajudar a melhorar
+title: "🐛 [BUG] - <title>"
+labels: [
+  "bug"
+]
+body:
+  - type: textarea
+    id: description
+    attributes:
+      label: "Descrição do Bug"
+      description: Por favor, forneça uma descrição curta e explícita do seu incidente...
+      placeholder: "Ex: O botão '...' não está funcionando corretamente"
+    validations:
+      required: true
+  - type: textarea
+    id: reprod
+    attributes:
+      label: "Passos para reproduzir"
+      description: Descreva os passos para reproduzir o bug...
+      value: |
+        1. Acesse a página '....'
+        2. Clique em '....'
+        3. Vá para '....'
+        4. Dispare o evento '....'
+        5. O erro ocorre...
+      render: bash
+    validations:
+      required: true
+  - type: textarea
+    id: screenshot
+    attributes:
+      label: "Screenshots"
+      description: Se houver, adicione capturas de tela para ajudar a explicar o problema...
+      value: |
+        ![DESCRIPTION](LINK.png)
+      render: bash
+    validations:
+      required: false
+  - type: textarea
+    id: logs
+    attributes:
+      label: "Logs"
+      description: Se houver, adicione logs para ajudar a explicar o problema...
+      render: bash
+    validations:
+      required: false
+  - type: dropdown
+    id: browsers
+    attributes:
+      label: "Navegadores"
+      description: Quais navegadores estão impactados ?
+      multiple: true
+      options:
+        - Firefox
+        - Chrome
+        - Safari
+        - Microsoft Edge
+        - Opera
+    validations:
+      required: false
+  - type: dropdown
+    id: os
+    attributes:
+      label: "OS"
+      description: Qual sistema operacional está impactado ?
+      multiple: true
+      options:
+        - Windows
+        - Linux
+        - Mac
+    validations:
+      required: false
