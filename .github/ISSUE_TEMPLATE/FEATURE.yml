@@ -1,0 +1,35 @@
+name: "💡 Proposta de melhoria"
+description: Sugira uma ideia para este projeto
+title: "💡 [FEATURE] - <title>"
+labels: [
+  "feature"
+]
+body:
+  - type: input
+    id: description
+    attributes:
+      label: Descrição
+      description: Descreva sua ideia em detalhes
+    validations:
+      required: true
+  - type: input
+    id: impact
+    attributes:
+      label: Impacto
+      description: Descreva o impacto que essa ideia teria no projeto
+    validations:
+      required: true
+  - type: input
+    id: resources
+    attributes:
+      label: Recursos necessários
+      description: Liste os recursos necessários para implementar essa ideia
+    validations:
+      required: false
+  - type: input
+    id: timeline
+    attributes:
+      label: Prazo
+      description: Informe um prazo estimado para implementação
+    validations:
+      required: false
