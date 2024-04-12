@@ -38,16 +38,11 @@ class Column
         if ($requestName == 'sales_order_grid_data_source') {
             if ($result instanceof $this->collection) {
                 $select = $result->getSelect();
-                $select->join(
+                $select->joinLeft(
                     ["gubee_order" => "gubee_integration_order"],
                     'main_table.entity_id = gubee_order.order_id ',
                     ['gubee_marketplace', 'gubee_order_id']
                 )->distinct();
-                // $select->joinRight(
-                //     ["gubee_order" => "gubee_integration_order"],
-                //     'main_table.entity_id = gubee_order.order_id ',
-                //     array('gubee_marketplace', 'gubee_order_id')
-                // );
             }
         }
         return $result;
