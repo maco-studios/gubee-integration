@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Gubee\Integration\Observer\Catalog\Product\Attribute\Save;
 
-use Gubee\Integration\Command\Catalog\Product\Attribute\SendCommand;
+use Gubee\Integration\Command\Catalog\Product\Attribute\SyncCommand;
 use Gubee\Integration\Model\Config;
 use Gubee\Integration\Model\Queue\Management;
 use Gubee\Integration\Model\ResourceModel\Catalog\Product\Attribute\CollectionFactory;
@@ -33,10 +33,8 @@ class After extends AbstractObserver
     protected function process(): void
     {
         $this->getQueueManagement()->append(
-            SendCommand::class,
+            SyncCommand::class,
             [
-                "attribute" => $this->getObserver()->getObject()->getAttributeCode(),
-                /** @phpstan-ignore-line */
             ]
         );
     }
