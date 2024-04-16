@@ -302,11 +302,15 @@ class Variation
     private function buildStatus()
     {
         $status = StatusEnum::ACTIVE();
-        if (! $this->product->isSalable()) {
-            $status = StatusEnum::INACTIVE();
+        if (!$this->product->isSalable()) {
+            return StatusEnum::INACTIVE();
         }
-        if (! $this->stockItem->getIsInStock()) {
-            $status = StatusEnum::INACTIVE();
+
+        if ($this->stockItem->getQty() < 1) {
+            return StatusEnum::INACTIVE();
+        }
+        if (!$this->stockItem->getIsInStock()) {
+            return StatusEnum::INACTIVE();
         }
         return $status;
     }
@@ -334,10 +338,10 @@ class Variation
                 'type'  => $type,
             ]
         );
-        $stock            = $this->objectManager->create(
+        $stock = $this->objectManager->create(
             Stock::class,
             [
-                'qty'              => (int) $this->stockItem->getQty() ?: 0,
+                'qty' => $this->stockItem->getIsInStock() ? ((int) $this->stockItem->getQty()) : 0,
                 'crossDockingTime' => $crossDockingTime,
             ]
         );
