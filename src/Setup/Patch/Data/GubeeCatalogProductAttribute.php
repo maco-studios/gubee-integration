@@ -192,4 +192,19 @@ class GubeeCatalogProductAttribute extends AbstractMigration
             $label
         );
     }
+
+    protected function rollback()
+    {
+        foreach ($this->attributes as $attributeCode => $attrValue) {
+            // remove any custom attribute source model
+            if (isset($attrValue['source'])) {
+                $this->productAttribute->update(
+                    $attributeCode,
+                    [
+                        'source' => null,
+                    ]
+                );
+            }
+        }
+    }
 }
