@@ -28,7 +28,8 @@ class After extends AbstractProduct
         ProductRepositoryInterface $productRepository,
         ObjectManagerInterface $objectManager,
         Registry $registry
-    ) {
+    )
+    {
         parent::__construct(
             $config,
             $logger,
@@ -48,17 +49,15 @@ class After extends AbstractProduct
             }
         }
         if (
-            $this->attribute->getRawAttributeValue('gubee', $this->getProduct())
-            && (
+            $this->attribute->getRawAttributeValue('gubee', $this->getProduct()) &&
+            (
                 $this->attribute->getRawAttributeValue(
-                    'gubee_integration_status',
-                    $this->getProduct()
-                ) !== StatusEnum::INTEGRATED()->__toString()
-                ||
-                $this->attribute->getRawAttributeValue(
-                    'gubee_sync',
-                    $this->getProduct()
+                    'gubee_integration_status', $this->getProduct
+                    ()
                 )
+                !== StatusEnum::INTEGRATED()->__toString()
+                ||
+                $this->attribute->getRawAttributeValue('gubee_sync', $this->getProduct())
             )
         ) {
             $this->queueManagement->append(
@@ -73,25 +72,23 @@ class After extends AbstractProduct
         $parents = $this->objectManager->create(
             Configurable::class
         )->getParentIdsByChild(
-            $this->getProduct()->getId()
-        );
+                $this->getProduct()->getId()
+            );
 
-        if (! empty($parents)) {
+        if (!empty($parents)) {
 
             foreach ($parents as $parentId) {
                 $parentProduct = $this->productRepository->getById($parentId);
                 if (
-                    $this->attribute->getRawAttributeValue('gubee', $this->getProduct())
-                    && (
+                    $this->attribute->getRawAttributeValue('gubee', $parentProduct) &&
+                    (
                         $this->attribute->getRawAttributeValue(
                             'gubee_integration_status',
-                            $this->getProduct()
-                        ) !== StatusEnum::INTEGRATED()->__toString()
-                        ||
-                        $this->attribute->getRawAttributeValue(
-                            'gubee_sync',
-                            $this->getProduct()
+                            $parentProduct
                         )
+                        !== StatusEnum::INTEGRATED()->__toString()
+                        ||
+                        $this->attribute->getRawAttributeValue('gubee_sync', $parentProduct)
                     )
                 ) {
                     $this->queueManagement->append(
@@ -116,7 +113,7 @@ class After extends AbstractProduct
             return false;
         }
 
-        if (! $this->getConfig()->getActive()) {
+        if (!$this->getConfig()->getActive()) {
             return false;
         }
 
