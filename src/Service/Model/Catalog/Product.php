@@ -250,7 +250,10 @@ class Product
 
     private function buildName()
     {
-        return $this->product->getName();
+        return $this->attribute->getAttributeValueLabel(
+            'name',
+            $this->product
+        );
     }
 
     private function buildNbm()
