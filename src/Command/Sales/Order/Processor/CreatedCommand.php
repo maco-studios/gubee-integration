@@ -1,6 +1,6 @@
 <?php
 
-declare (strict_types = 1);
+declare(strict_types=1);
 
 namespace Gubee\Integration\Command\Sales\Order\Processor;
 
@@ -41,7 +41,8 @@ use Psr\Log\LoggerInterface;
 use Symfony\Component\Console\Input\ArrayInput;
 use Throwable;
 
-class CreatedCommand extends AbstractProcessorCommand {
+class CreatedCommand extends AbstractProcessorCommand
+{
     protected ProductRepositoryInterface $productRepository;
     protected QuoteManagement $quoteManagement;
     protected CartManagementInterface $cartManagement;
@@ -78,7 +79,8 @@ class CreatedCommand extends AbstractProcessorCommand {
         HistoryFactory $historyFactory,
         OrderManagementInterface $orderManagement,
         ConvertOrder $convertOrder
-    ) {
+    )
+    {
         parent::__construct(
             $eventDispatcher,
             $logger,
@@ -106,7 +108,8 @@ class CreatedCommand extends AbstractProcessorCommand {
         $this->cartManagement = $cartManagement;
     }
 
-    protected function doExecute(): int {
+    protected function doExecute(): int
+    {
         $orderId = $this->input->getArgument('order_id');
         $order = $this->getOrder($orderId);
         if ($order != null) {
@@ -117,10 +120,10 @@ class CreatedCommand extends AbstractProcessorCommand {
         }
 
         $this->logger->error(
-            __(
-                "Order with increment ID '%1' not found, creating it",
-                $orderId
-            )->__toString()
+                __(
+                    "Order with increment ID '%1' not found, creating it",
+                    $orderId
+                )->__toString()
         );
 
         try {
@@ -144,7 +147,8 @@ class CreatedCommand extends AbstractProcessorCommand {
         }
     }
 
-    public function create(string $incrementId): bool {
+    public function create(string $incrementId): bool
+    {
         $gubeeOrder = $this->orderResource->loadByOrderId($incrementId);
         $customer = $this->prepareCustomer($gubeeOrder);
         $quote = $this->prepareQuote($gubeeOrder, $customer);
@@ -177,7 +181,8 @@ class CreatedCommand extends AbstractProcessorCommand {
     protected function createShipments(
         $order,
         array $gubeeOrder
-    ) {
+    )
+    {
         $arrayInput = ObjectManager::getInstance()->create(
             ArrayInput::class,
             [
@@ -196,7 +201,8 @@ class CreatedCommand extends AbstractProcessorCommand {
     protected function createInvoices(
         $order,
         array $gubeeOrder
-    ) {
+    )
+    {
         $arrayInput = ObjectManager::getInstance()->create(
             ArrayInput::class,
             [
@@ -216,7 +222,8 @@ class CreatedCommand extends AbstractProcessorCommand {
         CartInterface $quote,
         CustomerInterface $customer,
         array $gubeeOrder
-    ) {
+    )
+    {
         $this->logger->debug(
             __("Persisting order for customer '%1'", $customer->getEmail())
         );
@@ -339,7 +346,8 @@ class CreatedCommand extends AbstractProcessorCommand {
         }
     }
 
-    public function prepareCustomer(array $gubeeOrder): CustomerInterface {
+    public function prepareCustomer(array $gubeeOrder): CustomerInterface
+    {
         $this->logger->debug(
             __("Preparing customer for order '%1'", $gubeeOrder['id'])
         );
@@ -400,7 +408,8 @@ class CreatedCommand extends AbstractProcessorCommand {
     protected function prepareQuote(
         array $gubeeOrder,
         CustomerInterface $customer
-    ) {
+    )
+    {
         $quote = $this->quoteFactory->create();
         $quote->assignCustomer($customer)
             ->setCurrency();
@@ -408,7 +417,8 @@ class CreatedCommand extends AbstractProcessorCommand {
         return $quote;
     }
 
-    protected function addItemsToQuote(array $gubeeOrder, CartInterface $quote) {
+    protected function addItemsToQuote(array $gubeeOrder, CartInterface $quote)
+    {
         $this->logger->debug(
             __("Adding items to quote for order '%1'", $gubeeOrder['id'])
         );
@@ -427,9 +437,7 @@ class CreatedCommand extends AbstractProcessorCommand {
                 }
                 $fullPrice = $item['salePrice'];
                 if (isset($item['subItems'])) {
-                    foreach (
-                        $item['subItems'] as $toBeAdded
-                    ) {
+                    foreach ($item['subItems'] as $toBeAdded) {
                         if (!isset($toBeAdded['percentageOfTotal'])) {
                             $toBeAdded['percentageOfTotal'] = 100;
                         }
@@ -447,14 +455,12 @@ class CreatedCommand extends AbstractProcessorCommand {
                                 $productToBeAdd,
                                 $toBeAdded['qty'] * $item['qty']
                             );
-                            // echo"<hr>", "Price: ",  $price, "<hr>";
                             $quoteItem->setCustomPrice(
                                 $price
                             );
                             $quoteItem->setOriginalCustomPrice(
                                 $price
                             );
-                            // echo json_encode($quoteItem->getData(), JSON_PRETTY_PRINT);
                         } catch (Throwable $e) {
                             $message = __(
                                 "Error adding product with SKU '%1' to quote, error: " . (string) $e->getMessage(),
@@ -517,7 +523,8 @@ class CreatedCommand extends AbstractProcessorCommand {
      * @param mixed $item
      * @return float
      */
-    public function getItemPrice($item, $qty = 1) {
+    public function getItemPrice($item, $qty = 1)
+    {
         $price = 0;
         if (isset($item['subItems'])) {
             foreach ($item['subItems'] as $subItem) {
@@ -538,7 +545,8 @@ class CreatedCommand extends AbstractProcessorCommand {
 
     protected function getProductByGubeeSku(
         string $sku
-    ): ProductInterface {
+    ): ProductInterface
+    {
         $this->logger->debug(
             __("Getting product with SKU '%1'", $sku)
         );
@@ -566,7 +574,8 @@ class CreatedCommand extends AbstractProcessorCommand {
         return $product;
     }
 
-    public function createAddress($address, $customer, $mageCustomerId) {
+    public function createAddress($address, $customer, $mageCustomerId)
+    {
         $this->logger->debug(
             __("Creating address for customer '%1'", $customer['email'])
         );
@@ -584,9 +593,9 @@ class CreatedCommand extends AbstractProcessorCommand {
             $region = ObjectManager::getInstance()->create(
                 Region::class
             )->loadByCode(
-                $address->getRegion(),
-                'BR'
-            );
+                    $address->getRegion(),
+                    'BR'
+                );
         } else {
             $region = $regionCollection->getFirstItem();
         }
@@ -609,7 +618,7 @@ class CreatedCommand extends AbstractProcessorCommand {
 
         if (
             class_exists(
-                \Pagarme\Pagarme\Observer\CustomerAddressSaveBefore::class
+                    \Pagarme\Pagarme\Observer\CustomerAddressSaveBefore::class
             )
         ) {
             $street = [
@@ -645,7 +654,8 @@ class CreatedCommand extends AbstractProcessorCommand {
         return $address;
     }
 
-    public function getPriority(): int {
+    public function getPriority(): int
+    {
         return 999;
     }
 }

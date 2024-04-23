@@ -22,24 +22,23 @@ class Attribute
     public function getRawAttributeValue(string $attributeCode, ProductInterface $product)
     {
         $attribute = $this->getAttribute($attributeCode, $product);
-        if (! $attribute) {
+        if (!$attribute) {
             return null;
         }
 
         $frontend = $attribute->getFrontend();
-        if (! $frontend) {
+        if (!$frontend) {
             return null;
         }
 
         if ($attribute->getFrontendInput() === 'multiselect') {
             $value = $this->getMultiselectValue($attributeCode, $product);
-            if (! $value) {
+            if (!$value) {
                 return null;
             }
 
             return $this->getOptionLabels($value, $frontend);
         }
-
         return $product->getResource()
             ->getAttributeRawValue(
                 $product->getId(),
@@ -56,18 +55,18 @@ class Attribute
     public function getAttributeValueLabel(string $attributeCode, ProductInterface $product)
     {
         $attribute = $this->getAttribute($attributeCode, $product);
-        if (! $attribute) {
+        if (!$attribute) {
             return null;
         }
 
         $frontend = $attribute->getFrontend();
-        if (! $frontend) {
+        if (!$frontend) {
             return null;
         }
 
         if ($attribute->getFrontendInput() === 'multiselect') {
             $value = $this->getMultiselectValue($attributeCode, $product);
-            if (! $value) {
+            if (!$value) {
                 return null;
             }
 
@@ -96,13 +95,13 @@ class Attribute
     private function getMultiselectValue(string $attributeCode, ProductInterface $product)
     {
         $value = $product->getData($attributeCode);
-        if (! $value) {
+        if (!$value) {
             return null;
         }
 
         $value = explode(',', $value ?: '');
         $value = array_filter($value);
-        if (! $value) {
+        if (!$value) {
             return null;
         }
 
