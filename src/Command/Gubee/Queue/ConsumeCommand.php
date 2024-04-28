@@ -39,8 +39,6 @@ class ConsumeCommand extends AbstractCommand
 
     protected function doExecute(): int
     {
-        $this->state->setAreaCode(Area::AREA_ADMINHTML);
-
         $this->logger->info("Processing queue");
         $items = $this->queueManagement->getPending()->getItems();
         if (count($items) < 1) {
@@ -57,8 +55,11 @@ class ConsumeCommand extends AbstractCommand
                 ]
             );
         }
+        $queue = $this->queueManagement;
         foreach ($items as $message) {
-            $this->queueManagement->process($message);
+        $this->state->emulateAreaCode(Area::AREA_ADMINHTML, function() use ($queue, $message) {
+                $queue->process($message);
+        });
             if (php_sapi_name() === 'cli') {
                 $progressbar->advance();
             }
@@ -68,5 +69,6 @@ class ConsumeCommand extends AbstractCommand
         }
         $this->logger->info("Queue processed");
         return 0;
-    }
+        }
+
 }
