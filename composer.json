@@ -9,7 +9,7 @@
         }
     ],
     "require": {
-        "gubee/sdk": "@dev",
+        "gubee/sdk": "dev-wip",
         "laminas/laminas-hydrator": "^2",
         "magento/framework": "^103",
         "magento/module-catalog": "^104",
@@ -33,10 +33,6 @@
         "magento": {
             "type": "composer",
             "url": "https://repo.magento.com/"
-        },
-        "gubee/sdk": {
-            "type": "path",
-            "url": "../gubee-sdk"
         }
     },
     "config": {
