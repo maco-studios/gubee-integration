@@ -9,6 +9,7 @@ use Gubee\Integration\Command\Sales\Order\Cancel\SendCommand;
 use Gubee\Integration\Model\Config;
 use Gubee\Integration\Model\Queue\Management;
 use Gubee\Integration\Observer\AbstractObserver;
+use Magento\Framework\Exception\NoSuchEntityException;
 use Psr\Log\LoggerInterface;
 
 class After extends AbstractObserver
@@ -28,12 +29,19 @@ class After extends AbstractObserver
     protected function process(): void
     {
         $order = $this->getObserver()->getEvent()->getOrder();
-        $order = $this->orderRepository->getByOrderId($order->getId());
-        $this->queueManagement->append(
-            SendCommand::class,
-            [
-                'order_id' => $order->getGubeeOrderId(),
-            ]
-        );
+        try {
+            $order = $this->orderRepository->getByOrderId($order->getId());
+            
+            $this->queueManagement->append(
+                SendCommand::class,
+                [
+                    'order_id' => $order->getGubeeOrderId(),
+                ]
+            );
+        }
+        catch (NoSuchEntityException $exception)
+        {
+            $this->logger->info("Order {$order->getId()} is not integrated with gubee");
+        }
     }
 }
