@@ -10,6 +10,7 @@ use Gubee\Integration\Model\Config;
 use Gubee\Integration\Model\Queue\Management;
 use Gubee\Integration\Observer\AbstractObserver;
 use Magento\Framework\Exception\NoSuchEntityException;
+use Gubee\Integration\Command\Catalog\Product\Stock\SendCommand as StockSendCommand;
 use Psr\Log\LoggerInterface;
 
 class After extends AbstractObserver
@@ -28,9 +29,12 @@ class After extends AbstractObserver
 
     protected function process(): void
     {
-        $order = $this->getObserver()->getEvent()->getOrder();
+        /**
+         * @var \Magento\Sales\Model\Order $mageOrder
+         */
+        $mageOrder = $this->getObserver()->getEvent()->getOrder();
         try {
-            $order = $this->orderRepository->getByOrderId($order->getId());
+            $order = $this->orderRepository->getByOrderId($mageOrder->getId());
             
             $this->queueManagement->append(
                 SendCommand::class,
@@ -38,6 +42,19 @@ class After extends AbstractObserver
                     'order_id' => $order->getGubeeOrderId(),
                 ]
             );
+            /**
+             * @var \Magento\Sales\Model\Order\Item $item
+             */
+            foreach ($mageOrder->getAllVisibleItems() as $item)
+            {
+                $this->queueManagement->append(
+                    StockSendCommand::class,
+                    [
+                        "sku" => $item->getSku()
+                    ],
+                    (int) $item->getProductId()
+                );
+            }
         }
         catch (NoSuchEntityException $exception)
         {

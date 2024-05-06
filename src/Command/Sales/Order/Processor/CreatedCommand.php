@@ -612,9 +612,21 @@ class CreatedCommand extends AbstractProcessorCommand
             $phone['number'] ?? "999999999"
         );
         $name = explode(' ', $customer->getName());
-        $secondName = end($name);
-        unset($name[sizeof($name) - 1]);
-        $firstName = implode(' ', $name);
+        $firstName = $name[0];
+        if (count($name) > 1) {
+            // remove first name
+            unset($name[0]);
+            // implode the rest of the names
+            $name = array_map(
+                function ($name) {
+                    return is_string($name) ? trim($name) : '';
+                },
+                $name
+            );
+            $secondName = implode(' ', $name);
+        } else {
+            $secondName = $firstName;
+        }
 
         if (
             class_exists(
