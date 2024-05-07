@@ -302,8 +302,8 @@ class CreatedCommand extends AbstractProcessorCommand
         $shippingAmount = $gubeeOrder['totalFreight'];
         $quote->setTotalsCollectedFlag(false);
         $quote->collectTotals()->save();
-        $orderId = $this->cartManagement->placeOrder($quote->getId());
-        $order = $this->orderRepository->get($orderId);
+        $order = $this->cartManagement->submit($quote);
+        // $order = $this->orderRepository->get($orderId);
         $order->setShippingAmount($shippingAmount);
         $order->setBaseShippingAmount($shippingAmount);
         $order->setEmailSent(0);
