@@ -461,6 +461,9 @@ class CreatedCommand extends AbstractProcessorCommand
                             $quoteItem->setOriginalCustomPrice(
                                 $price
                             );
+                            $quoteItem->setAdditionalData(
+                                json_encode($item)
+                            );
                         } catch (Throwable $e) {
                             $message = __(
                                 "Error adding product with SKU '%1' to quote, error: " . (string) $e->getMessage(),
@@ -488,7 +491,9 @@ class CreatedCommand extends AbstractProcessorCommand
                             $price
                         );
                         $quoteItem->setOriginalCustomPrice($price);
-                        // echo json_encode($quoteItem->getData(), JSON_PRETTY_PRINT);
+                        $quoteItem->setAdditionalData(
+                            json_encode($item)
+                        );
                     } catch (Throwable $e) {
                         $message = __(
                             "Error adding product with SKU '%1' to quote, error: " . (string) $e->getMessage(),
