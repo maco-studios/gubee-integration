@@ -74,21 +74,29 @@ class SendCommand extends AbstractProcessorCommand
         foreach ($trackings as $tracking) {
             $items      = $tracking->getShipment()->getItems();
             $gubeeItems = [];
-            foreach ($items as $key => $value) {
-                $orderItem      = $value->getOrderItem();
+            foreach ($items as $shipmentItem) {
+                $orderItem      = $shipmentItem->getOrderItem();
                 $additionalData = json_decode(
                     $orderItem->getAdditionalData(),
                     true
                 );
-                $gubeeItems[]   = [
-                    'qty' => (int) $value->getQty(),
-                    'sku' => isset($additionalData['subItems']) ? $additionalData['subItems'][0]['skuId'] : $additionalData['skuId'],
+                if (!isset($gubeeItems[$additionalData['skuId']])) 
+                {
+                    $gubeeItems[$additionalData['skuId']] = $additionalData['qty'];
+                }
+            }
+
+            $gubeeItemsToSend = [];
+            foreach ( $gubeeItems as $gSku => $gQty ) {
+                $gubeeItemsToSend[] = [
+                    'qty' => $gQty,
+                    'sku' => $gSku
                 ];
             }
 
             $trackingGubee = [
                 'code'                => sprintf("%s:%s", $order->getIncrementId(), $tracking->getId()),
-                'items'               => $gubeeItems,
+                'items'               => $gubeeItemsToSend,
                 'estimatedDeliveryDt' => (new DateTime(
                     'now + '
                     . $this->config->getDefaultDeliveryTime()
@@ -101,7 +109,7 @@ class SendCommand extends AbstractProcessorCommand
                     'trackingCode' => $tracking->getTrackNumber(),
                 ],
             ];
-            $this->orderResource->updateShipped($order->getIncrementId(), $trackingGubee);
+            $this->orderResource->updateShipped($orderId, $trackingGubee);
             $this->logger->info(
                 sprintf(
                     "Order '%s' has been shipped with tracking '%s'",

@@ -44,20 +44,23 @@ class Before extends AbstractObserver
     {
         $params = $this->request->getParams();
         try {
-            foreach ($params['tracking'] as $tracking) {
-                if (! isset($tracking['shipment_key'])) {
-                    throw new Exception(
-                        __("Each shipment of Gubee must be associated with a invoice key.")->__toString()
-                    );
-                }
-                $invoiceKeys = [];
+            if (isset($params['tracking'])) {
+
                 foreach ($params['tracking'] as $tracking) {
-                    if (in_array($tracking['shipment_key'], $invoiceKeys)) {
+                    if (! isset($tracking['shipment_key'])) {
                         throw new Exception(
-                            __("The same invoice key cannot be used in more than one shipment.")->__toString()
+                            __("Each shipment of Gubee must be associated with a invoice key.")->__toString()
                         );
                     }
-                    $invoiceKeys[] = $tracking['shipment_key'];
+                    $invoiceKeys = [];
+                    foreach ($params['tracking'] as $tracking) {
+                        if (in_array($tracking['shipment_key'], $invoiceKeys)) {
+                            throw new Exception(
+                                __("The same invoice key cannot be used in more than one shipment.")->__toString()
+                            );
+                        }
+                        $invoiceKeys[] = $tracking['shipment_key'];
+                    }
                 }
             }
         } catch (Exception $e) {
