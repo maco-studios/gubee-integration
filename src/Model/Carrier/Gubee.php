@@ -24,12 +24,11 @@ class Gubee extends AbstractCarrier implements
 
     protected $_rateMethodFactory;
 
+    protected $appState;
+
     
     public function isActive() {
-        $appState = ObjectManager::getInstance()->create(
-                \Magento\Framework\App\State::class
-        );
-        return $appState->getAreaCode() === \Magento\Framework\App\Area::AREA_ADMINHTML
+        return $this->appState->getAreaCode() === \Magento\Framework\App\Area::AREA_ADMINHTML //scope to be defined by queue consumer
             &&
             parent::isActive();
     }
@@ -45,8 +44,10 @@ class Gubee extends AbstractCarrier implements
         LoggerInterface $logger,
         ResultFactory $rateResultFactory,
         MethodFactory $rateMethodFactory,
+        \Magento\Framework\App\State $state,
         array $data = []
     ) {
+        $this->appState = $state;
         $this->_rateResultFactory = $rateResultFactory;
         $this->_rateMethodFactory = $rateMethodFactory;
         parent::__construct($scopeConfig, $rateErrorFactory, $logger, $data);
@@ -57,7 +58,7 @@ class Gubee extends AbstractCarrier implements
      */
     public function collectRates(RateRequest $request)
     {
-        if (! $this->getConfigFlag('active')) {
+        if (!$this->isActive()) {
             return false;
         }
 
