@@ -24,6 +24,16 @@ class Gubee extends AbstractCarrier implements
 
     protected $_rateMethodFactory;
 
+    
+    public function isActive() {
+        $appState = ObjectManager::getInstance()->create(
+                \Magento\Framework\App\State::class
+        );
+        return $appState->getAreaCode() === \Magento\Framework\App\Area::AREA_ADMINHTML
+            &&
+            parent::isActive();
+    }
+
     /**
      * Constructor
      *
