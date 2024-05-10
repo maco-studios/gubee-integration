@@ -35,6 +35,9 @@ use function is_array;
 
 class Product
 {
+    /**
+     * @var ProductInterface
+     */
     protected ProductInterface $product;
     protected \Gubee\SDK\Model\Catalog\Product $gubeeProduct;
     protected ProductResource $productResource;
@@ -223,14 +226,9 @@ class Product
 
     private function buildStatus()
     {
-        $status = StatusEnum::ACTIVE();
-        if (!$this->product->isSalable()) {
-            $status = StatusEnum::INACTIVE();
-        }
-        if (!$this->stockItem->getIsInStock()) {
-            $status = StatusEnum::INACTIVE();
-        }
-        return $status;
+        return $this->product->getStatus() == \Magento\Catalog\Model\Product\Attribute\Source\Status::STATUS_DISABLED ? 
+            StatusEnum::INACTIVE() : 
+            StatusEnum::ACTIVE();
     }
 
     private function buildType()
