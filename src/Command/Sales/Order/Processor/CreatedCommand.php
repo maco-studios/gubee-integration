@@ -639,14 +639,15 @@ class CreatedCommand extends AbstractProcessorCommand
             )
         ) {
             $street = [
-                is_string($address->getStreet()) ? trim($address->getStreet()) : __("Street not informed"),
-                is_string($address->getNumber()) ? trim($address->getNumber()) : __("Number not informed"),
-                is_string($address->getComplement()) ? trim($address->getComplement()) : __("Complement not informed"),
+                is_string($address->getStreet()) && !empty(trim($address->getStreet())) ? trim($address->getStreet()) : __("Street not informed"),
+                is_string($address->getNumber()) && !empty(trim($address->getNumber())) ? trim($address->getNumber()) : __("Number not informed"),
+                is_string($address->getNeighborhood()) && !empty(trim($address->getNeighborhood())) ? trim($address->getNeighborhood()): __("Neighborhood not informed"),
+                is_string($address->getComplement()) && !empty(trim($address->getComplement())) ? trim($address->getComplement()) : __("Complement not informed"),
             ];
         } else {
             $street = [
-                is_string($address->getStreet()) ? trim($address->getStreet()) : __("Street not informed"),
-                is_string($address->getNumber()) ? trim($address->getNumber()) : __("Number not informed"),
+                is_string($address->getStreet()) && !empty(trim($address->getStreet())) ? trim($address->getStreet()) : __("Street not informed"),
+                is_string($address->getNumber()) && !empty(trim($address->getNumber())) ? trim($address->getNumber()) : __("Number not informed"),
             ];
         }
 
