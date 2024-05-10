@@ -58,7 +58,7 @@ class After extends AbstractObserver
         }
         catch (NoSuchEntityException $exception)
         {
-            $this->logger->info("Order {$order->getId()} is not integrated with gubee");
+            $this->logger->info("Order {$mageOrder->getId()} is not integrated with gubee");
         }
     }
 }

@@ -23,25 +23,27 @@ class Capture extends Before
             $this->request->getParams()
         );
         $hashes   = [];
-        foreach ($params->getTracking() as $tracking) {
-            $hashes[$this->hashTracking(
-                trim($tracking['title']),
-                trim($tracking['carrier_code']),
-                trim($tracking['number'])
-            )] = $tracking['shipment_key'];
-        }
-        $this->registry->register('gubee_shipment_save_invoice_capture', true);
-        foreach ($shipment->getTracks() as $tracking) {
-            $hash = $this->hashTracking(
-                trim($tracking->getTitle()),
-                trim($tracking->getCarrierCode()),
-                trim($tracking->getNumber())
-            );
-            if (! isset($hashes[$hash])) {
-                continue;
+        if (is_iterable($params->getTracking())) {
+            foreach ($params->getTracking() as $tracking) {
+                $hashes[$this->hashTracking(
+                    trim($tracking['title']),
+                    trim($tracking['carrier_code']),
+                    trim($tracking['number'])
+                )] = $tracking['shipment_key'];
             }
-            $tracking->setShipmentId($hashes[$hash]);
-            $tracking->save();
+            $this->registry->register('gubee_shipment_save_invoice_capture', true);
+            foreach ($shipment->getTracks() as $tracking) {
+                $hash = $this->hashTracking(
+                    trim($tracking->getTitle()),
+                    trim($tracking->getCarrierCode()),
+                    trim($tracking->getNumber())
+                );
+                if (! isset($hashes[$hash])) {
+                    continue;
+                }
+                $tracking->setShipmentId($hashes[$hash]);
+                $tracking->save();
+            }
         }
     }
 
