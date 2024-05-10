@@ -90,7 +90,7 @@ class SendCommand extends AbstractProcessorCommand
             foreach ( $gubeeItems as $gSku => $gQty ) {
                 $gubeeItemsToSend[] = [
                     'qty' => $gQty,
-                    'sku' => $gSku
+                    'skuId' => $gSku
                 ];
             }
 
