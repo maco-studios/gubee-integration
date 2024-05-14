@@ -37,4 +37,7 @@
         <observer name="Gubee\Integration\Observer\Sales\Order\Cancel\After" instance="Gubee\Integration\Observer\Sales\Order\Cancel\After" />
     </event>
 
+    <event name="sales_order_place_after">
+        <observer name="Gubee\Integration\Observer\Sales\Order\Place\After" instance="Gubee\Integration\Observer\Sales\Order\Place\After" />
+    </event>
 </config>

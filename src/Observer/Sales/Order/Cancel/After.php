@@ -42,6 +42,14 @@ class After extends AbstractObserver
                     'order_id' => $order->getGubeeOrderId(),
                 ]
             );
+        }
+        catch (NoSuchEntityException $exception)
+        {
+            $this->logger->info("Order {$mageOrder->getId()} is not integrated with gubee");
+        }
+
+        //update items 
+        try {
             /**
              * @var \Magento\Sales\Model\Order\Item $item
              */
@@ -56,9 +64,9 @@ class After extends AbstractObserver
                 );
             }
         }
-        catch (NoSuchEntityException $exception)
+        catch (\Exception $err)
         {
-            $this->logger->info("Order {$mageOrder->getId()} is not integrated with gubee");
+            $this->logger->info("Order {$mageOrder->getId()} error while updating item stock: {$err->getMessage()}");
         }
     }
 }

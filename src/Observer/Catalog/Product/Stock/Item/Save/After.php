@@ -18,7 +18,6 @@ class After extends AbstractProduct
 {
     protected function process(): void
     {
-
         $parents = $this->objectManager->create(
             Configurable::class
         )->getParentIdsByChild(

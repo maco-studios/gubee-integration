@@ -81,7 +81,9 @@ class SendCommand extends AbstractCommand
             );
             return 1;
         }
-
+        /**
+         * @var Product $product
+         */
         $product = $this->objectManager->create(
             Product::class,
             [

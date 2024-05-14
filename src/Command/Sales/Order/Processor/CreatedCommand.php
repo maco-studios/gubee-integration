@@ -257,7 +257,7 @@ class CreatedCommand extends AbstractProcessorCommand
         $quote->setCustomerFirstname($customer->getFirstname());
         $quote->setCustomerLastname($customer->getLastname());
         $quote->setCustomerGroupId($customer->getGroupId());
-        $quote->setStoreId($this->storeManager->getStore()->getId());
+        $quote->setStoreId($this->storeManager->getDefaultStoreView()->getId());
         $quote->setIsActive(true);
         $quote->getBillingAddress()->addData($billingAddress);
         $quote->getShippingAddress()->addData($shippingAddress);
