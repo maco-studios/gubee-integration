@@ -107,8 +107,8 @@ class CanceledCommand extends AbstractProcessorCommand
             }
 
             $this->orderManagement
-                ->cancel($order->getId())
-                ->save();
+                ->cancel($order->getId());
+            $order->save();
             $this->addOrderHistory(
                 __('Order canceled!')->__toString(),
                 (int) $order->getId()
