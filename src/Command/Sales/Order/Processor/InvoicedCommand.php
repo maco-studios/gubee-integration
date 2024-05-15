@@ -16,6 +16,7 @@ use Magento\Framework\Event\ManagerInterface;
 use Magento\Sales\Api\Data\OrderInterface;
 use Magento\Sales\Api\OrderManagementInterface;
 use Magento\Sales\Api\OrderRepositoryInterface;
+use Magento\Sales\Model\Order;
 use Magento\Sales\Model\Order\Status\HistoryFactory;
 use Magento\Sales\Model\ResourceModel\Order\CollectionFactory;
 use Magento\Sales\Model\Service\InvoiceService;
@@ -81,6 +82,13 @@ class InvoicedCommand extends AbstractProcessorCommand
         $this->logger->debug(
             __("Invoicing order '%1'", $order->getIncrementId())
         );
+
+        if (in_array($order->getState(), [Order::STATE_CANCELED, Order::STATE_CLOSED, Order::STATE_HOLDED])) {
+            $this->logger->info(
+                __('Not invoicing order %1 since its state is: \`%2\`', $order->getIncrementId(), $order->getState())
+            );
+            return 0;
+        }
 
         $this->invoiceOrder($order);
         $gubeeOrder = $this->gubeeOrderRepository->getByOrderId(
