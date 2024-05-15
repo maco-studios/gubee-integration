@@ -313,7 +313,12 @@ class CreatedCommand extends AbstractProcessorCommand
         $order->setGrandTotal(
             $gubeeOrder['totalNet']
         );
-
+        /**
+         * @var \Magento\Sales\Model\Order\Item $item
+         */
+        foreach ($order->getAllItems() as $item) {
+            $item->setStoreId($order->getStoreId())->save();
+        }
         try {
             $order->save();
             $gubeeOrderItem = ObjectManager::getInstance()->create(
@@ -464,6 +469,7 @@ class CreatedCommand extends AbstractProcessorCommand
                             $quoteItem->setAdditionalData(
                                 json_encode($item)
                             );
+                            $quoteItem->setStoreId($quote->getStoreId());
                         } catch (Throwable $e) {
                             $message = __(
                                 "Error adding product with SKU '%1' to quote, error: " . (string) $e->getMessage(),
@@ -494,6 +500,7 @@ class CreatedCommand extends AbstractProcessorCommand
                         $quoteItem->setAdditionalData(
                             json_encode($item)
                         );
+                        $quoteItem->setStoreId($quote->getStoreId());
                     } catch (Throwable $e) {
                         $message = __(
                             "Error adding product with SKU '%1' to quote, error: " . (string) $e->getMessage(),
