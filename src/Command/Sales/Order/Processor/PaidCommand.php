@@ -11,6 +11,7 @@ use Gubee\SDK\Resource\Sales\OrderResource;
 use Magento\Framework\Event\ManagerInterface;
 use Magento\Sales\Api\OrderManagementInterface;
 use Magento\Sales\Api\OrderRepositoryInterface;
+use Magento\Sales\Model\Order;
 use Magento\Sales\Model\Order\Status\HistoryFactory;
 use Magento\Sales\Model\ResourceModel\Order\CollectionFactory;
 use Psr\Log\LoggerInterface;
@@ -54,6 +55,13 @@ class PaidCommand extends AbstractProcessorCommand
         );
         $order      = $this->getOrder($this->getInput()->getArgument('order_id'));
         try {
+            if (in_array($order->getState(), [Order::STATE_CANCELED, Order::STATE_CLOSED, Order::STATE_HOLDED])) {
+                $this->logger->info(
+                    __('Not paying order %1 since its state is: \`%2\`', $order->getIncrementId(), $order->getState())
+                );
+                return 0;
+            }
+    
             $order->setTotalPaid(
                 $order->getGrandTotal()
             );

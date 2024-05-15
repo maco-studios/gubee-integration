@@ -8,6 +8,7 @@ use Gubee\Integration\Api\OrderRepositoryInterface as GubeeOrderRepositoryInterf
 use Gubee\Integration\Command\Sales\Order\AbstractProcessorCommand;
 use Gubee\SDK\Resource\Sales\OrderResource;
 use Magento\Framework\Event\ManagerInterface;
+use Magento\Sales\Model\Order;
 use Magento\Sales\Api\OrderManagementInterface;
 use Magento\Sales\Api\OrderRepositoryInterface;
 use Magento\Sales\Model\Order\Status\HistoryFactory;
@@ -52,6 +53,13 @@ class DeliveredCommand extends AbstractProcessorCommand
         $order = $this->getOrder(
             $this->getInput()->getArgument('order_id')
         );
+
+        if (in_array($order->getState(), [Order::STATE_CANCELED, Order::STATE_CLOSED, Order::STATE_HOLDED])) {
+            $this->logger->info(
+                __('Not delivering order %1 since it is canceled', $order->getIncrementId())
+            );
+            return 0;
+        }
 
         $this->deliverOrder($order);
 
