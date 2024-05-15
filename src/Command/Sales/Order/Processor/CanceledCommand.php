@@ -85,11 +85,12 @@ class CanceledCommand extends AbstractProcessorCommand
     private function cancelOrder($order): void
     {
         try {
-            if ($order->canCreditmemo()) {
+            if ($order->canCreditmemo() && $order->hasInvoice()) {
                 $itemIdsToRefund = [];
                 foreach ($order->getAllItems() as $orderItem) {
                     $creditMemoItem = $this->itemCreationFactory->create();
-                    $creditMemoItem->setQty($orderItem->getQtyOrdered())->setOrderItemId($orderItem->getId());
+                    $creditMemoItem->setQty($orderItem->getQtyOrdered())
+                                    ->setOrderItemId($orderItem->getId());
                     $itemIdsToRefund[] = $creditMemoItem;
                 }
 
@@ -106,8 +107,8 @@ class CanceledCommand extends AbstractProcessorCommand
                 }
             }
 
-            $this->orderManagement
-                ->cancel($order->getId());
+            $order->cancel();
+            
             $order->save();
             $this->addOrderHistory(
                 __('Order canceled!')->__toString(),
