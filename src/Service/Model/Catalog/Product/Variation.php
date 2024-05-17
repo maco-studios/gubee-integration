@@ -100,17 +100,27 @@ class Variation
             $this->product->getSku()
         ) : $this->product->getSku();
     }
+    /**
+     * Verifies if parent is defined and checks its media gallery information
+     * @return bool
+     */
+    private function parentHasMedia() : bool
+    {
+        return !is_null($this->parent) ? count($this->parent->getMediaGalleryImages()) > 0 : false;
+    }
 
     protected function buildImages()
     {
         $images = [];
-        if (empty($this->product->getMediaGalleryImages())) {
+        if (count($this->product->getMediaGalleryImages()) == 0 && !$this->parentHasMedia()) {
             return [
                 $this->createPlaceholder(),
             ];
         }
         $main = true;
-        foreach ($this->product->getMediaGalleryImages() as $key => $image) {
+        //switch between child and parent depending on its gallery status
+        $productToUploadImages = count($this->product->getMediaGalleryImages()) == 0 ? $this->parent : $this->product;
+        foreach ($productToUploadImages->getMediaGalleryImages() as $key => $image) {
             $images[] = $this->objectManager->create(
                 Image::class,
                 [
